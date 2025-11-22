@@ -205,3 +205,50 @@ if(gameState.politicalSystem&&politicalBonuses[gameState.politicalSystem]){Objec
 // Minimal random event example
 const events=[
 {title:"Economic Crisis",description:"Global downturn!",option1:"Stimulate (+)",option2:"Austerity (-)",effects1:{money:
+function nextTurn() {
+  game.turn++;
+
+  // Random growth
+  game.money += Math.floor(Math.random() * 200);
+  game.population += Math.floor(Math.random() * 100);
+  game.stability += Math.floor(Math.random() * 5) - 2; // can go down slightly
+
+  // Clamp stability between 0-100
+  if (game.stability > 100) game.stability = 100;
+  if (game.stability < 0) game.stability = 0;
+
+  // Random event
+  const eventChance = Math.random();
+  if (eventChance < 0.3) {
+    const events = [
+      {text:"Minor Economic Boom! +200 money", money:200, population:0, stability:0},
+      {text:"Small Protest! -5 stability", money:0, population:0, stability:-5},
+      {text:"Population Growth! +50 people", money:0, population:50, stability:0}
+    ];
+    const e = events[Math.floor(Math.random() * events.length)];
+    game.money += e.money;
+    game.population += e.population;
+    game.stability += e.stability;
+    eventEl.textContent = `Turn ${game.turn} Event: ${e.text}`;
+  } else {
+    eventEl.textContent = `Turn ${game.turn}: No event.`;
+  }
+
+  updateUI();
+
+  // Simple game over
+  if (game.stability <= 0) {
+    alert("Your country collapsed! Game Over.");
+    game.stability = 0;
+    updateUI();
+    document.getElementById("nextTurn").disabled = true;
+  }
+}
+
+document.getElementById("nextTurn").addEventListener("click", nextTurn);
+
+// Initial UI update
+updateUI();
+</script>
+</body>
+</html>
