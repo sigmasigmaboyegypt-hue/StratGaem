@@ -1,1 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Country-Building Simulator 2.0</title>
 
+<!-- Link CSS -->
+<link rel="stylesheet" href="style.css">
+
+</head>
+<body>
+
+<div class="container">
+    <header>
+        <h1>Country-Building Simulator 2.0</h1>
+        <p>Build your nation from the ground up! Turn: <span id="turn-counter">1</span></p>
+    </header>
+
+    <!-- Phases -->
+    <div id="continent-phase" class="game-phase active">
+        <h2>Choose Your Continent</h2>
+        <div class="selection-grid" id="continent-grid"></div>
+        <button id="next-to-politics" class="btn" disabled>Next</button>
+    </div>
+
+    <div id="politics-phase" class="game-phase">
+        <h2>Choose Political System</h2>
+        <div class="selection-grid" id="politics-grid"></div>
+        <button id="next-to-game" class="btn" disabled>Start Game</button>
+    </div>
+
+    <div id="game-phase" class="game-phase">
+        <div class="dashboard" id="dashboard"></div>
+        <div class="action-panel" id="actions"></div>
+        <div style="text-align:center;margin-top:20px;">
+            <button id="next-turn" class="btn pulse">Next Turn</button>
+        </div>
+    </div>
+
+    <div id="event-modal" class="event-modal">
+        <div class="modal-content">
+            <h2 id="event-title"></h2>
+            <p id="event-description"></p>
+            <div class="modal-buttons">
+                <button id="event-option1" class="btn btn-success"></button>
+                <button id="event-option2" class="btn btn-danger"></button>
+            </div>
+        </div>
+    </div>
+
+    <div id="game-over-modal" class="event-modal">
+        <div class="modal-content game-over">
+            <h2 id="game-over-title"></h2>
+            <p id="game-over-message"></p>
+            <button id="restart-game" class="btn">Restart</button>
+        </div>
+    </div>
+</div>
+
+<!-- Link JS -->
+<script src="script.js"></script>
+
+</body>
+</html>
