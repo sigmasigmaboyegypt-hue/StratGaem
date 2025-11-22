@@ -1,482 +1,402 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <title>Country-Building Simulator</title>
     <style>
-        :root {
-            --primary: #3498db;
-            --secondary: #2ecc71;
-            --danger: #e74c3c;
-            --warning: #f39c12;
-            --dark: #2c3e50;
-            --light: #ecf0f1;
-            --shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-            --transition: all 0.3s ease;
+        :root{
+            --primary:#3498db;
+            --primary-2:#2980b9;
+            --secondary:#2ecc71;
+            --danger:#e74c3c;
+            --warning:#f39c12;
+            --dark:#2c3e50;
+            --light:#ecf0f1;
+            --shadow:0 4px 6px rgba(0,0,0,0.12);
+            --glass: rgba(255,255,255,0.06);
+            --transition: all 0.28s ease;
+            --glass-2: rgba(255,255,255,0.12);
         }
 
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        *{box-sizing:border-box;margin:0;padding:0;font-family:Inter, 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; color:var(--light);}
+
+        body{
+            min-height:100vh;
+            padding:16px;
+            background: linear-gradient(135deg,#0f172a 0%, #1a2a6c 30%, #641e16 70%, #fdbb2d 100%);
+            -webkit-font-smoothing:antialiased;
+            -moz-osx-font-smoothing:grayscale;
+            position:relative;
+            overflow-x:hidden;
         }
 
-        body {
-            background: linear-gradient(135deg, #1a2a6c, #b21f1f, #fdbb2d);
-            color: var(--light);
-            min-height: 100vh;
-            padding: 20px;
+        /* subtle animated clouds */
+        .bg-clouds{
+            position:fixed;
+            top:0;
+            left:0;
+            right:0;
+            height:160px;
+            pointer-events:none;
+            opacity:0.06;
+            z-index:0;
+            background-image: radial-gradient(circle at 20% 30%, rgba(255,255,255,0.06) 0 8%, transparent 9%),
+                              radial-gradient(circle at 80% 60%, rgba(255,255,255,0.05) 0 10%, transparent 11%);
+            animation: drift 40s linear infinite;
+        }
+        @keyframes drift { from { transform: translateX(-10%);} to { transform: translateX(10%);} }
+
+        .container{max-width:1200px;margin:0 auto;position:relative;z-index:2;}
+
+        header{
+            text-align:center;
+            margin-bottom:18px;
+            padding:16px;
+            border-radius:12px;
+            background:var(--glass);
+            backdrop-filter: blur(6px);
+            box-shadow:var(--shadow);
+            display:flex;
+            align-items:center;
+            justify-content:space-between;
+            gap:12px;
+            flex-wrap:wrap;
         }
 
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
+        header .title {
+            text-align:left;
+            flex:1 1 360px;
+        }
+        header h1{font-size:1.5rem;margin-bottom:4px; text-shadow: 1px 1px 2px rgba(0,0,0,0.25);}
+        header p{font-size:0.95rem;opacity:0.9;margin-top:4px;}
+
+        .header-controls{
+            display:flex;
+            gap:8px;
+            align-items:center;
+            flex:0 0 auto;
         }
 
-        header {
-            text-align: center;
-            margin-bottom: 30px;
-            padding: 20px;
-            background: rgba(255, 255, 255, 0.1);
-            border-radius: 15px;
-            backdrop-filter: blur(10px);
+        .btn{
+            background:var(--primary);
+            border:none;
+            color:white;
+            padding:10px 14px;
+            border-radius:10px;
+            cursor:pointer;
+            font-weight:600;
+            box-shadow:var(--shadow);
+            transition:var(--transition);
+            display:inline-flex;
+            align-items:center;
+            gap:8px;
+            user-select:none;
+        }
+        .btn:hover{transform:translateY(-3px);background:var(--primary-2);}
+        .btn:active{transform:translateY(0);opacity:0.95;}
+        .btn.secondary{background:var(--secondary);color:#05220f;}
+        .btn.ghost{background:transparent;border:1px solid rgba(255,255,255,0.08);}
+
+        .small{padding:6px 10px;font-size:0.9rem;border-radius:8px;}
+
+        .game-phase{
+            display:none;
+            background:var(--glass);
+            border-radius:12px;
+            padding:18px;
+            margin-top:14px;
+            backdrop-filter: blur(6px);
             box-shadow: var(--shadow);
+            transition:var(--transition);
+        }
+        .game-phase.active{display:block;transform:translateY(0);opacity:1;}
+
+        .selection-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px;margin-top:14px;}
+        .selection-card{
+            background:linear-gradient(180deg, rgba(255,255,255,0.03), rgba(255,255,255,0.01));
+            border-radius:10px;padding:12px;text-align:left;cursor:pointer;border:1px solid transparent;transition:var(--transition);
+        }
+        .selection-card:hover{transform:translateY(-6px);box-shadow:0 8px 18px rgba(0,0,0,0.25);border-color:rgba(255,255,255,0.06);}
+        .selection-card .card-icon{font-size:1.8rem;margin-bottom:8px;}
+        .selection-card h3{font-size:1.05rem;margin-bottom:6px;}
+        .selection-card p{font-size:0.9rem;opacity:0.9;margin-bottom:6px;}
+        .selection-card .tooltip{display:inline-block;margin-left:6px;opacity:0.9;}
+
+        .selection-card.selected{outline:2px solid rgba(52,152,219,0.22);box-shadow:0 8px 20px rgba(52,152,219,0.08);}
+
+        .dashboard{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:12px;margin-top:14px;}
+        .stat-card{background:var(--glass);padding:12px;border-radius:10px;text-align:left;box-shadow:var(--shadow);border:1px solid rgba(255,255,255,0.03);}
+        .stat-card h3{font-size:0.95rem;margin-bottom:6px;}
+        .stat-value{font-size:1.45rem;font-weight:700;}
+        .progress-bar{height:10px;background:rgba(255,255,255,0.06);border-radius:6px;margin-top:10px;overflow:hidden;}
+        .progress-fill{height:100%;background:var(--secondary);width:0;transition:width 700ms cubic-bezier(.2,.9,.2,1);}
+
+        .action-panel{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:12px;margin-top:12px;}
+        .action-card{background:var(--glass);padding:12px;border-radius:10px;box-shadow:var(--shadow);border:1px solid rgba(255,255,255,0.03);}
+        .action-card h3{margin-bottom:8px;border-bottom:1px solid rgba(255,255,255,0.03);padding-bottom:8px;}
+        .action-item{display:flex;align-items:center;justify-content:space-between;padding:8px 0;border-bottom:1px dashed rgba(255,255,255,0.02);}
+        .action-item:last-child{border-bottom:none;}
+        .action-item .cost{font-weight:700;color:var(--warning);margin-left:8px;}
+        .action-item button.btn{padding:8px 10px;border-radius:8px;min-width:80px;font-size:0.9rem;}
+
+        /* Event modal container for stacking */
+        .event-container{
+            position:fixed;
+            right:16px;
+            bottom:16px;
+            display:flex;
+            flex-direction:column-reverse;
+            gap:10px;
+            z-index:1200;
+            align-items:flex-end;
+            pointer-events:none;
+        }
+        .event-modal{
+            width:360px;
+            max-width:95vw;
+            background:linear-gradient(180deg,var(--dark), #21324a);
+            color:var(--light);
+            border-radius:12px;
+            padding:12px;
+            box-shadow:0 10px 30px rgba(0,0,0,0.5);
+            transform:translateY(10px) scale(.98);
+            opacity:0;
+            transition:all 280ms cubic-bezier(.2,.9,.2,1);
+            pointer-events:auto;
+            border:1px solid rgba(255,255,255,0.04);
+        }
+        .event-modal.active{opacity:1;transform:translateY(0) scale(1);}
+        .event-modal h4{margin-bottom:8px;}
+        .event-modal p{opacity:0.95;font-size:0.95rem;}
+        .modal-buttons{display:flex;gap:8px;margin-top:10px;justify-content:flex-end;}
+        .event-modal .small-meta{display:flex;justify-content:space-between;opacity:0.9;margin-top:8px;font-size:0.88rem;color:rgba(255,255,255,0.85);}
+
+        /* Floating text */
+        .floating-text{
+            position:fixed;
+            z-index:1400;
+            pointer-events:none;
+            font-weight:700;
+            text-shadow:0 1px 2px rgba(0,0,0,0.5);
+            transition:transform 900ms ease-out, opacity 900ms ease-out;
+            opacity:1;
         }
 
-        h1 {
-            font-size: 2.5rem;
-            margin-bottom: 10px;
-            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+        /* Game over / Victory modal (center) */
+        .center-modal{
+            position:fixed;
+            left:50%;
+            top:50%;
+            transform:translate(-50%,-50%) scale(.98);
+            width:600px;
+            max-width:95%;
+            z-index:1400;
+            background:linear-gradient(180deg,#0b1622,#12232e);
+            color:var(--light);
+            padding:18px;border-radius:12px;box-shadow:0 20px 60px rgba(0,0,0,0.6);
+            opacity:0;pointer-events:none;transition:all 280ms ease;
+        }
+        .center-modal.active{opacity:1;pointer-events:auto;transform:translate(-50%,-50%) scale(1);}
+
+        /* tooltips */
+        .tooltip{position:relative;display:inline-block;}
+        .tooltip .tooltiptext{
+            visibility:hidden;
+            width:240px;background:var(--dark);color:#fff;text-align:left;border-radius:8px;padding:10px;
+            position:absolute;z-index:999;bottom:125%;left:50%;transform:translateX(-50%);opacity:0;transition:opacity .2s;
+            box-shadow:0 6px 18px rgba(0,0,0,0.4);font-size:0.88rem;
+        }
+        .tooltip:hover .tooltiptext{visibility:visible;opacity:1;}
+
+        /* mobile tweaks */
+        @media (max-width:768px){
+            header{flex-direction:column;align-items:flex-start;padding:12px;}
+            .header-controls{width:100%;justify-content:space-between;}
+            .dashboard{grid-template-columns:repeat(2,1fr);}
+            .action-panel{grid-template-columns:1fr;}
+            .event-container{left:8px;right:8px;bottom:8px;align-items:center;}
+            .event-modal{width:100%;}
         }
 
-        .game-phase {
-            display: none;
-            background: rgba(255, 255, 255, 0.1);
-            border-radius: 15px;
-            padding: 30px;
-            margin-bottom: 20px;
-            backdrop-filter: blur(10px);
-            box-shadow: var(--shadow);
-            animation: fadeIn 0.5s ease;
-        }
-
-        .active {
-            display: block;
-        }
-
-        .selection-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 20px;
-            margin-top: 20px;
-        }
-
-        .selection-card {
-            background: rgba(255, 255, 255, 0.15);
-            border-radius: 12px;
-            padding: 20px;
-            text-align: center;
-            cursor: pointer;
-            transition: var(--transition);
-            border: 2px solid transparent;
-        }
-
-        .selection-card:hover {
-            transform: translateY(-5px);
-            background: rgba(255, 255, 255, 0.25);
-            border-color: var(--primary);
-        }
-
-        .selection-card.selected {
-            background: rgba(52, 152, 219, 0.3);
-            border-color: var(--primary);
-            box-shadow: 0 0 15px rgba(52, 152, 219, 0.5);
-        }
-
-        .card-icon {
-            font-size: 3rem;
-            margin-bottom: 15px;
-        }
-
-        .btn {
-            background: var(--primary);
-            color: white;
-            border: none;
-            padding: 12px 25px;
-            border-radius: 50px;
-            cursor: pointer;
-            font-size: 1rem;
-            font-weight: 600;
-            transition: var(--transition);
-            box-shadow: var(--shadow);
-            margin-top: 20px;
-        }
-
-        .btn:hover {
-            background: #2980b9;
-            transform: translateY(-2px);
-            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
-        }
-
-        .btn:disabled {
-            background: #7f8c8d;
-            cursor: not-allowed;
-            transform: none;
-            box-shadow: none;
-        }
-
-        .dashboard {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 15px;
-            margin-bottom: 30px;
-        }
-
-        .stat-card {
-            background: rgba(255, 255, 255, 0.15);
-            border-radius: 12px;
-            padding: 20px;
-            text-align: center;
-            backdrop-filter: blur(10px);
-            box-shadow: var(--shadow);
-        }
-
-        .stat-value {
-            font-size: 2rem;
-            font-weight: bold;
-            margin: 10px 0;
-        }
-
-        .action-panel {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 20px;
-        }
-
-        .action-card {
-            background: rgba(255, 255, 255, 0.15);
-            border-radius: 12px;
-            padding: 20px;
-            backdrop-filter: blur(10px);
-            box-shadow: var(--shadow);
-        }
-
-        .action-card h3 {
-            margin-bottom: 15px;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
-            padding-bottom: 10px;
-        }
-
-        .action-item {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 10px 0;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-        }
-
-        .action-item:last-child {
-            border-bottom: none;
-        }
-
-        .cost {
-            color: var(--warning);
-            font-weight: bold;
-        }
-
-        .event-modal {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.7);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            z-index: 1000;
-            opacity: 0;
-            pointer-events: none;
-            transition: var(--transition);
-        }
-
-        .event-modal.active {
-            opacity: 1;
-            pointer-events: all;
-        }
-
-        .modal-content {
-            background: var(--dark);
-            border-radius: 15px;
-            padding: 30px;
-            max-width: 500px;
-            width: 90%;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
-            transform: translateY(20px);
-            transition: var(--transition);
-        }
-
-        .event-modal.active .modal-content {
-            transform: translateY(0);
-        }
-
-        .modal-buttons {
-            display: flex;
-            justify-content: space-between;
-            margin-top: 20px;
-        }
-
-        .btn-success {
-            background: var(--secondary);
-        }
-
-        .btn-danger {
-            background: var(--danger);
-        }
-
-        .game-over {
-            text-align: center;
-            padding: 40px;
-        }
-
-        .game-over h2 {
-            font-size: 2.5rem;
-            margin-bottom: 20px;
-        }
-
-        .progress-bar {
-            height: 10px;
-            background: rgba(255, 255, 255, 0.2);
-            border-radius: 5px;
-            margin: 10px 0;
-            overflow: hidden;
-        }
-
-        .progress-fill {
-            height: 100%;
-            background: var(--secondary);
-            border-radius: 5px;
-            transition: width 0.5s ease;
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
-        }
-
-        @keyframes pulse {
-            0% { transform: scale(1); }
-            50% { transform: scale(1.05); }
-            100% { transform: scale(1); }
-        }
-
-        .pulse {
-            animation: pulse 2s infinite;
-        }
-
-        .tooltip {
-            position: relative;
-            display: inline-block;
-        }
-
-        .tooltip .tooltiptext {
-            visibility: hidden;
-            width: 200px;
-            background-color: var(--dark);
-            color: #fff;
-            text-align: center;
-            border-radius: 6px;
-            padding: 10px;
-            position: absolute;
-            z-index: 1;
-            bottom: 125%;
-            left: 50%;
-            transform: translateX(-50%);
-            opacity: 0;
-            transition: opacity 0.3s;
-            font-size: 0.9rem;
-        }
-
-        .tooltip:hover .tooltiptext {
-            visibility: visible;
-            opacity: 1;
-        }
-
-        @media (max-width: 768px) {
-            .selection-grid {
-                grid-template-columns: 1fr;
-            }
-            
-            .dashboard {
-                grid-template-columns: repeat(2, 1fr);
-            }
-        }
     </style>
 </head>
 <body>
+    <div class="bg-clouds" aria-hidden="true"></div>
+
     <div class="container">
         <header>
-            <h1>Country-Building Simulator</h1>
-            <p>Build your nation from the ground up and lead it to prosperity!</p>
+            <div class="title">
+                <h1>Country-Building Simulator</h1>
+                <p id="header-sub">Build your nation from the ground up! Turn: 1</p>
+            </div>
+
+            <div class="header-controls">
+                <button id="save-btn" class="btn small ghost" title="Save your current game to your browser">💾 Save</button>
+                <button id="load-btn" class="btn small ghost" title="Load your last saved game">📂 Load</button>
+                <button id="export-btn" class="btn small ghost" title="Export save as JSON">🔁 Export</button>
+                <button id="import-btn" class="btn small ghost" title="Import save JSON">📥 Import</button>
+            </div>
         </header>
 
         <!-- Continent Selection Phase -->
-        <div id="continent-phase" class="game-phase active">
+        <div id="continent-phase" class="game-phase active" aria-live="polite">
             <h2>Choose Your Continent</h2>
-            <p>Each continent offers unique advantages for your nation.</p>
-            
-            <div class="selection-grid">
-                <div class="selection-card" data-continent="africa">
+            <p>Select a continent. Hover/tap the info for bonuses.</p>
+
+            <div class="selection-grid" id="continent-grid">
+                <div class="selection-card" data-continent="africa" role="button" tabindex="0">
                     <div class="card-icon">🌍</div>
-                    <h3>Africa</h3>
-                    <p>Rich in mineral resources</p>
-                    <div class="tooltip">ℹ️
+                    <h3>Africa <span class="tooltip">ℹ️
                         <span class="tooltiptext">+50% mineral production, -20% initial infrastructure</span>
-                    </div>
+                    </span></h3>
+                    <p>Rich in mineral resources</p>
                 </div>
-                <div class="selection-card" data-continent="asia">
+                <div class="selection-card" data-continent="asia" role="button" tabindex="0">
                     <div class="card-icon">🗾</div>
-                    <h3>Asia</h3>
-                    <p>Large population & tech potential</p>
-                    <div class="tooltip">ℹ️
+                    <h3>Asia <span class="tooltip">ℹ️
                         <span class="tooltiptext">+30% population growth, +20% tech research speed</span>
-                    </div>
+                    </span></h3>
+                    <p>Large population & tech potential</p>
                 </div>
-                <div class="selection-card" data-continent="europe">
+                <div class="selection-card" data-continent="europe" role="button" tabindex="0">
                     <div class="card-icon">🏛️</div>
-                    <h3>Europe</h3>
-                    <p>Advanced infrastructure</p>
-                    <div class="tooltip">ℹ️
+                    <h3>Europe <span class="tooltip">ℹ️
                         <span class="tooltiptext">+40% initial infrastructure, -10% resource production</span>
-                    </div>
+                    </span></h3>
+                    <p>Advanced infrastructure</p>
                 </div>
-                <div class="selection-card" data-continent="north-america">
+                <div class="selection-card" data-continent="north-america" role="button" tabindex="0">
                     <div class="card-icon">🗽</div>
-                    <h3>North America</h3>
-                    <p>Strong economy</p>
-                    <div class="tooltip">ℹ️
+                    <h3>North America <span class="tooltip">ℹ️
                         <span class="tooltiptext">+30% money generation, +15% trade efficiency</span>
-                    </div>
+                    </span></h3>
+                    <p>Strong economy</p>
                 </div>
-                <div class="selection-card" data-continent="south-america">
+                <div class="selection-card" data-continent="south-america" role="button" tabindex="0">
                     <div class="card-icon">🌴</div>
-                    <h3>South America</h3>
-                    <p>Fertile land & natural resources</p>
-                    <div class="tooltip">ℹ️
+                    <h3>South America <span class="tooltip">ℹ️
                         <span class="tooltiptext">+40% food production, +25% natural resources</span>
-                    </div>
+                    </span></h3>
+                    <p>Fertile land & natural resources</p>
                 </div>
-                <div class="selection-card" data-continent="oceania">
+                <div class="selection-card" data-continent="oceania" role="button" tabindex="0">
                     <div class="card-icon">🏝️</div>
-                    <h3>Oceania</h3>
-                    <p>High stability & strategic location</p>
-                    <div class="tooltip">ℹ️
+                    <h3>Oceania <span class="tooltip">ℹ️
                         <span class="tooltiptext">+50% stability, +30% diplomatic power</span>
-                    </div>
+                    </span></h3>
+                    <p>High stability & strategic location</p>
                 </div>
             </div>
-            
-            <button id="next-to-politics" class="btn" disabled>Continue to Political System</button>
+
+            <div style="text-align:center;margin-top:14px;">
+                <button id="next-to-politics" class="btn" disabled>Continue to Political System</button>
+            </div>
         </div>
 
         <!-- Political System Selection Phase -->
-        <div id="politics-phase" class="game-phase">
+        <div id="politics-phase" class="game-phase" aria-live="polite">
             <h2>Choose Your Political System</h2>
-            <p>Your political system will determine how your economy functions.</p>
-            
-            <div class="selection-grid">
-                <div class="selection-card" data-system="capitalist">
+            <p>Pick a political system to shape your long-term gameplay.</p>
+
+            <div class="selection-grid" id="politics-grid">
+                <div class="selection-card" data-system="capitalist" role="button" tabindex="0">
                     <div class="card-icon">💼</div>
-                    <h3>Capitalist</h3>
-                    <p>Free market economy with private ownership</p>
-                    <div class="tooltip">ℹ️
+                    <h3>Capitalist <span class="tooltip">ℹ️
                         <span class="tooltiptext">+25% money generation, -15% stability</span>
-                    </div>
+                    </span></h3>
+                    <p>Free market economy with private ownership</p>
                 </div>
-                <div class="selection-card" data-system="socialist">
+                <div class="selection-card" data-system="socialist" role="button" tabindex="0">
                     <div class="card-icon">⚖️</div>
-                    <h3>Socialist</h3>
-                    <p>Public ownership with social welfare</p>
-                    <div class="tooltip">ℹ️
+                    <h3>Socialist <span class="tooltip">ℹ️
                         <span class="tooltiptext">+30% stability, -20% economic growth</span>
-                    </div>
+                    </span></h3>
+                    <p>Public ownership with social welfare</p>
                 </div>
-                <div class="selection-card" data-system="mixed">
+                <div class="selection-card" data-system="mixed" role="button" tabindex="0">
                     <div class="card-icon">🔄</div>
-                    <h3>Mixed Economy</h3>
-                    <p>Balance of private enterprise and government intervention</p>
-                    <div class="tooltip">ℹ️
+                    <h3>Mixed Economy <span class="tooltip">ℹ️
                         <span class="tooltiptext">Balanced bonuses to all stats</span>
-                    </div>
+                    </span></h3>
+                    <p>Balance of private enterprise and government intervention</p>
                 </div>
             </div>
-            
-            <button id="next-to-game" class="btn" disabled>Start Building Your Nation</button>
+
+            <div style="text-align:center;margin-top:14px;">
+                <button id="next-to-game" class="btn" disabled>Start Building Your Nation</button>
+            </div>
         </div>
 
         <!-- Main Game Phase -->
-        <div id="game-phase" class="game-phase">
+        <div id="game-phase" class="game-phase" aria-live="polite">
+            <div style="display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;">
+                <h2 style="margin:0">Nation Dashboard</h2>
+                <div style="display:flex;gap:8px;align-items:center;">
+                    <div style="opacity:0.95">Turn: <strong id="turn-counter">1</strong></div>
+                    <button id="next-turn" class="btn pulse">Next Turn</button>
+                </div>
+            </div>
+
             <div class="dashboard">
                 <div class="stat-card">
                     <h3>Money</h3>
                     <div class="stat-value" id="money-value">$1000</div>
                     <div class="progress-bar">
-                        <div class="progress-fill" id="money-bar" style="width: 60%"></div>
+                        <div class="progress-fill" id="money-bar" style="width:60%"></div>
                     </div>
                 </div>
                 <div class="stat-card">
                     <h3>Population</h3>
                     <div class="stat-value" id="population-value">1.2M</div>
                     <div class="progress-bar">
-                        <div class="progress-fill" id="population-bar" style="width: 40%"></div>
+                        <div class="progress-fill" id="population-bar" style="width:40%"></div>
                     </div>
                 </div>
                 <div class="stat-card">
                     <h3>Technology</h3>
                     <div class="stat-value" id="tech-value">25</div>
                     <div class="progress-bar">
-                        <div class="progress-fill" id="tech-bar" style="width: 25%"></div>
+                        <div class="progress-fill" id="tech-bar" style="width:25%"></div>
                     </div>
                 </div>
                 <div class="stat-card">
                     <h3>Minerals</h3>
                     <div class="stat-value" id="minerals-value">500</div>
                     <div class="progress-bar">
-                        <div class="progress-fill" id="minerals-bar" style="width: 50%"></div>
+                        <div class="progress-fill" id="minerals-bar" style="width:50%"></div>
                     </div>
                 </div>
                 <div class="stat-card">
                     <h3>Stability</h3>
                     <div class="stat-value" id="stability-value">75%</div>
                     <div class="progress-bar">
-                        <div class="progress-fill" id="stability-bar" style="width: 75%"></div>
+                        <div class="progress-fill" id="stability-bar" style="width:75%"></div>
                     </div>
                 </div>
                 <div class="stat-card">
                     <h3>Influence</h3>
                     <div class="stat-value" id="influence-value">10</div>
                     <div class="progress-bar">
-                        <div class="progress-fill" id="influence-bar" style="width: 10%"></div>
+                        <div class="progress-fill" id="influence-bar" style="width:10%"></div>
                     </div>
                 </div>
             </div>
 
-            <div class="action-panel">
+            <div class="action-panel" id="action-panel">
                 <div class="action-card">
                     <h3>Economy</h3>
                     <div class="action-item">
                         <span>Build Factory</span>
-                        <button class="btn" data-action="factory">Build <span class="cost">($500)</span></button>
+                        <button class="btn" data-action="factory">Build <span class="cost" data-action="factory">$500</span></button>
                     </div>
                     <div class="action-item">
                         <span>Develop Infrastructure</span>
-                        <button class="btn" data-action="infrastructure">Develop <span class="cost">($300)</span></button>
+                        <button class="btn" data-action="infrastructure">Develop <span class="cost" data-action="infrastructure">$300</span></button>
                     </div>
                     <div class="action-item">
                         <span>Trade Agreement</span>
-                        <button class="btn" data-action="trade">Negotiate <span class="cost">($200)</span></button>
+                        <button class="btn" data-action="trade">Negotiate <span class="cost" data-action="trade">$200</span></button>
                     </div>
                 </div>
 
@@ -484,15 +404,15 @@
                     <h3>Society</h3>
                     <div class="action-item">
                         <span>Education Reform</span>
-                        <button class="btn" data-action="education">Reform <span class="cost">($400)</span></button>
+                        <button class="btn" data-action="education">Reform <span class="cost" data-action="education">$400</span></button>
                     </div>
                     <div class="action-item">
                         <span>Healthcare System</span>
-                        <button class="btn" data-action="healthcare">Implement <span class="cost">($600)</span></button>
+                        <button class="btn" data-action="healthcare">Implement <span class="cost" data-action="healthcare">$600</span></button>
                     </div>
                     <div class="action-item">
                         <span>Social Programs</span>
-                        <button class="btn" data-action="social">Fund <span class="cost">($250)</span></button>
+                        <button class="btn" data-action="social">Fund <span class="cost" data-action="social">$250</span></button>
                     </div>
                 </div>
 
@@ -500,15 +420,15 @@
                     <h3>Technology</h3>
                     <div class="action-item">
                         <span>Research Lab</span>
-                        <button class="btn" data-action="research">Build <span class="cost">($800)</span></button>
+                        <button class="btn" data-action="research">Build <span class="cost" data-action="research">$800</span></button>
                     </div>
                     <div class="action-item">
                         <span>Tech Education</span>
-                        <button class="btn" data-action="techedu">Implement <span class="cost">($350)</span></button>
+                        <button class="btn" data-action="techedu">Implement <span class="cost" data-action="techedu">$350</span></button>
                     </div>
                     <div class="action-item">
                         <span>Innovation Fund</span>
-                        <button class="btn" data-action="innovation">Create <span class="cost">($450)</span></button>
+                        <button class="btn" data-action="innovation">Create <span class="cost" data-action="innovation">$450</span></button>
                     </div>
                 </div>
 
@@ -516,49 +436,52 @@
                     <h3>Resources</h3>
                     <div class="action-item">
                         <span>Mine Expansion</span>
-                        <button class="btn" data-action="mine">Expand <span class="cost">($400)</span></button>
+                        <button class="btn" data-action="mine">Expand <span class="cost" data-action="mine">$400</span></button>
                     </div>
                     <div class="action-item">
                         <span>Agriculture</span>
-                        <button class="btn" data-action="agriculture">Develop <span class="cost">($300)</span></button>
+                        <button class="btn" data-action="agriculture">Develop <span class="cost" data-action="agriculture">$300</span></button>
                     </div>
                     <div class="action-item">
                         <span>Resource Trade</span>
-                        <button class="btn" data-action="resourcetrade">Trade <span class="cost">($150)</span></button>
+                        <button class="btn" data-action="resourcetrade">Trade <span class="cost" data-action="resourcetrade">$150</span></button>
                     </div>
                 </div>
             </div>
 
-            <div style="text-align: center; margin-top: 30px;">
-                <button id="next-turn" class="btn pulse">Next Turn</button>
-            </div>
         </div>
 
-        <!-- Event Modal -->
-        <div id="event-modal" class="event-modal">
-            <div class="modal-content">
-                <h2 id="event-title">Global Event</h2>
-                <p id="event-description">An important event has occurred that requires your attention.</p>
-                <div class="modal-buttons">
-                    <button id="event-option1" class="btn btn-success">Option 1</button>
-                    <button id="event-option2" class="btn btn-danger">Option 2</button>
-                </div>
-            </div>
-        </div>
+    </div>
 
-        <!-- Game Over Modal -->
-        <div id="game-over-modal" class="event-modal">
-            <div class="modal-content game-over">
-                <h2 id="game-over-title">Game Over</h2>
-                <p id="game-over-message">Your nation has collapsed due to instability.</p>
-                <button id="restart-game" class="btn">Play Again</button>
-            </div>
+    <!-- Event container -> creates stacked event cards -->
+    <div class="event-container" id="event-container" aria-live="polite"></div>
+
+    <!-- Centered modals for victory/gameover/summary -->
+    <div id="center-modal" class="center-modal" role="dialog" aria-modal="true" aria-hidden="true">
+        <h3 id="center-title">Title</h3>
+        <p id="center-body">Body</p>
+        <div style="display:flex;gap:8px;justify-content:flex-end;margin-top:14px;">
+            <button id="center-close" class="btn">Close</button>
+            <button id="center-restart" class="btn secondary">Play Again</button>
         </div>
     </div>
 
     <script>
-        // Game state
-        const gameState = {
+        /*****************************************************************************
+         * Modular, enhanced game script
+         * Features implemented:
+         *  - Dynamic scaling costs
+         *  - Animated stat changes and floating text
+         *  - Smooth progress bar animations
+         *  - Event queue & stacking (multiple events shown)
+         *  - Save / Load (localStorage + export/import)
+         *  - Victory & loss conditions + centered modal
+         *  - Mobile & UX improvements
+         *  - Modular functions and minimized duplication
+         *****************************************************************************/
+
+        // --- Game state (single source of truth)
+        const DEFAULT_STATE = {
             continent: null,
             politicalSystem: null,
             money: 1000,
@@ -568,351 +491,648 @@
             stability: 75,
             influence: 10,
             turn: 1,
-            buildings: {
-                factory: 0,
-                infrastructure: 0,
-                research: 0,
-                mine: 0
-            },
-            modifiers: {
-                money: 1,
-                population: 1,
-                technology: 1,
-                minerals: 1,
-                stability: 1,
-                influence: 1
-            }
+            buildings: { factory:0, infrastructure:0, research:0, mine:0 },
+            modifiers: { money:1, population:1, technology:1, minerals:1, stability:1, influence:1 },
+            // scaledCosts stores the current cost for each action (changes after purchase)
+            scaledCosts: {},
+            // simple event queue
+            eventQueue: []
         };
 
-        // Continent bonuses
+        let gameState = JSON.parse(JSON.stringify(DEFAULT_STATE));
+
+        // Base costs & scaling
+        const BASE_COSTS = {
+            factory:500, infrastructure:300, trade:200,
+            education:400, healthcare:600, social:250,
+            research:800, techedu:350, innovation:450,
+            mine:400, agriculture:300, resourcetrade:150
+        };
+        const COST_SCALE = {
+            // multiplicative scale per purchase for actions that can be purchased multiple times
+            factory:1.18,
+            infrastructure:1.12,
+            trade:1.08,
+            education:1.15,
+            healthcare:1.18,
+            social:1.10,
+            research:1.2,
+            techedu:1.12,
+            innovation:1.14,
+            mine:1.15,
+            agriculture:1.12,
+            resourcetrade:1.06
+        };
+
+        // continent & political bonuses
         const continentBonuses = {
-            africa: { minerals: 1.5, infrastructure: 0.8 },
-            asia: { population: 1.3, technology: 1.2 },
-            europe: { infrastructure: 1.4, minerals: 0.9 },
-            'north-america': { money: 1.3, influence: 1.15 },
-            'south-america': { minerals: 1.25, stability: 1.1 },
-            oceania: { stability: 1.5, influence: 1.3 }
+            africa: { minerals:1.5, infrastructure:0.8 },
+            asia: { population:1.3, technology:1.2 },
+            europe: { infrastructure:1.4, minerals:0.9 },
+            'north-america': { money:1.3, influence:1.15 },
+            'south-america': { minerals:1.25, stability:1.1 },
+            oceania: { stability:1.5, influence:1.3 }
         };
-
-        // Political system bonuses
         const politicalBonuses = {
-            capitalist: { money: 1.25, stability: 0.85 },
-            socialist: { stability: 1.3, money: 0.8 },
-            mixed: { money: 1.1, stability: 1.1, technology: 1.05, minerals: 1.05 }
+            capitalist: { money:1.25, stability:0.85 },
+            socialist: { stability:1.3, money:0.8 },
+            mixed: { money:1.1, stability:1.1, technology:1.05, minerals:1.05 }
         };
 
-        // Global events
+        // events & action effects (actionEffects do NOT include purchase cost)
         const events = [
             {
-                title: "Economic Crisis",
-                description: "A global economic downturn has affected trade and markets worldwide.",
-                option1: "Stimulate economy with government spending",
-                option2: "Implement austerity measures",
-                effects1: { money: -200, stability: -5 },
-                effects2: { money: -100, stability: -10, population: -50000 }
+                id:'econ_crisis',
+                title:"Economic Crisis",
+                description:"A global economic downturn has affected trade and markets worldwide.",
+                option1:"Stimulate economy (costly)",
+                option2:"Implement austerity",
+                effects1:{ money:-200, stability:-5 },
+                effects2:{ money:-100, stability:-10, population:-50000 }
             },
             {
-                title: "Natural Disaster",
-                description: "A major earthquake has struck, damaging infrastructure and causing casualties.",
-                option1: "Allocate emergency funds for relief",
-                option2: "Request international aid",
-                effects1: { money: -300, stability: -5 },
-                effects2: { stability: -10, influence: -2 }
+                id:'natural_disaster',
+                title:"Natural Disaster",
+                description:"A major earthquake struck, damaging infrastructure and causing casualties.",
+                option1:"Allocate emergency funds",
+                option2:"Request international aid",
+                effects1:{ money:-300, stability:-5 },
+                effects2:{ stability:-10, influence:-2 }
             },
             {
-                title: "Technological Breakthrough",
-                description: "Your scientists have made a significant discovery in renewable energy.",
-                option1: "Invest heavily in research",
-                option2: "License the technology to other nations",
-                effects1: { money: -250, technology: 15 },
-                effects2: { money: 150, technology: 5 }
+                id:'tech_break',
+                title:"Technological Breakthrough",
+                description:"Scientists made a significant discovery in renewable energy.",
+                option1:"Invest heavily in research",
+                option2:"License the tech",
+                effects1:{ money:-250, technology:15 },
+                effects2:{ money:150, technology:5 }
             },
             {
-                title: "Diplomatic Opportunity",
-                description: "A neighboring country proposes a strategic alliance.",
-                option1: "Form the alliance",
-                option2: "Remain neutral",
-                effects1: { influence: 5, stability: 5 },
-                effects2: { influence: -2 }
+                id:'diplomatic',
+                title:"Diplomatic Opportunity",
+                description:"A neighboring country proposes a strategic alliance.",
+                option1:"Form the alliance",
+                option2:"Remain neutral",
+                effects1:{ influence:5, stability:5 },
+                effects2:{ influence:-2 }
             },
             {
-                title: "Resource Discovery",
-                description: "Vast mineral deposits have been found within your borders.",
-                option1: "Invest in extraction infrastructure",
-                option2: "Auction extraction rights",
-                effects1: { money: -200, minerals: 300 },
-                effects2: { money: 400, minerals: 100 }
+                id:'resource_discovery',
+                title:"Resource Discovery",
+                description:"Vast mineral deposits have been discovered.",
+                option1:"Invest in extraction",
+                option2:"Auction extraction rights",
+                effects1:{ money:-200, minerals:300 },
+                effects2:{ money:400, minerals:100 }
             }
         ];
 
-        // Action effects
-        // NOTE: purchase cost is handled via the `costs` object in performAction().
-        // To avoid double-deducting money, actionEffects should only include post-purchase effects
-        // (i.e., not repeat the purchase cost).
         const actionEffects = {
-            factory: { moneyMod: 1.1 },
-            infrastructure: { stability: 5, population: 50000 },
-            trade: { moneyMod: 1.05, influence: 2 },
-            education: { technology: 10, stability: 3 },
-            healthcare: { stability: 10, population: 100000 },
-            social: { stability: 8 },
-            research: { technology: 25 },
-            techedu: { technology: 15 },
-            innovation: { technology: 20 },
-            mine: { minerals: 200 },
-            agriculture: { population: 75000, stability: 3 },
-            // Resource trade: pay the cost (handled by costs), then gain money and lose some minerals.
-            // Keeping a positive money effect here (e.g. +300) means the player pays the cost and then receives this payout.
-            resourcetrade: { money: 300, minerals: -50 }
+            factory:{ moneyMod:1.1 },
+            infrastructure:{ stability:5, population:50000 },
+            trade:{ moneyMod:1.05, influence:2 },
+            education:{ technology:10, stability:3 },
+            healthcare:{ stability:10, population:100000 },
+            social:{ stability:8 },
+            research:{ technology:25 },
+            techedu:{ technology:15 },
+            innovation:{ technology:20 },
+            mine:{ minerals:200 },
+            agriculture:{ population:75000, stability:3 },
+            resourcetrade:{ money:300, minerals:-50 }
         };
 
-        // DOM Elements
-        const continentPhase = document.getElementById('continent-phase');
-        const politicsPhase = document.getElementById('politics-phase');
-        const gamePhase = document.getElementById('game-phase');
-        const eventModal = document.getElementById('event-modal');
-        const gameOverModal = document.getElementById('game-over-modal');
+        // DOM references (cached)
+        const DOM = {
+            continentPhase: document.getElementById('continent-phase'),
+            politicsPhase: document.getElementById('politics-phase'),
+            gamePhase: document.getElementById('game-phase'),
+            nextToPoliticsBtn: document.getElementById('next-to-politics'),
+            nextToGameBtn: document.getElementById('next-to-game'),
+            nextTurnBtn: document.getElementById('next-turn'),
+            continentCards: document.querySelectorAll('[data-continent]'),
+            systemCards: document.querySelectorAll('[data-system]'),
+            actionButtons: document.querySelectorAll('[data-action]'),
+            costSpans: document.querySelectorAll('.cost[data-action]'),
+            eventContainer: document.getElementById('event-container'),
+            centerModal: document.getElementById('center-modal'),
+            centerTitle: document.getElementById('center-title'),
+            centerBody: document.getElementById('center-body'),
+            centerClose: document.getElementById('center-close'),
+            centerRestart: document.getElementById('center-restart'),
+            saveBtn: document.getElementById('save-btn'),
+            loadBtn: document.getElementById('load-btn'),
+            exportBtn: document.getElementById('export-btn'),
+            importBtn: document.getElementById('import-btn'),
+            headerSub: document.getElementById('header-sub'),
+            turnCounter: document.getElementById('turn-counter'),
+            // stat elements
+            moneyValue: document.getElementById('money-value'),
+            populationValue: document.getElementById('population-value'),
+            techValue: document.getElementById('tech-value'),
+            mineralsValue: document.getElementById('minerals-value'),
+            stabilityValue: document.getElementById('stability-value'),
+            influenceValue: document.getElementById('influence-value'),
+            moneyBar: document.getElementById('money-bar'),
+            populationBar: document.getElementById('population-bar'),
+            techBar: document.getElementById('tech-bar'),
+            mineralsBar: document.getElementById('minerals-bar'),
+            stabilityBar: document.getElementById('stability-bar'),
+            influenceBar: document.getElementById('influence-bar')
+        };
 
-        const continentCards = document.querySelectorAll('[data-continent]');
-        const systemCards = document.querySelectorAll('[data-system]');
-        const nextToPoliticsBtn = document.getElementById('next-to-politics');
-        const nextToGameBtn = document.getElementById('next-to-game');
-        const nextTurnBtn = document.getElementById('next-turn');
-        const actionButtons = document.querySelectorAll('[data-action]');
-        const restartGameBtn = document.getElementById('restart-game');
-
-        // Event listeners for continent selection
-        continentCards.forEach(card => {
-            card.addEventListener('click', () => {
-                continentCards.forEach(c => c.classList.remove('selected'));
-                card.classList.add('selected');
-                gameState.continent = card.getAttribute('data-continent');
-                nextToPoliticsBtn.disabled = false;
-            });
-        });
-
-        // Event listeners for political system selection
-        systemCards.forEach(card => {
-            card.addEventListener('click', () => {
-                systemCards.forEach(c => c.classList.remove('selected'));
-                card.classList.add('selected');
-                gameState.politicalSystem = card.getAttribute('data-system');
-                nextToGameBtn.disabled = false;
-            });
-        });
-
-        // Navigation between phases
-        nextToPoliticsBtn.addEventListener('click', () => {
-            continentPhase.classList.remove('active');
-            politicsPhase.classList.add('active');
-        });
-
-        nextToGameBtn.addEventListener('click', () => {
-            politicsPhase.classList.remove('active');
-            gamePhase.classList.add('active');
-            applyBonuses();
-            updateUI();
-        });
-
-        // Action buttons
-        actionButtons.forEach(button => {
-            button.addEventListener('click', () => {
-                const action = button.getAttribute('data-action');
-                performAction(action);
-            });
-        });
-
-        // Next turn button
-        nextTurnBtn.addEventListener('click', () => {
-            nextTurn();
-        });
-
-        // Restart game button
-        restartGameBtn.addEventListener('click', () => {
-            location.reload();
-        });
-
-        // Apply continent and political system bonuses
-        function applyBonuses() {
-            // Reset modifiers
-            Object.keys(gameState.modifiers).forEach(key => {
-                gameState.modifiers[key] = 1;
-            });
-
-            // Apply continent bonuses
-            if (gameState.continent && continentBonuses[gameState.continent]) {
-                Object.keys(continentBonuses[gameState.continent]).forEach(key => {
-                    gameState.modifiers[key] *= continentBonuses[gameState.continent][key];
-                });
-            }
-
-            // Apply political system bonuses
-            if (gameState.politicalSystem && politicalBonuses[gameState.politicalSystem]) {
-                Object.keys(politicalBonuses[gameState.politicalSystem]).forEach(key => {
-                    gameState.modifiers[key] *= politicalBonuses[gameState.politicalSystem][key];
-                });
-            }
+        // --- Utilities: animations, sounds, floating text
+        function formatNumber(n){
+            if (Math.abs(n) >= 1000000) return (n/1000000).toFixed(1) + 'M';
+            if (Math.abs(n) >= 1000) return (n/1000).toFixed(1) + 'k';
+            return n.toString();
         }
 
-        // Perform an action
-        function performAction(action) {
-            const costs = {
-                factory: 500,
-                infrastructure: 300,
-                trade: 200,
-                education: 400,
-                healthcare: 600,
-                social: 250,
-                research: 800,
-                techedu: 350,
-                innovation: 450,
-                mine: 400,
-                agriculture: 300,
-                resourcetrade: 150
-            };
+        function animateValue(el, start, end, duration = 700, formatter = v => v){
+            const startTime = performance.now();
+            const range = end - start;
+            function step(now){
+                const t = Math.min(1, (now - startTime) / duration);
+                const eased = t<.5 ? 2*t*t : -1 + (4-2*t)*t; // simple ease
+                const val = start + range * eased;
+                el.textContent = formatter(Math.round(val));
+                if (t < 1) requestAnimationFrame(step);
+            }
+            requestAnimationFrame(step);
+        }
 
-            // Ensure action exists
-            if (!(action in costs)) return;
+        function floatText(x, y, text, color = '#fff'){
+            // create a floating text element at page coordinates (x,y)
+            const ft = document.createElement('div');
+            ft.className = 'floating-text';
+            ft.style.left = `${x}px`;
+            ft.style.top = `${y}px`;
+            ft.style.color = color;
+            ft.textContent = text;
+            document.body.appendChild(ft);
+            requestAnimationFrame(()=> {
+                ft.style.transform = 'translateY(-60px) scale(1.04)';
+                ft.style.opacity = '0';
+            });
+            setTimeout(()=> ft.remove(), 1000);
+        }
 
-            if (gameState.money >= costs[action]) {
-                // Deduct purchase cost once
-                gameState.money -= costs[action];
+        // Simple sound via WebAudio to avoid external assets
+        const audioCtx = (window.AudioContext || window.webkitAudioContext) ? new (window.AudioContext || window.webkitAudioContext)() : null;
+        function playSound(type='click'){
+            if (!audioCtx) return;
+            try {
+                const o = audioCtx.createOscillator();
+                const g = audioCtx.createGain();
+                o.type = (type === 'success') ? 'sine' : 'triangle';
+                o.frequency.value = (type === 'success') ? 880 : 440;
+                g.gain.value = 0.02;
+                o.connect(g);
+                g.connect(audioCtx.destination);
+                o.start();
+                o.stop(audioCtx.currentTime + 0.08);
+            } catch(e){}
+        }
 
-                // Apply effects (effects no longer duplicate the purchase cost)
-                if (actionEffects[action]) {
-                    Object.keys(actionEffects[action]).forEach(key => {
-                        if (key.includes('Mod')) {
-                            // This is a modifier, not a direct value
-                            const stat = key.replace('Mod', '');
-                            gameState.modifiers[stat] *= actionEffects[action][key];
-                        } else {
-                            // Apply numeric changes (if stat doesn't exist, create it)
-                            if (typeof gameState[key] === 'number') {
-                                gameState[key] += actionEffects[action][key];
-                            } else {
-                                // Unknown stat — just ignore or you could extend gameState schema
-                                console.warn('Unknown stat in action effect:', key);
-                            }
-                        }
-                    });
-                }
+        // --- Save / Load functionality
+        const STORAGE_KEY = 'stratgaem_save_v1';
+        function saveGame(){
+            const toSave = JSON.stringify(gameState);
+            localStorage.setItem(STORAGE_KEY, toSave);
+            showCenterModal('Game Saved', 'Your game has been saved to localStorage.', true);
+        }
+        function loadGame(){
+            const raw = localStorage.getItem(STORAGE_KEY);
+            if (!raw){ showCenterModal('No Save Found', 'No saved game found in localStorage.'); return; }
+            try {
+                const parsed = JSON.parse(raw);
+                gameState = Object.assign({}, DEFAULT_STATE, parsed);
+                // ensure scaledCosts exists
+                initializeScaledCosts();
+                applyBonuses();
+                updateUI(true);
+                showCenterModal('Game Loaded', 'Save loaded from localStorage.', true);
+            } catch(e){
+                showCenterModal('Load Error', 'Failed to parse saved game.');
+            }
+        }
+        function exportSave(){
+            const data = JSON.stringify(gameState, null, 2);
+            const blob = new Blob([data], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'stratgaem_save.json';
+            a.click();
+            URL.revokeObjectURL(url);
+        }
+        function importSave(){
+            const input = document.createElement('input');
+            input.type = 'file';
+            input.accept = '.json,application/json';
+            input.addEventListener('change', e=>{
+                const file = e.target.files[0];
+                if (!file) return;
+                const reader = new FileReader();
+                reader.onload = () => {
+                    try {
+                        const parsed = JSON.parse(reader.result);
+                        gameState = Object.assign({}, DEFAULT_STATE, parsed);
+                        initializeScaledCosts();
+                        applyBonuses();
+                        updateUI(true);
+                        showCenterModal('Imported', 'Save imported successfully.', true);
+                    } catch(err){
+                        showCenterModal('Import Error', 'Invalid JSON.');
+                    }
+                };
+                reader.readAsText(file);
+            });
+            input.click();
+        }
 
-                // Update buildings count if applicable
-                if (['factory', 'infrastructure', 'research', 'mine'].includes(action)) {
-                    gameState.buildings[action]++;
-                }
+        // center modal helpers
+        function showCenterModal(title, body, autoClose=false){
+            DOM.centerTitle.textContent = title;
+            DOM.centerBody.textContent = body;
+            DOM.centerModal.classList.add('active');
+            DOM.centerModal.setAttribute('aria-hidden','false');
+            playSound('success');
+            if (autoClose) setTimeout(()=> hideCenterModal(), 1300);
+        }
+        function hideCenterModal(){ DOM.centerModal.classList.remove('active'); DOM.centerModal.setAttribute('aria-hidden','true'); }
 
-                updateUI();
+        // initialize scaledCosts from base if missing
+        function initializeScaledCosts(){
+            if (!gameState.scaledCosts || Object.keys(gameState.scaledCosts).length === 0){
+                gameState.scaledCosts = {};
+                Object.keys(BASE_COSTS).forEach(k => gameState.scaledCosts[k] = BASE_COSTS[k]);
             } else {
-                alert("Not enough money to perform this action!");
+                // make sure every key exists
+                Object.keys(BASE_COSTS).forEach(k => {
+                    if (!(k in gameState.scaledCosts)) gameState.scaledCosts[k] = BASE_COSTS[k];
+                });
             }
         }
 
-        // Process next turn
-        function nextTurn() {
-            // Apply passive income/growth
-            gameState.money += Math.floor(100 * gameState.modifiers.money);
-            gameState.population += Math.floor(50000 * gameState.modifiers.population);
-            gameState.technology += Math.floor(2 * gameState.modifiers.technology);
-            gameState.minerals += Math.floor(50 * gameState.modifiers.minerals);
-            
-            // Random event chance (20%)
-            if (Math.random() < 0.2) {
-                triggerRandomEvent();
+        // Apply continent & political bonuses to modifiers
+        function applyBonuses(){
+            Object.keys(gameState.modifiers).forEach(k => gameState.modifiers[k] = 1);
+            if (gameState.continent && continentBonuses[gameState.continent]){
+                Object.keys(continentBonuses[gameState.continent]).forEach(k=>{
+                    gameState.modifiers[k] *= continentBonuses[gameState.continent][k];
+                });
+            }
+            if (gameState.politicalSystem && politicalBonuses[gameState.politicalSystem]){
+                Object.keys(politicalBonuses[gameState.politicalSystem]).forEach(k=>{
+                    gameState.modifiers[k] *= politicalBonuses[gameState.politicalSystem][k];
+                });
+            }
+        }
+
+        // Update cost display & button enabled state
+        function refreshCostsAndButtons(){
+            DOM.costSpans.forEach(span=>{
+                const act = span.getAttribute('data-action');
+                const cost = Math.round(gameState.scaledCosts[act] || BASE_COSTS[act]);
+                span.textContent = `$${cost}`;
+                // find the parent button
+                const btn = document.querySelector(`button[data-action="${act}"]`);
+                if (btn) btn.disabled = (gameState.money < cost);
+            });
+        }
+
+        // Perform an action: deduct cost, apply effects, scale cost, animate
+        function performAction(action, evtElement=null){
+            const costs = gameState.scaledCosts;
+            if (!(action in costs)) return;
+            const cost = Math.round(costs[action]);
+
+            if (gameState.money < cost){ showCenterModal('Insufficient Funds', `You need $${cost} to ${action}.`); playSound('click'); return; }
+
+            // Deduct
+            const prevMoney = gameState.money;
+            gameState.money -= cost;
+            animateStatChange('money', prevMoney, gameState.money, evtElement);
+
+            // Apply effects
+            const effects = actionEffects[action] || {};
+            Object.keys(effects).forEach(key=>{
+                if (key.includes('Mod')){
+                    const stat = key.replace('Mod','');
+                    gameState.modifiers[stat] *= effects[key];
+                } else {
+                    if (typeof gameState[key] === 'number'){
+                        const prev = gameState[key];
+                        gameState[key] += effects[key];
+                        animateStatChange(key, prev, gameState[key], evtElement);
+                    }
+                }
+            });
+
+            // update buildings if relevant
+            if (['factory','infrastructure','research','mine'].includes(action)){
+                gameState.buildings[action] = (gameState.buildings[action] || 0) + 1;
             }
 
-            // Check for game over conditions
-            if (gameState.stability <= 0 || gameState.population <= 0 || gameState.money <= -1000) {
-                gameOver();
+            // scale cost up for next purchase
+            const scale = COST_SCALE[action] || 1.08;
+            gameState.scaledCosts[action] = Math.max(1, Math.round(gameState.scaledCosts[action] * scale));
+
+            // Visual + audio feedback
+            playSound('click');
+            // Floating text near the button if element provided
+            if (evtElement && evtElement instanceof HTMLElement){
+                const rect = evtElement.getBoundingClientRect();
+                floatText(rect.left + rect.width/2, rect.top, `-$${cost}`, '#f5d36b');
+            }
+
+            refreshCostsAndButtons();
+            updateUI();
+        }
+
+        // Animate stat change and update progress bars
+        function animateStatChange(stat, from, to, evtElement=null){
+            // map stat to DOM element & bar
+            const map = {
+                money: {el:DOM.moneyValue, bar:DOM.moneyBar, max:5000, fmt: v => `$${v}`},
+                population: {el:DOM.populationValue, bar:DOM.populationBar, max:5000000, fmt: v => `${(v/1000000).toFixed(1)}M`},
+                technology: {el:DOM.techValue, bar:DOM.techBar, max:100, fmt: v => `${v}`},
+                minerals: {el:DOM.mineralsValue, bar:DOM.mineralsBar, max:1000, fmt: v => `${v}`},
+                stability: {el:DOM.stabilityValue, bar:DOM.stabilityBar, max:100, fmt: v => `${v}%`},
+                influence: {el:DOM.influenceValue, bar:DOM.influenceBar, max:100, fmt: v => `${v}`}
+            };
+            const meta = map[stat];
+            if (!meta) return;
+            animateValue(meta.el, from, to, 700, v => meta.fmt(v));
+            // progress bar
+            const pct = Math.min(100, (to / meta.max) * 100);
+            meta.bar.style.width = `${pct}%`;
+
+            // spawn floating text for delta
+            const delta = to - from;
+            if (delta !== 0){
+                const positive = delta > 0;
+                const color = positive ? '#9eedc7' : '#ffb4b4';
+                const sign = positive ? '+' : '-';
+                // position roughly near stat-value element
+                const rect = meta.el.getBoundingClientRect();
+                floatText(rect.left + rect.width/2, rect.top, `${sign}${Math.abs(delta)}`, color);
+            }
+        }
+
+        // Next turn: passive generation, event chance, victory/loss checks
+        function nextTurn(){
+            // passive income/growth
+            const prevMoney = gameState.money;
+            gameState.money += Math.floor(100 * gameState.modifiers.money);
+            animateStatChange('money', prevMoney, gameState.money);
+
+            const prevPop = gameState.population;
+            gameState.population += Math.floor(50000 * gameState.modifiers.population);
+            animateStatChange('population', prevPop, gameState.population);
+
+            const prevTech = gameState.technology;
+            gameState.technology += Math.floor(2 * gameState.modifiers.technology);
+            animateStatChange('technology', prevTech, gameState.technology);
+
+            const prevMinerals = gameState.minerals;
+            gameState.minerals += Math.floor(50 * gameState.modifiers.minerals);
+            animateStatChange('minerals', prevMinerals, gameState.minerals);
+
+            // multiple event triggers allowed: we allow up to 2 events per turn probabilistically
+            let eventsTriggered = 0;
+            for (let i=0;i<2;i++){
+                if (Math.random() < 0.2){ // 20% per trial => up to two events
+                    enqueueRandomEvent();
+                    eventsTriggered++;
+                }
+            }
+            if (eventsTriggered) playSound('success');
+
+            // increment turn & UI
+            gameState.turn++;
+            updateUI();
+
+            // auto-save small snapshot
+            try { localStorage.setItem(STORAGE_KEY, JSON.stringify(gameState)); } catch(e){}
+
+            // check victory/loss
+            checkVictoryLoss();
+        }
+
+        // Enqueue a random event into the event queue and render
+        function enqueueRandomEvent(){
+            const ev = events[Math.floor(Math.random() * events.length)];
+            // create an instance (clone) so handlers refer to right object
+            const inst = Object.assign({ uuid: 'ev-' + Date.now() + Math.random().toString(36).slice(2) }, ev);
+            gameState.eventQueue.push(inst);
+            renderEventQueue();
+        }
+
+        // Render stacked event modals
+        function renderEventQueue(){
+            DOM.eventContainer.innerHTML = ''; // clear
+            // show up to 5 stacked events (older ones lower)
+            gameState.eventQueue.forEach((ev, idx) => {
+                const card = document.createElement('div');
+                card.className = 'event-modal active';
+                card.style.zIndex = 1100 + idx;
+                card.innerHTML = `
+                    <h4>${ev.title}</h4>
+                    <p>${ev.description}</p>
+                    <div class="small-meta">
+                        <span>Turn: ${gameState.turn}</span>
+                        <span>Event</span>
+                    </div>
+                    <div class="modal-buttons">
+                        <button class="btn small option1"> ${ev.option1} </button>
+                        <button class="btn small ghost option2"> ${ev.option2} </button>
+                    </div>
+                `;
+                // option handlers
+                const opt1 = card.querySelector('.option1');
+                const opt2 = card.querySelector('.option2');
+                const removeAndApply = (effects) => {
+                    applyEventEffects(effects, card);
+                    // remove this event instance from queue
+                    gameState.eventQueue = gameState.eventQueue.filter(e => e.uuid !== ev.uuid);
+                    renderEventQueue();
+                };
+                opt1.addEventListener('click', () => removeAndApply(ev.effects1));
+                opt2.addEventListener('click', () => removeAndApply(ev.effects2));
+                DOM.eventContainer.appendChild(card);
+            });
+        }
+
+        // Apply event effects (can be called for action responses too)
+        function applyEventEffects(effects, sourceElement=null){
+            Object.keys(effects).forEach(k=>{
+                if (k in gameState){
+                    const prev = gameState[k];
+                    gameState[k] += effects[k];
+                    animateStatChange(k, prev, gameState[k], sourceElement);
+                } else {
+                    console.warn('Unknown stat in event effect:', k);
+                }
+            });
+            // small feedback sound
+            playSound('click');
+            updateUI();
+        }
+
+        // Check for victory or loss conditions
+        function checkVictoryLoss(){
+            // Loss conditions
+            if (gameState.stability <= 0 || gameState.population <= 0 || gameState.money <= -10000){
+                // Game over
+                let title, message;
+                if (gameState.stability <= 0){ title = 'Revolution!'; message = 'Your government was overthrown due to low stability.'; }
+                else if (gameState.population <= 0){ title = 'Population Collapse'; message = 'Your nation lost its population.'; }
+                else { title = 'Bankruptcy'; message = 'Your nation defaulted on debts.'; }
+                showCenterModal(title, message);
+                DOM.centerRestart.addEventListener('click', resetGameOnce);
+                DOM.centerClose.addEventListener('click', () => { hideCenterModal(); resetGameOnce(); });
                 return;
             }
 
-            gameState.turn++;
-            updateUI();
-        }
-
-        // Trigger a random event
-        function triggerRandomEvent() {
-            const event = events[Math.floor(Math.random() * events.length)];
-            
-            document.getElementById('event-title').textContent = event.title;
-            document.getElementById('event-description').textContent = event.description;
-            document.getElementById('event-option1').textContent = event.option1;
-            document.getElementById('event-option2').textContent = event.option2;
-            
-            // Set up event option handlers
-            const option1Btn = document.getElementById('event-option1');
-            const option2Btn = document.getElementById('event-option2');
-            
-            const option1Handler = () => {
-                applyEventEffects(event.effects1);
-                eventModal.classList.remove('active');
-                option1Btn.removeEventListener('click', option1Handler);
-                option2Btn.removeEventListener('click', option2Handler);
-            };
-            
-            const option2Handler = () => {
-                applyEventEffects(event.effects2);
-                eventModal.classList.remove('active');
-                option1Btn.removeEventListener('click', option1Handler);
-                option2Btn.removeEventListener('click', option2Handler);
-            };
-            
-            option1Btn.addEventListener('click', option1Handler);
-            option2Btn.addEventListener('click', option2Handler);
-            
-            eventModal.classList.add('active');
-        }
-
-        // Apply event effects
-        function applyEventEffects(effects) {
-            Object.keys(effects).forEach(key => {
-                gameState[key] += effects[key];
-            });
-            updateUI();
-        }
-
-        // Game over
-        function gameOver() {
-            let title, message;
-            
-            if (gameState.stability <= 0) {
-                title = "Revolution!";
-                message = "Your government has been overthrown due to low stability.";
-            } else if (gameState.population <= 0) {
-                title = "Population Collapse";
-                message = "Your nation's population has declined to unsustainable levels.";
-            } else {
-                title = "Bankruptcy";
-                message = "Your nation has defaulted on its debts and collapsed economically.";
+            // Victory conditions (at least one threshold)
+            const win = (gameState.population >= 10000000) || (gameState.technology >= 200) || (gameState.influence >= 200);
+            if (win){
+                const summary = `Turns: ${gameState.turn}\nPopulation: ${formatNumber(gameState.population)}\nTech: ${gameState.technology}\nInfluence: ${gameState.influence}`;
+                showCenterModal('Victory!', 'You achieved a major national milestone! ' + '\n\n' + summary);
+                DOM.centerRestart.addEventListener('click', resetGameOnce);
+                DOM.centerClose.addEventListener('click', hideCenterModal);
             }
-            
-            document.getElementById('game-over-title').textContent = title;
-            document.getElementById('game-over-message').textContent = message;
-            gameOverModal.classList.add('active');
         }
 
-        // Update the UI with current game state
-        function updateUI() {
-            // Update resource values
-            document.getElementById('money-value').textContent = `$${gameState.money}`;
-            document.getElementById('population-value').textContent = `${(gameState.population / 1000000).toFixed(1)}M`;
-            document.getElementById('tech-value').textContent = gameState.technology;
-            document.getElementById('minerals-value').textContent = gameState.minerals;
-            document.getElementById('stability-value').textContent = `${gameState.stability}%`;
-            document.getElementById('influence-value').textContent = gameState.influence;
-            
-            // Update progress bars
-            document.getElementById('money-bar').style.width = `${Math.min(100, (gameState.money / 5000) * 100)}%`;
-            document.getElementById('population-bar').style.width = `${Math.min(100, (gameState.population / 5000000) * 100)}%`;
-            document.getElementById('tech-bar').style.width = `${Math.min(100, gameState.technology)}%`;
-            document.getElementById('minerals-bar').style.width = `${Math.min(100, (gameState.minerals / 1000) * 100)}%`;
-            document.getElementById('stability-bar').style.width = `${Math.min(100, gameState.stability)}%`;
-            document.getElementById('influence-bar').style.width = `${Math.min(100, gameState.influence)}%`;
-            
-            // Update turn counter in header if needed
-            document.querySelector('header p').textContent = `Build your nation from the ground up! Turn: ${gameState.turn}`;
+        // Ensure reset handler only attached once
+        function resetGameOnce(){
+            gameState = JSON.parse(JSON.stringify(DEFAULT_STATE));
+            initializeScaledCosts();
+            applyBonuses();
+            updateUI(true);
+            hideCenterModal();
+            playSound('success');
         }
+
+        // Update UI: refresh numbers and costs, header
+        function updateUI(skipAnimate = false){
+            DOM.headerSub.textContent = `Build your nation from the ground up! Turn: ${gameState.turn}`;
+            DOM.turnCounter.textContent = gameState.turn;
+
+            // set stat displays (use immediate set if skipAnimate true)
+            if (skipAnimate){
+                DOM.moneyValue.textContent = `$${gameState.money}`;
+                DOM.populationValue.textContent = `${(gameState.population/1000000).toFixed(1)}M`;
+                DOM.techValue.textContent = gameState.technology;
+                DOM.mineralsValue.textContent = gameState.minerals;
+                DOM.stabilityValue.textContent = `${gameState.stability}%`;
+                DOM.influenceValue.textContent = gameState.influence;
+
+                DOM.moneyBar.style.width = `${Math.min(100, (gameState.money/5000)*100)}%`;
+                DOM.populationBar.style.width = `${Math.min(100, (gameState.population/5000000)*100)}%`;
+                DOM.techBar.style.width = `${Math.min(100, gameState.technology)}%`;
+                DOM.mineralsBar.style.width = `${Math.min(100, (gameState.minerals/1000)*100)}%`;
+                DOM.stabilityBar.style.width = `${Math.min(100, gameState.stability)}%`;
+                DOM.influenceBar.style.width = `${Math.min(100, gameState.influence)}%`;
+            } else {
+                // animate small changes by calling animateStatChange with current values as both start & end (to sync)
+                animateStatChange('money', gameState.money, gameState.money);
+                animateStatChange('population', gameState.population, gameState.population);
+                animateStatChange('technology', gameState.technology, gameState.technology);
+                animateStatChange('minerals', gameState.minerals, gameState.minerals);
+                animateStatChange('stability', gameState.stability, gameState.stability);
+                animateStatChange('influence', gameState.influence, gameState.influence);
+            }
+
+            refreshCostsAndButtons();
+            renderEventQueue();
+        }
+
+        // --- Initialization: set up scaled costs and event listeners
+        function init(){
+            initializeScaledCosts();
+
+            // continent selection
+            DOM.continentCards.forEach(card=>{
+                card.addEventListener('click', ()=>{
+                    DOM.continentCards.forEach(c=>c.classList.remove('selected'));
+                    card.classList.add('selected');
+                    gameState.continent = card.getAttribute('data-continent');
+                    DOM.nextToPoliticsBtn.disabled = false;
+                    playSound('click');
+                });
+                // keyboard accessibility
+                card.addEventListener('keydown', (e)=> { if (e.key === 'Enter') card.click(); });
+            });
+
+            DOM.nextToPoliticsBtn.addEventListener('click', ()=> {
+                DOM.continentPhase.classList.remove('active');
+                DOM.politicsPhase.classList.add('active');
+            });
+
+            // political selection
+            DOM.systemCards.forEach(card=>{
+                card.addEventListener('click', ()=>{
+                    DOM.systemCards.forEach(c=>c.classList.remove('selected'));
+                    card.classList.add('selected');
+                    gameState.politicalSystem = card.getAttribute('data-system');
+                    DOM.nextToGameBtn.disabled = false;
+                    playSound('click');
+                });
+                card.addEventListener('keydown', (e)=> { if (e.key === 'Enter') card.click(); });
+            });
+
+            DOM.nextToGameBtn.addEventListener('click', ()=>{
+                DOM.politicsPhase.classList.remove('active');
+                DOM.gamePhase.classList.add('active');
+                applyBonuses();
+                updateUI(true);
+            });
+
+            // action buttons
+            DOM.actionButtons.forEach(btn=>{
+                btn.addEventListener('click', (e)=>{
+                    const action = btn.getAttribute('data-action');
+                    performAction(action, btn);
+                });
+            });
+
+            // next turn
+            DOM.nextTurnBtn.addEventListener('click', nextTurn);
+
+            // center modal controls
+            DOM.centerClose.addEventListener('click', hideCenterModal);
+            DOM.centerRestart.addEventListener('click', resetGameOnce);
+
+            // save/load/export/import
+            DOM.saveBtn.addEventListener('click', saveGame);
+            DOM.loadBtn.addEventListener('click', loadGame);
+            DOM.exportBtn.addEventListener('click', exportSave);
+            DOM.importBtn.addEventListener('click', importSave);
+
+            // keyboard shortcut: S to save, L to load
+            window.addEventListener('keydown', (e)=>{
+                if (e.key.toLowerCase() === 's' && (e.ctrlKey || e.metaKey)) { e.preventDefault(); saveGame(); }
+                if (e.key.toLowerCase() === 'l' && (e.ctrlKey || e.metaKey)) { e.preventDefault(); loadGame(); }
+            });
+
+            updateUI(true);
+        }
+
+        // run init on load
+        init();
+
+        // expose small helpers for debugging (optional)
+        window.__game = {
+            getState: ()=>gameState,
+            save: saveGame,
+            load: loadGame,
+            reset: resetGameOnce
+        };
+
     </script>
 </body>
 </html>
