@@ -646,19 +646,24 @@
         ];
 
         // Action effects
+        // NOTE: purchase cost is handled via the `costs` object in performAction().
+        // To avoid double-deducting money, actionEffects should only include post-purchase effects
+        // (i.e., not repeat the purchase cost).
         const actionEffects = {
-            factory: { money: -500, moneyMod: 1.1 },
-            infrastructure: { money: -300, stability: 5, population: 50000 },
-            trade: { money: -200, moneyMod: 1.05, influence: 2 },
-            education: { money: -400, technology: 10, stability: 3 },
-            healthcare: { money: -600, stability: 10, population: 100000 },
-            social: { money: -250, stability: 8 },
-            research: { money: -800, technology: 25 },
-            techedu: { money: -350, technology: 15 },
-            innovation: { money: -450, technology: 20 },
-            mine: { money: -400, minerals: 200 },
-            agriculture: { money: -300, population: 75000, stability: 3 },
-            resourcetrade: { money: -150, minerals: -50, money: 300 }
+            factory: { moneyMod: 1.1 },
+            infrastructure: { stability: 5, population: 50000 },
+            trade: { moneyMod: 1.05, influence: 2 },
+            education: { technology: 10, stability: 3 },
+            healthcare: { stability: 10, population: 100000 },
+            social: { stability: 8 },
+            research: { technology: 25 },
+            techedu: { technology: 15 },
+            innovation: { technology: 20 },
+            mine: { minerals: 200 },
+            agriculture: { population: 75000, stability: 3 },
+            // Resource trade: pay the cost (handled by costs), then gain money and lose some minerals.
+            // Keeping a positive money effect here (e.g. +300) means the player pays the cost and then receives this payout.
+            resourcetrade: { money: 300, minerals: -50 }
         };
 
         // DOM Elements
@@ -766,11 +771,14 @@
                 resourcetrade: 150
             };
 
+            // Ensure action exists
+            if (!(action in costs)) return;
+
             if (gameState.money >= costs[action]) {
-                // Apply costs
+                // Deduct purchase cost once
                 gameState.money -= costs[action];
 
-                // Apply effects
+                // Apply effects (effects no longer duplicate the purchase cost)
                 if (actionEffects[action]) {
                     Object.keys(actionEffects[action]).forEach(key => {
                         if (key.includes('Mod')) {
@@ -778,7 +786,13 @@
                             const stat = key.replace('Mod', '');
                             gameState.modifiers[stat] *= actionEffects[action][key];
                         } else {
-                            gameState[key] += actionEffects[action][key];
+                            // Apply numeric changes (if stat doesn't exist, create it)
+                            if (typeof gameState[key] === 'number') {
+                                gameState[key] += actionEffects[action][key];
+                            } else {
+                                // Unknown stat — just ignore or you could extend gameState schema
+                                console.warn('Unknown stat in action effect:', key);
+                            }
                         }
                     });
                 }
