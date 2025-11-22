@@ -5,8 +5,59 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Country-Building Simulator 2.0</title>
 
-    <!-- Connect CSS -->
-    <link rel="stylesheet" href="style.css">
+    <!-- CSS inside HTML -->
+    <style>
+        /* Reset */
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #0d0d0d;
+            color: white;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 40px 20px;
+        }
+
+        h1, h2 { text-align: center; margin-bottom: 20px; }
+
+        section {
+            background-color: #1a1a1a;
+            padding: 20px;
+            border-radius: 12px;
+            margin-bottom: 30px;
+            width: 95%;
+            max-width: 500px;
+            box-shadow: 0 0 15px #000;
+        }
+
+        select, button {
+            width: 100%;
+            padding: 12px;
+            margin-top: 10px;
+            border-radius: 8px;
+            border: none;
+            font-size: 16px;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+
+        button {
+            background-color: #00aaff;
+            color: white;
+            font-weight: bold;
+        }
+
+        button:disabled {
+            background-color: #555;
+            cursor: not-allowed;
+        }
+
+        button:hover:enabled { background-color: #0090dd; }
+
+        #gameplay-section p { font-size: 18px; margin: 10px 0; }
+    </style>
 </head>
 <body>
 
@@ -50,8 +101,89 @@
 
     <button id="restart-btn" style="display:none;">Restart</button>
 
-    <!-- Connect JS -->
-    <script src="script.js"></script>
+    <!-- JS inside HTML -->
+    <script>
+        const continentSelect = document.getElementById("continent-select");
+        const nextBtn = document.getElementById("next-btn");
+
+        const politicsSection = document.getElementById("politics-section");
+        const politicsSelect = document.getElementById("politics-select");
+        const startBtn = document.getElementById("start-btn");
+
+        const gameplaySection = document.getElementById("gameplay-section");
+        const economyEl = document.getElementById("economy");
+        const militaryEl = document.getElementById("military");
+        const happinessEl = document.getElementById("happiness");
+        const nextTurnBtn = document.getElementById("next-turn-btn");
+
+        const restartBtn = document.getElementById("restart-btn");
+        const turnEl = document.getElementById("turn");
+
+        let turn = 1;
+        let stats = { economy: 50, military: 50, happiness: 50 };
+
+        continentSelect.addEventListener("change", () => {
+            nextBtn.disabled = continentSelect.value === "";
+        });
+
+        nextBtn.addEventListener("click", () => {
+            document.getElementById("continent-section").style.display = "none";
+            politicsSection.style.display = "block";
+        });
+
+        politicsSelect.addEventListener("change", () => {
+            startBtn.disabled = politicsSelect.value === "";
+        });
+
+        startBtn.addEventListener("click", () => {
+            politicsSection.style.display = "none";
+            gameplaySection.style.display = "block";
+            updateStats();
+        });
+
+        nextTurnBtn.addEventListener("click", () => {
+            turn++;
+            turnEl.textContent = turn;
+
+            stats.economy += Math.floor(Math.random() * 11 - 5);
+            stats.military += Math.floor(Math.random() * 11 - 5);
+            stats.happiness += Math.floor(Math.random() * 11 - 5);
+
+            stats.economy = Math.max(0, Math.min(100, stats.economy));
+            stats.military = Math.max(0, Math.min(100, stats.military));
+            stats.happiness = Math.max(0, Math.min(100, stats.happiness));
+
+            updateStats();
+
+            if (stats.economy === 0 || stats.military === 0 || stats.happiness === 0) {
+                alert("Game Over! One of your stats reached 0.");
+                gameplaySection.style.display = "none";
+                restartBtn.style.display = "block";
+            }
+        });
+
+        restartBtn.addEventListener("click", () => {
+            turn = 1;
+            stats = { economy: 50, military: 50, happiness: 50 };
+            turnEl.textContent = turn;
+
+            continentSelect.value = "";
+            nextBtn.disabled = true;
+
+            politicsSelect.value = "";
+            startBtn.disabled = true;
+
+            restartBtn.style.display = "none";
+            document.getElementById("continent-section").style.display = "block";
+        });
+
+        function updateStats() {
+            economyEl.textContent = stats.economy;
+            militaryEl.textContent = stats.military;
+            happinessEl.textContent = stats.happiness;
+        }
+    </script>
 
 </body>
 </html>
+
