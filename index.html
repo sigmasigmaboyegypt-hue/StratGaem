@@ -1,65 +1,57 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Country-Building Simulator 2.0</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Country-Building Simulator 2.0</title>
 
-<!-- Link CSS -->
-<link rel="stylesheet" href="style.css">
-
+    <!-- Connect CSS -->
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-<div class="container">
-    <header>
-        <h1>Country-Building Simulator 2.0</h1>
-        <p>Build your nation from the ground up! Turn: <span id="turn-counter">1</span></p>
-    </header>
+    <h1>Country-Building Simulator 2.0</h1>
+    <p>Build your nation from the ground up! Turn: <span id="turn">1</span></p>
 
-    <!-- Phases -->
-    <div id="continent-phase" class="game-phase active">
+    <section id="continent-section">
         <h2>Choose Your Continent</h2>
-        <div class="selection-grid" id="continent-grid"></div>
-        <button id="next-to-politics" class="btn" disabled>Next</button>
-    </div>
+        <select id="continent-select">
+            <option value="">--Select Continent--</option>
+            <option value="Africa">Africa</option>
+            <option value="Asia">Asia</option>
+            <option value="Europe">Europe</option>
+            <option value="North America">North America</option>
+            <option value="South America">South America</option>
+            <option value="Oceania">Oceania</option>
+        </select>
+        <button id="next-btn" disabled>Next</button>
+    </section>
 
-    <div id="politics-phase" class="game-phase">
+    <section id="politics-section" style="display:none;">
         <h2>Choose Political System</h2>
-        <div class="selection-grid" id="politics-grid"></div>
-        <button id="next-to-game" class="btn" disabled>Start Game</button>
-    </div>
+        <select id="politics-select">
+            <option value="">--Select System--</option>
+            <option value="Capitalist">Capitalist</option>
+            <option value="Socialist">Socialist</option>
+            <option value="Communist">Communist</option>
+            <option value="Mixed Economy">Mixed Economy</option>
+        </select>
+        <button id="start-btn" disabled>Start Game</button>
+    </section>
 
-    <div id="game-phase" class="game-phase">
-        <div class="dashboard" id="dashboard"></div>
-        <div class="action-panel" id="actions"></div>
-        <div style="text-align:center;margin-top:20px;">
-            <button id="next-turn" class="btn pulse">Next Turn</button>
-        </div>
-    </div>
+    <section id="gameplay-section" style="display:none;">
+        <h2>Your Nation Stats</h2>
+        <p>Economy: <span id="economy">0</span></p>
+        <p>Military: <span id="military">0</span></p>
+        <p>Happiness: <span id="happiness">0</span></p>
 
-    <div id="event-modal" class="event-modal">
-        <div class="modal-content">
-            <h2 id="event-title"></h2>
-            <p id="event-description"></p>
-            <div class="modal-buttons">
-                <button id="event-option1" class="btn btn-success"></button>
-                <button id="event-option2" class="btn btn-danger"></button>
-            </div>
-        </div>
-    </div>
+        <button id="next-turn-btn">Next Turn</button>
+    </section>
 
-    <div id="game-over-modal" class="event-modal">
-        <div class="modal-content game-over">
-            <h2 id="game-over-title"></h2>
-            <p id="game-over-message"></p>
-            <button id="restart-game" class="btn">Restart</button>
-        </div>
-    </div>
-</div>
+    <button id="restart-btn" style="display:none;">Restart</button>
 
-<!-- Link JS -->
-<script src="script.js"></script>
+    <!-- Connect JS -->
+    <script src="script.js"></script>
 
 </body>
 </html>
