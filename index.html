@@ -3,9 +3,8 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    <title>NationCraft Ultimate - Historical Country Builder</title>
+    <title>NationCraft - Historical Country Builder</title>
     <style>
-        /* === YOUR ORIGINAL 2000+ LINES OF CSS === */
         :root {
             --bg-primary: #0a0f1c;
             --bg-secondary: #131a2d;
@@ -15,7 +14,6 @@
             --accent-success: #38b000;
             --accent-warning: #ff9e00;
             --accent-danger: #ff006e;
-            --accent-info: #00bbf9;
             --text-primary: #ffffff;
             --text-secondary: #b0b8d1;
             --text-muted: #6b7280;
@@ -906,268 +904,20 @@
             outline: 3px solid rgba(58, 134, 255, 0.5);
             outline-offset: 2px;
         }
-
-        /* === NEW ENHANCED SYSTEMS CSS === */
-        
-        /* Enhanced Header for New Features */
-        .scenario-selector {
-            background: var(--bg-secondary);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            color: var(--text-primary);
-            padding: 8px 12px;
-            border-radius: 6px;
-            font-size: 0.9rem;
-        }
-
-        /* Enhanced Sidebar Sections */
-        .environment-indicator {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 8px;
-            background: rgba(255, 255, 255, 0.03);
-            border-radius: 6px;
-            margin-bottom: 6px;
-            border-left: 3px solid var(--accent-info);
-        }
-
-        .environment-indicator.critical {
-            border-left-color: var(--accent-danger);
-            background: rgba(255, 0, 110, 0.1);
-        }
-
-        .population-chart {
-            margin-top: 10px;
-        }
-
-        .chart-bar {
-            display: flex;
-            align-items: center;
-            margin-bottom: 6px;
-            font-size: 0.8rem;
-        }
-
-        .chart-label {
-            width: 80px;
-            color: var(--text-secondary);
-        }
-
-        .chart-value {
-            flex: 1;
-            height: 12px;
-            background: rgba(255, 255, 255, 0.1);
-            border-radius: 6px;
-            overflow: hidden;
-            margin: 0 8px;
-        }
-
-        .chart-fill {
-            height: 100%;
-            transition: width 0.5s ease;
-        }
-
-        .youth-fill { background: var(--accent-primary); }
-        .adult-fill { background: var(--accent-success); }
-        .elderly-fill { background: var(--accent-warning); }
-
-        /* Crisis Alerts */
-        .crisis-alert {
-            background: linear-gradient(135deg, var(--accent-danger), #ff2e8b);
-            color: white;
-            padding: 10px 12px;
-            border-radius: 6px;
-            margin-bottom: 10px;
-            animation: pulse 2s infinite;
-            font-size: 0.85rem;
-        }
-
-        @keyframes pulse {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0.8; }
-        }
-
-        /* Research Queue */
-        .research-item {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 6px 8px;
-            background: rgba(255, 255, 255, 0.03);
-            border-radius: 4px;
-            margin-bottom: 4px;
-            font-size: 0.8rem;
-        }
-
-        .research-progress {
-            color: var(--accent-info);
-            font-weight: 600;
-        }
-
-        /* Enhanced Action Categories for New Systems */
-        .action-category.research {
-            border-left: 4px solid var(--accent-info);
-        }
-
-        .action-category.espionage {
-            border-left: 4px solid #8338ec;
-        }
-
-        .action-category.environment {
-            border-left: 4px solid var(--accent-success);
-        }
-
-        /* Technology Tree Styles */
-        .tech-tree {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 10px;
-            margin-top: 15px;
-        }
-
-        .tech-card {
-            background: rgba(255, 255, 255, 0.03);
-            border-radius: 8px;
-            padding: 12px;
-            border: 2px solid transparent;
-            transition: var(--transition);
-            cursor: pointer;
-        }
-
-        .tech-card.researched {
-            border-color: var(--accent-success);
-            background: rgba(56, 176, 0, 0.1);
-        }
-
-        .tech-card.available {
-            border-color: var(--accent-primary);
-            background: rgba(58, 134, 255, 0.1);
-        }
-
-        .tech-card.locked {
-            opacity: 0.5;
-            cursor: not-allowed;
-        }
-
-        .tech-name {
-            font-weight: 600;
-            margin-bottom: 4px;
-        }
-
-        .tech-cost {
-            font-size: 0.8rem;
-            color: var(--text-secondary);
-            margin-top: 6px;
-        }
-
-        /* Espionage Missions */
-        .mission-card {
-            background: rgba(255, 255, 255, 0.03);
-            border-radius: 8px;
-            padding: 12px;
-            margin-bottom: 8px;
-            border-left: 3px solid #8338ec;
-        }
-
-        .mission-risk {
-            display: inline-block;
-            padding: 2px 6px;
-            border-radius: 4px;
-            font-size: 0.7rem;
-            font-weight: 600;
-            margin-top: 4px;
-        }
-
-        .risk-low { background: rgba(56, 176, 0, 0.3); color: var(--accent-success); }
-        .risk-medium { background: rgba(255, 158, 0, 0.3); color: var(--accent-warning); }
-        .risk-high { background: rgba(255, 0, 110, 0.3); color: var(--accent-danger); }
-
-        /* Enhanced War System */
-        .battle-animation {
-            height: 60px;
-            background: linear-gradient(45deg, rgba(255, 0, 110, 0.3), rgba(255, 46, 139, 0.3));
-            border-radius: 8px;
-            margin: 10px 0;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .battle-unit {
-            position: absolute;
-            width: 12px;
-            height: 12px;
-            background: var(--accent-primary);
-            border-radius: 50%;
-            animation: battleMove 3s infinite alternate;
-        }
-
-        @keyframes battleMove {
-            0% { transform: translateX(0) translateY(0); }
-            100% { transform: translateX(200px) translateY(40px); }
-        }
-
-        /* Sound Controls */
-        .sound-controls {
-            position: fixed;
-            bottom: 20px;
-            right: 20px;
-            background: var(--bg-card);
-            border-radius: var(--border-radius);
-            padding: 10px;
-            box-shadow: var(--shadow);
-            z-index: 1000;
-            display: flex;
-            gap: 8px;
-        }
-
-        .sound-toggle {
-            background: none;
-            border: none;
-            color: var(--text-primary);
-            cursor: pointer;
-            font-size: 1.1rem;
-            padding: 6px;
-            border-radius: 50%;
-            transition: var(--transition);
-        }
-
-        .sound-toggle:hover {
-            background: rgba(255, 255, 255, 0.1);
-        }
-
-        /* Performance Monitor */
-        .performance-monitor {
-            position: fixed;
-            top: 20px;
-            left: 20px;
-            background: rgba(0, 0, 0, 0.8);
-            color: var(--accent-success);
-            padding: 6px 10px;
-            border-radius: 4px;
-            font-size: 0.7rem;
-            font-family: monospace;
-            z-index: 1000;
-        }
     </style>
 </head>
 <body>
-    <div class="performance-monitor" id="performance-monitor">FPS: 60 | Memory: Normal</div>
-
     <div class="container">
         <header>
             <div class="logo">
-                <h1>NationCraft Ultimate</h1>
-                <span class="sr-only">Enhanced Historical Country Building Simulator</span>
+                <h1>NationCraft</h1>
+                <span class="sr-only">Historical Country Building Simulator</span>
             </div>
             <div class="header-controls">
                 <select id="timeline-select" class="btn btn-secondary btn-small" aria-label="Select historical timeline">
                     <option value="WWII">World War II (1939-1945)</option>
                     <option value="ColdWar">Cold War (1947-1991)</option>
                     <option value="Modern">Modern Era (1991-Present)</option>
-                </select>
-                <select id="scenario-select" class="scenario-selector">
-                    <option value="sandbox">Sandbox Mode</option>
-                    <option value="ww2">WWII Scenario</option>
-                    <option value="coldwar">Cold War Crisis</option>
                 </select>
                 <button id="save-btn" class="btn btn-secondary btn-small">💾 Save</button>
                 <button id="load-btn" class="btn btn-secondary btn-small">📂 Load</button>
@@ -1189,18 +939,15 @@
             </div>
             <div class="timeline-track">
                 <div class="timeline-progress" id="timeline-progress"></div>
+                <!-- Timeline markers will be added dynamically -->
             </div>
         </div>
 
         <div class="game-layout">
-            <!-- Enhanced Left Sidebar -->
+            <!-- Left Sidebar - Nation Stats -->
             <aside class="sidebar">
                 <div class="sidebar-section">
-                    <h3>🇺🇳 Nation Overview</h3>
-                    <div id="crisis-alerts">
-                        <!-- Crisis alerts will appear here -->
-                    </div>
-                    
+                    <h3>Nation Overview</h3>
                     <div class="stat">
                         <div class="stat-name">
                             <span>💰 Money</span>
@@ -1253,82 +1000,172 @@
                 </div>
 
                 <div class="sidebar-section">
-                    <h3>🌍 Environment & Resources</h3>
-                    <div class="environment-indicator">
-                        <span>🌡️ Temperature</span>
-                        <span id="temp-value">+0.8°C</span>
+                    <h3>Resources</h3>
+                    <div class="stat">
+                        <div class="stat-name">
+                            <span>⛏️ Minerals</span>
+                        </div>
+                        <div class="stat-value" id="minerals-value">500</div>
                     </div>
-                    <div class="environment-indicator">
-                        <span>💧 Pollution</span>
-                        <span id="pollution-value">25%</span>
+                    <div class="stat">
+                        <div class="stat-name">
+                            <span>🍞 Food</span>
+                        </div>
+                        <div class="stat-value" id="food-value">1,000</div>
                     </div>
-                    <div class="environment-indicator">
-                        <span>🛢️ Oil Reserves</span>
-                        <span id="oil-value">200</span>
-                    </div>
-                    <div class="environment-indicator">
-                        <span>⛏️ Minerals</span>
-                        <span id="minerals-value">500</span>
+                    <div class="stat">
+                        <div class="stat-name">
+                            <span>🛢️ Oil</span>
+                        </div>
+                        <div class="stat-value" id="oil-value">200</div>
                     </div>
                 </div>
 
                 <div class="sidebar-section">
-                    <h3>📊 Population Demographics</h3>
-                    <div class="population-chart">
-                        <div class="chart-bar">
-                            <div class="chart-label">Youth (0-18)</div>
-                            <div class="chart-value">
-                                <div class="chart-fill youth-fill" style="width: 30%"></div>
-                            </div>
-                            <span>30%</span>
+                    <h3>Diplomacy</h3>
+                    <div class="stat">
+                        <div class="stat-name">
+                            <span>🌍 Influence</span>
                         </div>
-                        <div class="chart-bar">
-                            <div class="chart-label">Adults (19-65)</div>
-                            <div class="chart-value">
-                                <div class="chart-fill adult-fill" style="width: 55%"></div>
-                            </div>
-                            <span>55%</span>
+                        <div class="stat-value" id="influence-value">10</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-name">
+                            <span>🤝 Alliances</span>
                         </div>
-                        <div class="chart-bar">
-                            <div class="chart-label">Elderly (65+)</div>
-                            <div class="chart-value">
-                                <div class="chart-fill elderly-fill" style="width: 15%"></div>
-                            </div>
-                            <span>15%</span>
+                        <div class="stat-value" id="alliances-value">0</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-name">
+                            <span>⚠️ Conflicts</span>
                         </div>
+                        <div class="stat-value" id="conflicts-value">0</div>
                     </div>
                 </div>
             </aside>
 
-            <!-- Main Content - Your Original Phases + New Systems -->
+            <!-- Main Content -->
             <main class="main-content">
-                <!-- Your original continent/country/politics phases remain exactly the same -->
+                <!-- Continent Selection Phase -->
                 <section id="continent-phase" class="game-phase active">
-                    <!-- ... your existing continent selection code ... -->
+                    <div class="phase-header">
+                        <h2>Choose Your Continent</h2>
+                        <p>Select a continent to establish your nation. Each continent offers unique advantages and challenges.</p>
+                    </div>
+                    <div class="selection-grid" id="continent-grid">
+                        <div class="selection-card" data-continent="europe" tabindex="0" role="button" aria-label="Select Europe">
+                            <div class="card-icon">🏛️</div>
+                            <div class="card-title">Europe</div>
+                            <div class="card-description">Advanced infrastructure and technology, but limited resources.</div>
+                            <div class="card-bonus">+40% Infrastructure, +20% Technology</div>
+                        </div>
+                        <div class="selection-card" data-continent="asia" tabindex="0" role="button" aria-label="Select Asia">
+                            <div class="card-icon">🗾</div>
+                            <div class="card-title">Asia</div>
+                            <div class="card-description">Large population and manufacturing capacity.</div>
+                            <div class="card-bonus">+30% Population, +25% Production</div>
+                        </div>
+                        <div class="selection-card" data-continent="africa" tabindex="0" role="button" aria-label="Select Africa">
+                            <div class="card-icon">🌍</div>
+                            <div class="card-title">Africa</div>
+                            <div class="card-description">Rich in natural resources with growth potential.</div>
+                            <div class="card-bonus">+50% Resources, +15% Growth</div>
+                        </div>
+                        <div class="selection-card" data-continent="north-america" tabindex="0" role="button" aria-label="Select North America">
+                            <div class="card-icon">🗽</div>
+                            <div class="card-title">North America</div>
+                            <div class="card-description">Strong economy and military power.</div>
+                            <div class="card-bonus">+35% Economy, +25% Military</div>
+                        </div>
+                        <div class="selection-card" data-continent="south-america" tabindex="0" role="button" aria-label="Select South America">
+                            <div class="card-icon">🌴</div>
+                            <div class="card-title">South America</div>
+                            <div class="card-description">Agricultural powerhouse with cultural influence.</div>
+                            <div class="card-bonus">+40% Agriculture, +20% Culture</div>
+                        </div>
+                        <div class="selection-card" data-continent="oceania" tabindex="0" role="button" aria-label="Select Oceania">
+                            <div class="card-icon">🏝️</div>
+                            <div class="card-title">Oceania</div>
+                            <div class="card-description">Strategic location with maritime advantages.</div>
+                            <div class="card-bonus">+30% Trade, +25% Naval Power</div>
+                        </div>
+                    </div>
+                    <div style="text-align: center; margin-top: 20px;">
+                        <button id="next-to-country" class="btn btn-primary" disabled>Continue to Country Selection</button>
+                    </div>
                 </section>
 
+                <!-- Country Selection Phase -->
                 <section id="country-phase" class="game-phase">
-                    <!-- ... your existing country selection code ... -->
+                    <div class="phase-header">
+                        <h2>Choose Your Country</h2>
+                        <p>Select a country from <span id="selected-continent-name">your chosen continent</span>.</p>
+                    </div>
+                    <div class="country-grid" id="country-grid">
+                        <!-- Countries will be populated dynamically -->
+                    </div>
+                    <div style="text-align: center; margin-top: 20px;">
+                        <button id="next-to-politics" class="btn btn-primary" disabled>Continue to Government Type</button>
+                    </div>
                 </section>
 
+                <!-- Political System Selection Phase -->
                 <section id="politics-phase" class="game-phase">
-                    <!-- ... your existing government selection code ... -->
+                    <div class="phase-header">
+                        <h2>Choose Your Government</h2>
+                        <p>Select a political system that will shape your nation's development and policies.</p>
+                    </div>
+                    <div class="selection-grid" id="politics-grid">
+                        <div class="selection-card" data-system="democracy" tabindex="0" role="button" aria-label="Select Democracy">
+                            <div class="card-icon">🗳️</div>
+                            <div class="card-title">Democracy</div>
+                            <div class="card-description">Government by the people, with free elections and civil liberties.</div>
+                            <div class="card-bonus">+30% Stability, +20% Research</div>
+                        </div>
+                        <div class="selection-card" data-system="republic" tabindex="0" role="button" aria-label="Select Republic">
+                            <div class="card-icon">⚖️</div>
+                            <div class="card-title">Republic</div>
+                            <div class="card-description">Representative democracy with elected officials.</div>
+                            <div class="card-bonus">+25% Stability, +15% Economy</div>
+                        </div>
+                        <div class="selection-card" data-system="monarchy" tabindex="0" role="button" aria-label="Select Monarchy">
+                            <div class="card-icon">👑</div>
+                            <div class="card-title">Monarchy</div>
+                            <div class="card-description">Ruled by a sovereign with hereditary succession.</div>
+                            <div class="card-bonus">+40% Stability, -10% Growth</div>
+                        </div>
+                        <div class="selection-card" data-system="dictatorship" tabindex="0" role="button" aria-label="Select Dictatorship">
+                            <div class="card-icon">⚔️</div>
+                            <div class="card-title">Dictatorship</div>
+                            <div class="card-description">Authoritarian rule with centralized power.</div>
+                            <div class="card-bonus">+50% Military, -30% Stability</div>
+                        </div>
+                        <div class="selection-card" data-system="communism" tabindex="0" role="button" aria-label="Select Communism">
+                            <div class="card-icon">☭</div>
+                            <div class="card-title">Communism</div>
+                            <div class="card-description">Classless society with state-controlled economy.</div>
+                            <div class="card-bonus">+40% Production, -20% Economy</div>
+                        </div>
+                        <div class="selection-card" data-system="theocracy" tabindex="0" role="button" aria-label="Select Theocracy">
+                            <div class="card-icon">⛪</div>
+                            <div class="card-title">Theocracy</div>
+                            <div class="card-description">Government based on religious principles.</div>
+                            <div class="card-bonus">+35% Stability, -15% Research</div>
+                        </div>
+                    </div>
+                    <div style="text-align: center; margin-top: 20px;">
+                        <button id="next-to-game" class="btn btn-primary" disabled>Start Building Your Nation</button>
+                    </div>
                 </section>
 
-                <!-- Enhanced Main Game Phase -->
+                <!-- Main Game Phase -->
                 <section id="game-phase" class="game-phase">
                     <div class="phase-header">
-                        <h2>Nation Management - Ultimate Edition</h2>
-                        <p>Manage your country with advanced systems including technology, espionage, and environmental management.</p>
-                    </div>
-
-                    <!-- Crisis Alert Display -->
-                    <div id="active-crisis-display" style="display: none;">
-                        <!-- Active crises will appear here -->
+                        <h2>Nation Management</h2>
+                        <p>Manage your country's development through strategic decisions and policies.</p>
                     </div>
 
                     <div class="action-panel">
-                        <!-- Your original action categories -->
                         <div class="action-category">
                             <h3>🏛️ Government</h3>
                             <div class="action-item">
@@ -1338,171 +1175,186 @@
                                 </div>
                                 <button class="btn btn-secondary btn-small" data-action="tax-reform">Enact <span class="action-cost">$200</span></button>
                             </div>
-                            <!-- ... more government actions ... -->
+                            <div class="action-item">
+                                <div class="action-info">
+                                    <div class="action-name">Policy Reform</div>
+                                    <div class="action-description">Implement new domestic policies</div>
+                                </div>
+                                <button class="btn btn-secondary btn-small" data-action="policy-reform">Implement <span class="action-cost">$150</span></button>
+                            </div>
+                            <div class="action-item">
+                                <div class="action-info">
+                                    <div class="action-name">Anti-Corruption</div>
+                                    <div class="action-description">Crack down on government corruption</div>
+                                </div>
+                                <button class="btn btn-secondary btn-small" data-action="anti-corruption">Launch <span class="action-cost">$300</span></button>
+                            </div>
                         </div>
 
-                        <!-- NEW: Research & Technology Category -->
-                        <div class="action-category research">
-                            <h3>🔬 Research & Technology</h3>
+                        <div class="action-category">
+                            <h3>🏭 Economy</h3>
+                            <div class="action-item">
+                                <div class="action-info">
+                                    <div class="action-name">Build Factory</div>
+                                    <div class="action-description">Construct new manufacturing facilities</div>
+                                </div>
+                                <button class="btn btn-secondary btn-small" data-action="factory">Build <span class="action-cost">$500</span></button>
+                            </div>
+                            <div class="action-item">
+                                <div class="action-info">
+                                    <div class="action-name">Infrastructure</div>
+                                    <div class="action-description">Develop roads, bridges, and utilities</div>
+                                </div>
+                                <button class="btn btn-secondary btn-small" data-action="infrastructure">Develop <span class="action-cost">$400</span></button>
+                            </div>
+                            <div class="action-item">
+                                <div class="action-info">
+                                    <div class="action-name">Trade Agreement</div>
+                                    <div class="action-description">Establish international trade deals</div>
+                                </div>
+                                <button class="btn btn-secondary btn-small" data-action="trade">Negotiate <span class="action-cost">$250</span></button>
+                            </div>
+                        </div>
+
+                        <div class="action-category">
+                            <h3>🔬 Technology</h3>
                             <div class="action-item">
                                 <div class="action-info">
                                     <div class="action-name">Research Lab</div>
                                     <div class="action-description">Build advanced research facilities</div>
                                 </div>
-                                <button class="btn btn-secondary btn-small" data-action="research-lab">Build <span class="action-cost">$600</span></button>
+                                <button class="btn btn-secondary btn-small" data-action="research">Build <span class="action-cost">$600</span></button>
                             </div>
                             <div class="action-item">
                                 <div class="action-info">
-                                    <div class="action-name">Nuclear Research</div>
-                                    <div class="action-description">Develop atomic technology</div>
+                                    <div class="action-name">Education Reform</div>
+                                    <div class="action-description">Improve national education system</div>
                                 </div>
-                                <button class="btn btn-secondary btn-small" data-action="nuclear-research">Research <span class="action-cost">$2000</span></button>
+                                <button class="btn btn-secondary btn-small" data-action="education">Reform <span class="action-cost">$450</span></button>
                             </div>
                             <div class="action-item">
                                 <div class="action-info">
-                                    <div class="action-name">Space Program</div>
-                                    <div class="action-description">Begin space exploration</div>
+                                    <div class="action-name">Tech Initiative</div>
+                                    <div class="action-description">Fund technological innovation</div>
                                 </div>
-                                <button class="btn btn-secondary btn-small" data-action="space-program">Launch <span class="action-cost">$5000</span></button>
+                                <button class="btn btn-secondary btn-small" data-action="innovation">Fund <span class="action-cost">$350</span></button>
                             </div>
                         </div>
 
-                        <!-- NEW: Espionage Category -->
-                        <div class="action-category espionage">
-                            <h3>🕵️ Espionage & Intelligence</h3>
-                            <div class="action-item">
-                                <div class="action-info">
-                                    <div class="action-name">Establish Spy Network</div>
-                                    <div class="action-description">Create intelligence agency</div>
-                                </div>
-                                <button class="btn btn-secondary btn-small" data-action="spy-network">Establish <span class="action-cost">$800</span></button>
-                            </div>
-                            <div class="action-item">
-                                <div class="action-info">
-                                    <div class="action-name">Sabotage Enemy</div>
-                                    <div class="action-description">Disrupt enemy production</div>
-                                </div>
-                                <button class="btn btn-secondary btn-small" data-action="sabotage">Execute <span class="action-cost">$500</span></button>
-                            </div>
-                            <div class="action-item">
-                                <div class="action-info">
-                                    <div class="action-name">Counter-Intelligence</div>
-                                    <div class="action-description">Protect against foreign spies</div>
-                                </div>
-                                <button class="btn btn-secondary btn-small" data-action="counter-intel">Implement <span class="action-cost">$600</span></button>
-                            </div>
-                        </div>
-
-                        <!-- NEW: Environmental Category -->
-                        <div class="action-category environment">
-                            <h3>🌿 Environmental Management</h3>
-                            <div class="action-item">
-                                <div class="action-info">
-                                    <div class="action-name">Clean Energy</div>
-                                    <div class="action-description">Invest in renewable resources</div>
-                                </div>
-                                <button class="btn btn-secondary btn-small" data-action="clean-energy">Invest <span class="action-cost">$700</span></button>
-                            </div>
-                            <div class="action-item">
-                                <div class="action-info">
-                                    <div class="action-name">Pollution Control</div>
-                                    <div class="action-description">Reduce industrial pollution</div>
-                                </div>
-                                <button class="btn btn-secondary btn-small" data-action="pollution-control">Implement <span class="action-cost">$400</span></button>
-                            </div>
-                            <div class="action-item">
-                                <div class="action-info">
-                                    <div class="action-name">Conservation</div>
-                                    <div class="action-description">Protect natural resources</div>
-                                </div>
-                                <button class="btn btn-secondary btn-small" data-action="conservation">Protect <span class="action-cost">$300</span></button>
-                            </div>
-                        </div>
-
-                        <!-- Your original Economy, Military, Diplomacy, Society categories remain -->
-                        <div class="action-category">
-                            <h3>🏭 Economy</h3>
-                            <!-- ... existing economy actions ... -->
-                        </div>
                         <div class="action-category">
                             <h3>⚔️ Military</h3>
-                            <!-- ... existing military actions ... -->
+                            <div class="action-item">
+                                <div class="action-info">
+                                    <div class="action-name">Build Barracks</div>
+                                    <div class="action-description">Construct military training facilities</div>
+                                </div>
+                                <button class="btn btn-secondary btn-small" data-action="barracks">Build <span class="action-cost">$700</span></button>
+                            </div>
+                            <div class="action-item">
+                                <div class="action-info">
+                                    <div class="action-name">Recruit Soldiers</div>
+                                    <div class="action-description">Expand military forces</div>
+                                </div>
+                                <button class="btn btn-secondary btn-small" data-action="recruit">Recruit <span class="action-cost">$400</span></button>
+                            </div>
+                            <div class="action-item">
+                                <div class="action-info">
+                                    <div class="action-name">Military Research</div>
+                                    <div class="action-description">Develop advanced weaponry</div>
+                                </div>
+                                <button class="btn btn-secondary btn-small" data-action="military-research">Research <span class="action-cost">$550</span></button>
+                            </div>
                         </div>
+
                         <div class="action-category">
                             <h3>🌍 Diplomacy</h3>
-                            <!-- ... existing diplomacy actions ... -->
+                            <div class="action-item">
+                                <div class="action-info">
+                                    <div class="action-name">Form Alliance</div>
+                                    <div class="action-description">Establish defensive pact with another nation</div>
+                                </div>
+                                <button class="btn btn-secondary btn-small" data-action="alliance">Propose <span class="action-cost">$300</span></button>
+                            </div>
+                            <div class="action-item">
+                                <div class="action-info">
+                                    <div class="action-name">Trade Sanctions</div>
+                                    <div class="action-description">Impose economic restrictions on rivals</div>
+                                </div>
+                                <button class="btn btn-secondary btn-small" data-action="sanctions">Impose <span class="action-cost">$200</span></button>
+                            </div>
+                            <div class="action-item">
+                                <div class="action-info">
+                                    <div class="action-name">Diplomatic Mission</div>
+                                    <div class="action-description">Send envoys to improve relations</div>
+                                </div>
+                                <button class="btn btn-secondary btn-small" data-action="diplomacy">Send <span class="action-cost">$150</span></button>
+                            </div>
                         </div>
+
                         <div class="action-category">
                             <h3>🏥 Society</h3>
-                            <!-- ... existing society actions ... -->
-                        </div>
-                    </div>
-
-                    <!-- Technology Tree Display -->
-                    <div style="margin-top: 20px; display: none;" id="tech-tree-display">
-                        <h3>Technology Tree</h3>
-                        <div class="tech-tree" id="tech-tree-container">
-                            <!-- Technology cards will be populated here -->
-                        </div>
-                    </div>
-
-                    <!-- Enhanced War Display -->
-                    <div class="war-panel" id="war-panel" style="display: none;">
-                        <h4>⚔️ Active War</h4>
-                        <div class="battle-animation" id="battle-animation">
-                            <!-- Battle animation will appear here -->
-                        </div>
-                        <div id="war-status">
-                            <p>War with <strong id="war-enemy">Unknown</strong></p>
-                            <div class="progress-bar">
-                                <div class="progress-fill military-fill" id="war-progress" style="width: 0%"></div>
+                            <div class="action-item">
+                                <div class="action-info">
+                                    <div class="action-name">Healthcare System</div>
+                                    <div class="action-description">Implement national healthcare</div>
+                                </div>
+                                <button class="btn btn-secondary btn-small" data-action="healthcare">Implement <span class="action-cost">$600</span></button>
                             </div>
-                            <p style="margin-top: 8px; font-size: 0.85rem;">War Support: <span id="war-support">0%</span></p>
-                        </div>
-                        <div style="margin-top: 12px;">
-                            <button class="btn btn-danger btn-small" style="width: 100%;" id="war-offensive">Launch Offensive</button>
-                            <button class="btn btn-secondary btn-small" style="width: 100%; margin-top: 6px;" id="war-peace">Peace Negotiations</button>
+                            <div class="action-item">
+                                <div class="action-info">
+                                    <div class="action-name">Social Programs</div>
+                                    <div class="action-description">Fund welfare and assistance programs</div>
+                                </div>
+                                <button class="btn btn-secondary btn-small" data-action="social">Fund <span class="action-cost">$350</span></button>
+                            </div>
+                            <div class="action-item">
+                                <div class="action-info">
+                                    <div class="action-name">Cultural Development</div>
+                                    <div class="action-description">Support arts and cultural institutions</div>
+                                </div>
+                                <button class="btn btn-secondary btn-small" data-action="culture">Support <span class="action-cost">$250</span></button>
+                            </div>
                         </div>
                     </div>
                 </section>
             </main>
 
-            <!-- Enhanced Right Dashboard -->
+            <!-- Right Dashboard - Allies & Enemies -->
             <aside class="dashboard">
                 <div class="dashboard-section">
-                    <h3>🌐 World News & Events</h3>
-                    <div id="news-feed">
-                        <div class="news-item">Global markets show positive trends</div>
-                        <div class="news-item">International tensions rising</div>
-                        <div class="news-item">Climate summit concludes</div>
-                    </div>
-                </div>
-
-                <div class="dashboard-section">
-                    <h3>🤝 Diplomacy & Relations</h3>
+                    <h3>🤝 Allies</h3>
                     <div id="allies-list">
                         <div class="empty-state">No allies yet</div>
                     </div>
                 </div>
 
                 <div class="dashboard-section">
-                    <h3>⚠️ Active Crises</h3>
-                    <div id="active-crises">
-                        <div class="empty-state">No active crises</div>
+                    <h3>⚠️ Enemies</h3>
+                    <div id="enemies-list">
+                        <div class="empty-state">No enemies yet</div>
                     </div>
                 </div>
 
                 <div class="dashboard-section">
-                    <h3>🔬 Research Progress</h3>
-                    <div id="research-queue">
-                        <div class="empty-state">No research in progress</div>
+                    <h3>🌍 Other Nations</h3>
+                    <div id="other-nations-list">
+                        <div class="empty-state">No diplomatic relations yet</div>
                     </div>
                 </div>
 
-                <div class="dashboard-section">
-                    <h3>🕵️ Intelligence Report</h3>
-                    <div id="intelligence-report">
-                        <div class="empty-state">No intelligence data</div>
+                <!-- War Panel -->
+                <div class="war-panel" id="war-panel" style="display: none;">
+                    <h4>⚔️ Active War</h4>
+                    <div id="war-status">
+                        <p>War with <strong id="war-enemy">Unknown</strong></p>
+                        <div class="progress-bar">
+                            <div class="progress-fill military-fill" id="war-progress" style="width: 0%"></div>
+                        </div>
+                        <p style="margin-top: 8px; font-size: 0.85rem;">War Support: <span id="war-support">0%</span></p>
+                    </div>
+                    <div style="margin-top: 12px;">
+                        <button class="btn btn-danger btn-small" style="width: 100%;" id="war-offensive">Launch Offensive</button>
+                        <button class="btn btn-secondary btn-small" style="width: 100%; margin-top: 6px;" id="war-peace">Peace Negotiations</button>
                     </div>
                 </div>
             </aside>
@@ -1514,12 +1366,6 @@
         <button id="mobile-save" class="btn btn-secondary btn-small">💾 Save</button>
         <button id="mobile-next" class="btn btn-primary btn-small" disabled>Next Month ▶</button>
         <button id="mobile-menu" class="btn btn-secondary btn-small">☰ Menu</button>
-    </div>
-
-    <!-- Sound Controls -->
-    <div class="sound-controls">
-        <button id="sound-toggle" class="sound-toggle">🔊</button>
-        <button id="music-toggle" class="sound-toggle">🎵</button>
     </div>
 
     <!-- Event Container -->
@@ -1545,9 +1391,8 @@
     </div>
 
     <script>
-        // ===== ENHANCED GAME STATE WITH ALL NEW SYSTEMS =====
+        // Game State
         const gameState = {
-            // Your original core state
             continent: null,
             country: null,
             politicalSystem: null,
@@ -1562,7 +1407,7 @@
             influence: 10,
             alliances: 0,
             conflicts: 0,
-            month: 8,
+            month: 8, // September (0-indexed)
             year: 1939,
             timelineEra: 'WWII',
             buildings: {
@@ -1589,156 +1434,38 @@
             currentWar: null,
             warSupport: 0,
             gameStarted: false,
-            isProcessingAction: false,
-
-            // ===== NEW ENHANCED SYSTEMS =====
-            
-            // 1. Scenario System
-            currentScenario: 'sandbox',
-            scenarioProgress: 0,
-            scenarioEvents: [],
-
-            // 2. Detailed Population System
-            populationDetails: {
-                demographics: {
-                    youth: 0.30,    // 0-18 years
-                    adult: 0.55,    // 19-65 years  
-                    elderly: 0.15   // 65+ years
-                },
-                education: {
-                    illiterate: 0.10,
-                    basic: 0.40,
-                    secondary: 0.30,
-                    higher: 0.20
-                },
-                employment: {
-                    agriculture: 0.25,
-                    industry: 0.35,
-                    services: 0.30,
-                    unemployed: 0.10
-                },
-                growthRate: 0.02,
-                migration: 0.005
-            },
-
-            // 3. Environmental System
-            environment: {
-                temperature: 0.8,    // degrees above pre-industrial
-                pollution: 25,       // 0-100 scale
-                airQuality: 65,      // 0-100 scale
-                waterQuality: 70,    // 0-100 scale
-                biodiversity: 80,    // 0-100 scale
-                resources: {
-                    oil: { reserves: 50000, extraction: 1000 },
-                    minerals: { reserves: 100000, extraction: 2000 },
-                    renewable: 35,   // % renewable energy
-                    forests: 60      // % forest cover
-                },
-                climateChange: {
-                    seaLevelRise: 0.1,
-                    extremeWeather: 0.05,
-                    carbonEmissions: 45
-                }
-            },
-
-            // 4. Crisis and Disaster System
-            crises: [],
-            disasterRisk: {
-                economic: 0.1,
-                political: 0.05,
-                environmental: 0.08,
-                military: 0.03,
-                health: 0.02
-            },
-
-            // 5. Technology Tree & Research System
-            research: {
-                currentProject: null,
-                progress: 0,
-                queue: [],
-                unlocked: ['basic_industry', 'basic_military', 'basic_infrastructure'],
-                available: [
-                    { id: 'nuclear', name: 'Nuclear Fission', cost: 2000, era: 'WWII', effect: { military: 2.0, technology: 50 } },
-                    { id: 'jets', name: 'Jet Propulsion', cost: 1500, era: 'WWII', effect: { military: 1.5, technology: 30 } },
-                    { id: 'computers', name: 'Digital Computers', cost: 3000, era: 'ColdWar', effect: { technology: 80, money: 1.3 } },
-                    { id: 'space', name: 'Space Program', cost: 5000, era: 'ColdWar', effect: { influence: 25, technology: 100 } },
-                    { id: 'internet', name: 'Internet Technology', cost: 4000, era: 'Modern', effect: { technology: 120, money: 1.5 } }
-                ]
-            },
-
-            // 6. Enhanced Economic System
-            economy: {
-                gdp: 50000,
-                gdpGrowth: 0.032,
-                inflation: 2.1,
-                unemployment: 5.4,
-                tradeBalance: 2100,
-                debt: 0,
-                stockMarket: {
-                    industrial: { value: 100, trend: 'up' },
-                    technology: { value: 150, trend: 'down' },
-                    energy: { value: 80, trend: 'stable' }
-                },
-                sectors: {
-                    agriculture: 0.25,
-                    industry: 0.35,
-                    services: 0.40
-                }
-            },
-
-            // 7. Espionage & Intelligence System
-            espionage: {
-                intelligence: 45,
-                spyNetworks: {
-                    'USA': { level: 2, agents: 3, discovered: false },
-                    'USSR': { level: 1, agents: 1, discovered: false },
-                    'UK': { level: 0, agents: 0, discovered: false }
-                },
-                missions: [
-                    { id: 'sabotage', name: 'Industrial Sabotage', risk: 'high', cost: 500, effect: 'Reduce enemy production' },
-                    { id: 'intel', name: 'Gather Intelligence', risk: 'medium', cost: 300, effect: 'Gain military secrets' },
-                    { id: 'propaganda', name: 'Propaganda Campaign', risk: 'low', cost: 200, effect: 'Reduce enemy stability' }
-                ],
-                counterIntelligence: 30
-            },
-
-            // 8. Enhanced War System
-            militaryDetails: {
-                power: 15000,
-                morale: 75,
-                experience: 25,
-                navalCapacity: { current: 45, max: 50 },
-                airSuperiority: 72,
-                units: {
-                    infantry: 10000,
-                    tanks: 500,
-                    aircraft: 200,
-                    ships: 45,
-                    missiles: 0
-                },
-                technology: {
-                    nuclear: false,
-                    jets: false,
-                    missiles: false
-                }
-            },
-
-            // 9. Performance & Sound Systems
-            performance: {
-                fps: 60,
-                memory: 'normal',
-                lastUpdate: Date.now()
-            },
-            sound: {
-                enabled: true,
-                music: true,
-                volume: 0.7
-            }
+            isProcessingAction: false
         };
 
-        // ===== ENHANCED ACTION DATA WITH NEW SYSTEMS =====
+        // Month names for display
+        const monthNames = ["January", "February", "March", "April", "May", "June",
+            "July", "August", "September", "October", "November", "December"];
+
+        // Sound Effects (placeholder - would be actual audio files in production)
+        const soundEffects = {
+            purchase: new Audio('data:audio/wav;base64,UklGRigAAABXQVZFZm10IBAAAAABAAEARKwAAIhYAQACABAAZGF0YQQAAAAAAA=='),
+            error: new Audio('data:audio/wav;base64,UklGRigAAABXQVZFZm10IBAAAAABAAEARKwAAIhYAQACABAAZGF0YQQAAAAAAA=='),
+            click: new Audio('data:audio/wav;base64,UklGRigAAABXQVZFZm10IBAAAAABAAEARKwAAIhYAQACABAAZGF0YQQAAAAAAA=='),
+            success: new Audio('data:audio/wav;base64,UklGRigAAABXQVZFZm10IBAAAAABAAEARKwAAIhYAQACABAAZGF0YQQAAAAAAA==')
+        };
+
+        // Initialize sound effects
+        Object.values(soundEffects).forEach(sound => {
+            sound.volume = 0.3;
+        });
+
+        // Country Data (historically accurate for each era)
+        const countriesByContinent = {
+            europe: ["France", "United Kingdom", "Germany", "Italy", "Spain", "Poland", "Netherlands", "Belgium", "Sweden", "Norway", "Denmark", "Finland", "Austria", "Switzerland", "Portugal", "Greece", "Soviet Union"],
+            asia: ["Japan", "China", "India", "South Korea", "North Korea", "Vietnam", "Thailand", "Philippines", "Indonesia", "Malaysia", "Singapore", "Pakistan", "Bangladesh", "Sri Lanka", "Myanmar", "Cambodia"],
+            africa: ["Egypt", "South Africa", "Nigeria", "Kenya", "Ethiopia", "Ghana", "Tanzania", "Uganda", "Morocco", "Algeria", "Sudan", "Angola", "Mozambique", "Zambia", "Zimbabwe", "Senegal"],
+            'north-america': ["United States", "Canada", "Mexico", "Cuba", "Jamaica", "Haiti", "Dominican Republic", "Guatemala", "Honduras", "El Salvador", "Nicaragua", "Costa Rica", "Panama"],
+            'south-america': ["Brazil", "Argentina", "Chile", "Colombia", "Peru", "Venezuela", "Ecuador", "Bolivia", "Paraguay", "Uruguay", "Guyana", "Suriname", "French Guiana"],
+            oceania: ["Australia", "New Zealand", "Papua New Guinea", "Fiji", "Solomon Islands", "Vanuatu", "New Caledonia", "Samoa", "Tonga", "Kiribati", "Micronesia", "Palau"]
+        };
+
+        // Action Costs and Effects - FIXED: Removed money from effects
         const actionData = {
-            // Your original actions
             'tax-reform': { cost: 200, effect: { stability: -5 } },
             'policy-reform': { cost: 150, effect: { stability: 10 } },
             'anti-corruption': { cost: 300, effect: { stability: 15 } },
@@ -1756,485 +1483,936 @@
             'diplomacy': { cost: 150, effect: { influence: 8 } },
             'healthcare': { cost: 600, effect: { stability: 15, population: 100000 } },
             'social': { cost: 350, effect: { stability: 12 } },
-            'culture': { cost: 250, effect: { stability: 8, influence: 5 } },
-
-            // NEW: Research & Technology Actions
-            'research-lab': { cost: 600, effect: { technology: 30 }, building: 'research' },
-            'nuclear-research': { cost: 2000, effect: { technology: 100, military: 200 }, research: 'nuclear' },
-            'space-program': { cost: 5000, effect: { technology: 150, influence: 25 }, research: 'space' },
-
-            // NEW: Espionage Actions
-            'spy-network': { cost: 800, effect: { influence: 10 }, espionage: { intelligence: 20 } },
-            'sabotage': { cost: 500, effect: { conflicts: 1 }, espionage: { risk: 'high' } },
-            'counter-intel': { cost: 600, effect: { stability: 5 }, espionage: { counterIntelligence: 15 } },
-
-            // NEW: Environmental Actions
-            'clean-energy': { cost: 700, effect: { money: -100 }, environment: { pollution: -10, renewable: 10 } },
-            'pollution-control': { cost: 400, effect: { }, environment: { pollution: -15, airQuality: 10 } },
-            'conservation': { cost: 300, effect: { stability: 5 }, environment: { biodiversity: 10, forests: 5 } }
+            'culture': { cost: 250, effect: { stability: 8, influence: 5 } }
         };
 
-        // ===== ENHANCED INITIALIZATION =====
-        function initEnhancedGame() {
-            // Your original initialization
+        // Historical Events (era-specific)
+        const historicalEvents = {
+            WWII: [
+                { 
+                    year: 1939, 
+                    month: 8,
+                    title: "World War II Begins", 
+                    description: "Germany invades Poland, starting the Second World War. Britain and France declare war on Germany.",
+                    isMajor: true,
+                    options: [
+                        { text: "Join the Allies", effect: { alliances: 2, stability: -10, military: 100 } },
+                        { text: "Remain Neutral", effect: { influence: 5, stability: 5 } },
+                        { text: "Join the Axis", effect: { alliances: 2, stability: -15, military: 150, influence: -20 } }
+                    ]
+                }
+            ],
+            ColdWar: [
+                { 
+                    year: 1947, 
+                    month: 2,
+                    title: "Truman Doctrine", 
+                    description: "President Truman announces the policy of containing Soviet expansion, marking the start of the Cold War.",
+                    isMajor: true,
+                    options: [
+                        { text: "Support Western Bloc", effect: { alliances: 1, influence: 10, stability: -5 } },
+                        { text: "Support Eastern Bloc", effect: { alliances: 1, influence: -10, stability: -10 } },
+                        { text: "Remain Non-Aligned", effect: { influence: 5, stability: 5 } }
+                    ]
+                }
+            ],
+            Modern: [
+                { 
+                    year: 1991, 
+                    month: 11,
+                    title: "Soviet Union Collapses", 
+                    description: "The Soviet Union officially dissolves, ending the Cold War and creating new independent states.",
+                    isMajor: true,
+                    options: [
+                        { text: "Support democratic reforms", effect: { stability: 10, influence: 5 } },
+                        { text: "Maintain status quo", effect: { stability: -5, influence: -5 } }
+                    ]
+                }
+            ]
+        };
+
+        // DOM Elements
+        const DOM = {
+            continentPhase: document.getElementById('continent-phase'),
+            countryPhase: document.getElementById('country-phase'),
+            politicsPhase: document.getElementById('politics-phase'),
+            gamePhase: document.getElementById('game-phase'),
+            nextToCountry: document.getElementById('next-to-country'),
+            nextToPolitics: document.getElementById('next-to-politics'),
+            nextToGame: document.getElementById('next-to-game'),
+            nextTurn: document.getElementById('next-turn'),
+            mobileNext: document.getElementById('mobile-next'),
+            continentGrid: document.getElementById('continent-grid'),
+            countryGrid: document.getElementById('country-grid'),
+            politicsGrid: document.getElementById('politics-grid'),
+            selectedContinentName: document.getElementById('selected-continent-name'),
+            currentEra: document.getElementById('current-era'),
+            currentDate: document.getElementById('current-date'),
+            moneyValue: document.getElementById('money-value'),
+            populationValue: document.getElementById('population-value'),
+            techValue: document.getElementById('tech-value'),
+            stabilityValue: document.getElementById('stability-value'),
+            militaryValue: document.getElementById('military-value'),
+            mineralsValue: document.getElementById('minerals-value'),
+            foodValue: document.getElementById('food-value'),
+            oilValue: document.getElementById('oil-value'),
+            influenceValue: document.getElementById('influence-value'),
+            alliancesValue: document.getElementById('alliances-value'),
+            conflictsValue: document.getElementById('conflicts-value'),
+            moneyBar: document.getElementById('money-bar'),
+            populationBar: document.getElementById('population-bar'),
+            techBar: document.getElementById('tech-bar'),
+            stabilityBar: document.getElementById('stability-bar'),
+            militaryBar: document.getElementById('military-bar'),
+            timelineSelect: document.getElementById('timeline-select'),
+            timelineProgress: document.getElementById('timeline-progress'),
+            timelineSpeed: document.getElementById('timeline-speed'),
+            timelineAuto: document.getElementById('timeline-auto'),
+            eventContainer: document.getElementById('event-container'),
+            notification: document.getElementById('notification'),
+            modalOverlay: document.getElementById('modal-overlay'),
+            modalTitle: document.getElementById('modal-title'),
+            modalBody: document.getElementById('modal-body'),
+            modalClose: document.getElementById('modal-close'),
+            modalAction: document.getElementById('modal-action'),
+            actionButtons: document.querySelectorAll('[data-action]'),
+            alliesList: document.getElementById('allies-list'),
+            enemiesList: document.getElementById('enemies-list'),
+            otherNationsList: document.getElementById('other-nations-list'),
+            warPanel: document.getElementById('war-panel'),
+            warEnemy: document.getElementById('war-enemy'),
+            warProgress: document.getElementById('war-progress'),
+            warSupport: document.getElementById('war-support'),
+            warOffensive: document.getElementById('war-offensive'),
+            warPeace: document.getElementById('war-peace'),
+            mobileSave: document.getElementById('mobile-save'),
+            mobileMenu: document.getElementById('mobile-menu')
+        };
+
+        // Initialize the game
+        function initGame() {
             setupEventListeners();
-            
-            // NEW: Enhanced systems initialization
-            initEnhancedEventListeners();
-            initTechnologyTree();
-            initEnvironmentalSystem();
-            initCrisisSystem();
-            initPerformanceMonitor();
-            initSoundSystem();
-            
-            updateEnhancedUI();
-            showNotification('NationCraft Ultimate v2.0 - All Systems Online!', 'success');
+            updateUI();
+            showNotification('Welcome to NationCraft! Start by selecting a continent.', 'success');
         }
 
-        // ===== NEW ENHANCED SYSTEMS FUNCTIONS =====
-        
-        function initEnhancedEventListeners() {
-            // Scenario selector
-            document.getElementById('scenario-select').addEventListener('change', (e) => {
-                gameState.currentScenario = e.target.value;
-                loadScenario(gameState.currentScenario);
-            });
-
-            // Sound controls
-            document.getElementById('sound-toggle').addEventListener('click', toggleSound);
-            document.getElementById('music-toggle').addEventListener('click', toggleMusic);
-
-            // New action buttons
-            document.querySelectorAll('[data-action]').forEach(button => {
-                button.addEventListener('click', (e) => {
-                    const action = e.target.closest('button').dataset.action;
-                    performEnhancedAction(action, e.target.closest('button'));
+        // Set up event listeners
+        function setupEventListeners() {
+            // Continent selection
+            DOM.continentGrid.querySelectorAll('.selection-card').forEach(card => {
+                card.addEventListener('click', () => {
+                    selectContinent(card);
                 });
             });
-        }
 
-        function initTechnologyTree() {
-            const techTree = document.getElementById('tech-tree-container');
-            gameState.research.available.forEach(tech => {
-                const techCard = document.createElement('div');
-                const isResearched = gameState.research.unlocked.includes(tech.id);
-                const isAvailable = gameState.technology >= tech.cost / 100;
-                
-                techCard.className = `tech-card ${isResearched ? 'researched' : isAvailable ? 'available' : 'locked'}`;
-                techCard.innerHTML = `
-                    <div class="tech-name">${tech.name}</div>
-                    <div class="tech-cost">Cost: $${tech.cost}</div>
-                    <div class="tech-era">${tech.era}</div>
-                `;
-                
-                if (!isResearched && isAvailable) {
-                    techCard.addEventListener('click', () => startResearch(tech.id));
+            // Country selection
+            DOM.nextToCountry.addEventListener('click', () => {
+                switchPhase(DOM.continentPhase, DOM.countryPhase);
+                playSound('click');
+            });
+
+            // Politics selection
+            DOM.politicsGrid.querySelectorAll('.selection-card').forEach(card => {
+                card.addEventListener('click', () => {
+                    selectGovernment(card);
+                });
+            });
+
+            DOM.nextToPolitics.addEventListener('click', () => {
+                if (!gameState.country) {
+                    showNotification('Please select a country first.', 'error');
+                    playSound('error');
+                    return;
                 }
-                
-                techTree.appendChild(techCard);
+                switchPhase(DOM.countryPhase, DOM.politicsPhase);
+                playSound('click');
+            });
+
+            // Start game
+            DOM.nextToGame.addEventListener('click', () => {
+                if (!gameState.country) {
+                    showNotification('Please select a country first.', 'error');
+                    playSound('error');
+                    return;
+                }
+                startGame();
+            });
+
+            // Action buttons
+            DOM.actionButtons.forEach(button => {
+                button.addEventListener('click', () => {
+                    const action = button.dataset.action;
+                    performAction(action, button);
+                });
+            });
+
+            // Timeline controls
+            DOM.timelineSelect.addEventListener('change', (e) => {
+                gameState.timelineEra = e.target.value;
+                resetTimeline();
+                updateUI();
+                playSound('click');
+            });
+
+            DOM.timelineSpeed.addEventListener('click', () => {
+                gameState.timelineSpeed = gameState.timelineSpeed === 1 ? 2 : 1;
+                DOM.timelineSpeed.textContent = `Speed: ${gameState.timelineSpeed}x`;
+                playSound('click');
+            });
+
+            DOM.timelineAuto.addEventListener('click', () => {
+                gameState.autoPlay = !gameState.autoPlay;
+                DOM.timelineAuto.textContent = `Auto: ${gameState.autoPlay ? 'On' : 'Off'}`;
+                if (gameState.autoPlay) {
+                    startAutoPlay();
+                }
+                playSound('click');
+            });
+
+            // Next turn
+            DOM.nextTurn.addEventListener('click', () => {
+                nextTurn();
+                playSound('click');
+            });
+            
+            DOM.mobileNext.addEventListener('click', () => {
+                nextTurn();
+                playSound('click');
+            });
+
+            // Modal controls
+            DOM.modalClose.addEventListener('click', () => {
+                DOM.modalOverlay.classList.remove('active');
+                playSound('click');
+            });
+
+            // Save/Load buttons
+            document.getElementById('save-btn').addEventListener('click', saveGame);
+            document.getElementById('load-btn').addEventListener('click', loadGame);
+            DOM.mobileSave.addEventListener('click', saveGame);
+
+            // War buttons
+            DOM.warOffensive.addEventListener('click', () => {
+                launchOffensive();
+            });
+            
+            DOM.warPeace.addEventListener('click', () => {
+                peaceNegotiations();
+            });
+
+            // Mobile menu
+            DOM.mobileMenu.addEventListener('click', () => {
+                showMobileMenu();
             });
         }
 
-        function initEnvironmentalSystem() {
-            // Environmental effects processor
-            setInterval(() => {
-                processEnvironmentalEffects();
-            }, 10000); // Process every 10 seconds
+        // Select continent
+        function selectContinent(card) {
+            DOM.continentGrid.querySelectorAll('.selection-card').forEach(c => c.classList.remove('selected'));
+            card.classList.add('selected');
+            gameState.continent = card.dataset.continent;
+            DOM.nextToCountry.disabled = false;
+            DOM.selectedContinentName.textContent = card.querySelector('.card-title').textContent;
+            populateCountries(gameState.continent);
+            playSound('click');
         }
 
-        function initCrisisSystem() {
-            // Random crisis generator
-            setInterval(() => {
-                if (Math.random() < 0.1) { // 10% chance each interval
-                    generateRandomCrisis();
-                }
-            }, 30000); // Check every 30 seconds
+        // Select government
+        function selectGovernment(card) {
+            DOM.politicsGrid.querySelectorAll('.selection-card').forEach(c => c.classList.remove('selected'));
+            card.classList.add('selected');
+            gameState.politicalSystem = card.dataset.system;
+            DOM.nextToGame.disabled = false;
+            playSound('click');
         }
 
-        function initPerformanceMonitor() {
-            let frameCount = 0;
-            let lastTime = performance.now();
+        // Start the game
+        function startGame() {
+            switchPhase(DOM.politicsPhase, DOM.gamePhase);
+            applyBonuses();
+            gameState.gameStarted = true;
+            updateNextTurnButton();
+            updateUI();
+            showNotification(`Welcome to ${gameState.country}! Start managing your nation.`, 'success');
+            playSound('success');
             
-            function checkPerformance() {
-                frameCount++;
-                const currentTime = performance.now();
-                if (currentTime >= lastTime + 1000) {
-                    gameState.performance.fps = Math.round((frameCount * 1000) / (currentTime - lastTime));
-                    frameCount = 0;
-                    lastTime = currentTime;
-                    updatePerformanceDisplay();
-                }
-                requestAnimationFrame(checkPerformance);
+            // Trigger initial historical event based on era
+            setTimeout(() => {
+                triggerInitialEvent();
+            }, 1000);
+        }
+
+        // Trigger initial historical event
+        function triggerInitialEvent() {
+            const eraEvents = historicalEvents[gameState.timelineEra];
+            if (eraEvents && eraEvents.length > 0) {
+                const initialEvent = eraEvents[0];
+                showHistoricalEvent(initialEvent);
             }
-            checkPerformance();
         }
 
-        function initSoundSystem() {
-            // Initialize Web Audio API or HTML5 Audio
-            // This is a placeholder for actual sound implementation
-            console.log('Sound system initialized');
+        // Play sound effect
+        function playSound(type) {
+            if (soundEffects[type]) {
+                soundEffects[type].currentTime = 0;
+                soundEffects[type].play().catch(e => console.log('Audio play failed:', e));
+            }
         }
 
-        // ===== ENHANCED GAME FUNCTIONS =====
+        // Create purchase effect animation
+        function createPurchaseEffect(x, y, text, isSuccess = true) {
+            const effect = document.createElement('div');
+            effect.className = 'purchase-effect';
+            effect.textContent = text;
+            effect.style.left = `${x}px`;
+            effect.style.top = `${y}px`;
+            effect.style.color = isSuccess ? '#38b000' : '#ff006e';
+            
+            document.body.appendChild(effect);
+            
+            setTimeout(() => {
+                effect.remove();
+            }, 1500);
+        }
 
-        function performEnhancedAction(action, button) {
-            // Your original action logic plus new system integrations
-            if (gameState.isProcessingAction) return;
+        // Switch between game phases
+        function switchPhase(fromPhase, toPhase) {
+            fromPhase.classList.remove('active');
+            toPhase.classList.add('active');
+        }
+
+        // Populate countries based on selected continent
+        function populateCountries(continent) {
+            DOM.countryGrid.innerHTML = '';
+            const countries = countriesByContinent[continent] || [];
+            
+            countries.forEach(country => {
+                const countryElement = document.createElement('div');
+                countryElement.className = 'country-item';
+                countryElement.textContent = country;
+                countryElement.addEventListener('click', () => {
+                    selectCountry(countryElement, country);
+                });
+                DOM.countryGrid.appendChild(countryElement);
+            });
+        }
+
+        // Select country
+        function selectCountry(element, country) {
+            DOM.countryGrid.querySelectorAll('.country-item').forEach(c => c.classList.remove('selected'));
+            element.classList.add('selected');
+            gameState.country = country;
+            DOM.nextToPolitics.disabled = false;
+            playSound('click');
+        }
+
+        // Apply continent and government bonuses
+        function applyBonuses() {
+            // Reset modifiers
+            Object.keys(gameState.modifiers).forEach(key => {
+                gameState.modifiers[key] = 1;
+            });
+
+            // Apply continent bonuses
+            if (gameState.continent) {
+                if (gameState.continent === 'europe') {
+                    gameState.modifiers.money *= 1.4;
+                    gameState.modifiers.technology *= 1.2;
+                } else if (gameState.continent === 'asia') {
+                    gameState.modifiers.population *= 1.3;
+                    gameState.modifiers.money *= 1.25;
+                } else if (gameState.continent === 'africa') {
+                    gameState.modifiers.minerals *= 1.5;
+                    gameState.modifiers.population *= 1.15;
+                } else if (gameState.continent === 'north-america') {
+                    gameState.modifiers.money *= 1.35;
+                    gameState.modifiers.military *= 1.25;
+                } else if (gameState.continent === 'south-america') {
+                    gameState.modifiers.food *= 1.4;
+                    gameState.modifiers.influence *= 1.2;
+                } else if (gameState.continent === 'oceania') {
+                    gameState.modifiers.money *= 1.3;
+                    gameState.modifiers.military *= 1.25;
+                }
+            }
+
+            // Apply government bonuses
+            if (gameState.politicalSystem) {
+                if (gameState.politicalSystem === 'democracy') {
+                    gameState.modifiers.stability *= 1.3;
+                    gameState.modifiers.technology *= 1.2;
+                } else if (gameState.politicalSystem === 'republic') {
+                    gameState.modifiers.stability *= 1.25;
+                    gameState.modifiers.money *= 1.15;
+                } else if (gameState.politicalSystem === 'monarchy') {
+                    gameState.modifiers.stability *= 1.4;
+                    gameState.modifiers.population *= 0.9;
+                } else if (gameState.politicalSystem === 'dictatorship') {
+                    gameState.modifiers.military *= 1.5;
+                    gameState.modifiers.stability *= 0.7;
+                } else if (gameState.politicalSystem === 'communism') {
+                    gameState.modifiers.money *= 1.4;
+                    gameState.modifiers.money *= 0.8;
+                } else if (gameState.politicalSystem === 'theocracy') {
+                    gameState.modifiers.stability *= 1.35;
+                    gameState.modifiers.technology *= 0.85;
+                }
+            }
+        }
+
+        // Perform an action - FIXED VERSION
+        function performAction(action, button) {
+            // Prevent multiple simultaneous actions
+            if (gameState.isProcessingAction) {
+                return;
+            }
+            
             gameState.isProcessingAction = true;
-
+            
             const actionInfo = actionData[action];
+            
             if (!actionInfo) {
                 console.error(`Unknown action: ${action}`);
                 gameState.isProcessingAction = false;
                 return;
             }
 
-            // Check cost
             if (gameState.money < actionInfo.cost) {
-                showNotification('Not enough money!', 'error');
+                showNotification('Not enough money to perform this action.', 'error');
+                playSound('error');
+                
+                // Add shake animation to button
                 button.classList.add('shake');
-                setTimeout(() => button.classList.remove('shake'), 500);
+                setTimeout(() => {
+                    button.classList.remove('shake');
+                }, 500);
+                
+                // Create failure effect
+                const rect = button.getBoundingClientRect();
+                createPurchaseEffect(rect.left + rect.width/2, rect.top + rect.height/2, `-$${actionInfo.cost}`, false);
                 gameState.isProcessingAction = false;
                 return;
             }
 
-            // Deduct cost
+            // Deduct cost - THIS IS THE ONLY PLACE WHERE MONEY SHOULD BE DEDUCTED
             gameState.money -= actionInfo.cost;
 
-            // Apply effects
+            // Apply effects (but NOT money effects - those were removed from actionData)
             if (actionInfo.effect) {
                 Object.keys(actionInfo.effect).forEach(key => {
                     if (gameState.hasOwnProperty(key)) {
                         gameState[key] += actionInfo.effect[key];
+                        // Ensure values don't go below 0
+                        if (gameState[key] < 0) gameState[key] = 0;
                     }
                 });
             }
 
-            // Handle new system-specific effects
-            if (actionInfo.research) {
-                startResearch(actionInfo.research);
-            }
+            // Special handling for buildings
+            if (action === 'factory') gameState.buildings.factory++;
+            if (action === 'infrastructure') gameState.buildings.infrastructure++;
+            if (action === 'research') gameState.buildings.research++;
+            if (action === 'barracks') gameState.buildings.barracks++;
 
-            if (actionInfo.espionage) {
-                handleEspionageAction(action, actionInfo.espionage);
-            }
-
-            if (actionInfo.environment) {
-                handleEnvironmentalAction(actionInfo.environment);
-            }
-
-            // Visual feedback
-            createPurchaseEffect(button.getBoundingClientRect().left + button.offsetWidth/2, 
-                               button.getBoundingClientRect().top + button.offsetHeight/2, 
-                               `-$${actionInfo.cost}`, true);
-
-            showNotification(`Action completed: ${action}`, 'success');
-            updateEnhancedUI();
+            // Create success effect
+            const rect = button.getBoundingClientRect();
+            createPurchaseEffect(rect.left + rect.width/2, rect.top + rect.height/2, `-$${actionInfo.cost}`, true);
             
+            showNotification(`Action completed: ${action}. Cost: $${actionInfo.cost}`, 'success');
+            playSound('purchase');
+            updateUI();
+            
+            // Re-enable action processing after a short delay to prevent double-clicks
             setTimeout(() => {
                 gameState.isProcessingAction = false;
             }, 500);
         }
 
-        function startResearch(techId) {
-            const tech = gameState.research.available.find(t => t.id === techId);
-            if (tech && !gameState.research.unlocked.includes(techId)) {
-                gameState.research.currentProject = techId;
-                gameState.research.progress = 0;
-                showNotification(`Started research: ${tech.name}`, 'info');
+        // Advance to next turn
+        function nextTurn() {
+            if (!gameState.gameStarted) {
+                showNotification('Please complete nation setup first.', 'error');
+                playSound('error');
+                return;
             }
-        }
-
-        function handleEspionageAction(action, effects) {
-            gameState.espionage.intelligence += effects.intelligence || 0;
-            gameState.espionage.counterIntelligence += effects.counterIntelligence || 0;
             
-            if (effects.risk === 'high' && Math.random() < 0.3) {
-                generateCrisis('diplomatic', 'medium');
+            gameState.month++;
+            
+            // Handle year progression
+            if (gameState.month > 11) {
+                gameState.month = 0;
+                gameState.year++;
             }
-        }
-
-        function handleEnvironmentalAction(effects) {
-            Object.keys(effects).forEach(key => {
-                if (gameState.environment[key] !== undefined) {
-                    gameState.environment[key] += effects[key];
-                }
-            });
-        }
-
-        function processEnvironmentalEffects() {
-            // Environmental degradation over time
-            if (gameState.buildings.factory > 0) {
-                gameState.environment.pollution += gameState.buildings.factory * 0.5;
-                gameState.environment.temperature += 0.01;
+            
+            // Passive income and growth - FIXED: This only happens during next turn, not during actions
+            gameState.money += Math.floor(100 * gameState.modifiers.money);
+            gameState.population += Math.floor(50000 * gameState.modifiers.population);
+            gameState.technology += Math.floor(2 * gameState.modifiers.technology);
+            gameState.minerals += Math.floor(50);
+            gameState.food += Math.floor(100);
+            gameState.oil += Math.floor(20);
+            
+            // Ensure stability stays within bounds
+            gameState.stability = Math.max(0, Math.min(100, gameState.stability));
+            
+            // Random events
+            if (Math.random() < 0.3) {
+                triggerRandomEvent();
             }
-
-            // Crisis generation based on environmental factors
-            if (gameState.environment.pollution > 70 && Math.random() < 0.2) {
-                generateCrisis('environmental', 'high');
-            }
-
-            updateEnhancedUI();
-        }
-
-        function generateRandomCrisis() {
-            const crisisTypes = ['economic', 'political', 'environmental', 'military', 'health'];
-            const randomType = crisisTypes[Math.floor(Math.random() * crisisTypes.length)];
-            const severity = Math.random() > 0.7 ? 'high' : Math.random() > 0.4 ? 'medium' : 'low';
             
-            generateCrisis(randomType, severity);
-        }
-
-        function generateCrisis(type, severity) {
-            const crisis = {
-                type: type,
-                severity: severity,
-                duration: severity === 'high' ? 5 : severity === 'medium' ? 3 : 1,
-                startTurn: gameState.month + (gameState.year * 12),
-                impact: getCrisisImpact(type, severity)
-            };
+            // Check for historical events
+            checkHistoricalEvents();
             
-            gameState.crises.push(crisis);
-            showCrisisAlert(crisis);
-        }
-
-        function getCrisisImpact(type, severity) {
-            const impacts = {
-                economic: { money: -200, stability: -10 },
-                political: { stability: -15, influence: -10 },
-                environmental: { population: -50000, stability: -5 },
-                military: { military: -50, stability: -8 },
-                health: { population: -100000, stability: -12 }
-            };
-            
-            const impact = { ...impacts[type] };
-            Object.keys(impact).forEach(key => {
-                impact[key] *= (severity === 'high' ? 2 : severity === 'medium' ? 1 : 0.5);
-            });
-            
-            return impact;
-        }
-
-        function showCrisisAlert(crisis) {
-            const crisisDisplay = document.getElementById('active-crisis-display');
-            const crisisElement = document.createElement('div');
-            crisisElement.className = 'crisis-alert';
-            crisisElement.innerHTML = `
-                ⚠️ ${crisis.severity.toUpperCase()} ${crisis.type} CRISIS! 
-                Duration: ${crisis.duration} months
-            `;
-            crisisDisplay.appendChild(crisisElement);
-            crisisDisplay.style.display = 'block';
-            
-            showNotification(`Crisis Alert: ${crisis.type} crisis!`, 'warning');
-        }
-
-        function updateEnhancedUI() {
-            // Your original UI updates
             updateUI();
-            
-            // NEW: Enhanced system UI updates
-            updateEnvironmentalIndicators();
-            updatePopulationCharts();
-            updateResearchDisplay();
-            updateCrisisDisplay();
-            updatePerformanceDisplay();
-            updateEspionageDisplay();
+            showNotification(`${monthNames[gameState.month]} ${gameState.year} completed.`, 'success');
         }
 
-        function updateEnvironmentalIndicators() {
-            document.getElementById('temp-value').textContent = `+${gameState.environment.temperature.toFixed(1)}°C`;
-            document.getElementById('pollution-value').textContent = `${Math.round(gameState.environment.pollution)}%`;
-            
-            // Update indicator colors based on severity
-            const indicators = document.querySelectorAll('.environment-indicator');
-            indicators.forEach(indicator => {
-                const value = parseInt(indicator.querySelector('span:last-child').textContent);
-                indicator.className = 'environment-indicator';
-                if (value > 70) indicator.classList.add('critical');
-                else if (value > 40) indicator.classList.add('warning');
-            });
-        }
-
-        function updatePopulationCharts() {
-            // Update demographic charts
-            document.querySelector('.youth-fill').style.width = `${gameState.populationDetails.demographics.youth * 100}%`;
-            document.querySelector('.adult-fill').style.width = `${gameState.populationDetails.demographics.adult * 100}%`;
-            document.querySelector('.elderly-fill').style.width = `${gameState.populationDetails.demographics.elderly * 100}%`;
-        }
-
-        function updateResearchDisplay() {
-            const researchQueue = document.getElementById('research-queue');
-            researchQueue.innerHTML = '';
-            
-            if (gameState.research.currentProject) {
-                const researchItem = document.createElement('div');
-                researchItem.className = 'research-item';
-                const tech = gameState.research.available.find(t => t.id === gameState.research.currentProject);
-                researchItem.innerHTML = `
-                    <span>${tech.name}</span>
-                    <span class="research-progress">${gameState.research.progress}%</span>
-                `;
-                researchQueue.appendChild(researchItem);
-            } else {
-                researchQueue.innerHTML = '<div class="empty-state">No research in progress</div>';
-            }
-        }
-
-        function updateCrisisDisplay() {
-            const crisesContainer = document.getElementById('active-crises');
-            crisesContainer.innerHTML = '';
-            
-            if (gameState.crises.length > 0) {
-                gameState.crises.forEach(crisis => {
-                    const crisisElement = document.createElement('div');
-                    crisisElement.className = 'nation-item';
-                    crisisElement.innerHTML = `
-                        <span>${crisis.type} Crisis</span>
-                        <span class="nation-status status-enemy">${crisis.severity}</span>
-                    `;
-                    crisesContainer.appendChild(crisisElement);
-                });
-            } else {
-                crisesContainer.innerHTML = '<div class="empty-state">No active crises</div>';
-            }
-        }
-
-        function updatePerformanceDisplay() {
-            document.getElementById('performance-monitor').textContent = 
-                `FPS: ${gameState.performance.fps} | Memory: ${gameState.performance.memory}`;
-        }
-
-        function updateEspionageDisplay() {
-            const intelReport = document.getElementById('intelligence-report');
-            intelReport.innerHTML = '';
-            
-            if (gameState.espionage.intelligence > 0) {
-                const intelElement = document.createElement('div');
-                intelElement.className = 'nation-item';
-                intelElement.innerHTML = `
-                    <span>Intelligence Level</span>
-                    <span class="nation-status status-ally">${gameState.espionage.intelligence}%</span>
-                `;
-                intelReport.appendChild(intelElement);
-            } else {
-                intelReport.innerHTML = '<div class="empty-state">No intelligence data</div>';
-            }
-        }
-
-        function toggleSound() {
-            gameState.sound.enabled = !gameState.sound.enabled;
-            showNotification(`Sound ${gameState.sound.enabled ? 'enabled' : 'disabled'}`, 'info');
-        }
-
-        function toggleMusic() {
-            gameState.sound.music = !gameState.sound.music;
-            showNotification(`Music ${gameState.sound.music ? 'enabled' : 'disabled'}`, 'info');
-        }
-
-        function loadScenario(scenarioId) {
-            gameState.currentScenario = scenarioId;
-            // Load scenario-specific conditions and events
-            showNotification(`Scenario loaded: ${scenarioId}`, 'success');
-        }
-
-        // Enhanced nextTurn function
-        const originalNextTurn = window.nextTurn;
-        window.nextTurn = function() {
-            // Call original nextTurn logic
-            if (originalNextTurn) originalNextTurn();
-            
-            // NEW: Enhanced system processing
-            processResearchProgress();
-            processCrises();
-            processEnvironmentalChanges();
-            processPopulationChanges();
-            processEconomicChanges();
-            
-            updateEnhancedUI();
-        };
-
-        function processResearchProgress() {
-            if (gameState.research.currentProject) {
-                gameState.research.progress += 10; // 10% per turn
-                if (gameState.research.progress >= 100) {
-                    completeResearch(gameState.research.currentProject);
+        // Trigger a random event
+        function triggerRandomEvent() {
+            const events = [
+                {
+                    title: "Economic Boom",
+                    description: "Your nation's economy is experiencing rapid growth.",
+                    effect: { money: 300, stability: 5 }
+                },
+                {
+                    title: "Natural Disaster",
+                    description: "A severe natural disaster has struck, damaging infrastructure.",
+                    effect: { money: -200, stability: -10, population: -50000 }
+                },
+                {
+                    title: "Technological Breakthrough",
+                    description: "Your scientists have made a major discovery.",
+                    effect: { technology: 25, money: 100 }
+                },
+                {
+                    title: "Political Scandal",
+                    description: "A government official is involved in a corruption scandal.",
+                    effect: { stability: -15, money: -100 }
+                },
+                {
+                    title: "Resource Discovery",
+                    description: "A large mineral deposit has been discovered.",
+                    effect: { minerals: 300, money: 150 }
                 }
+            ];
+            
+            const event = events[Math.floor(Math.random() * events.length)];
+            showEventModal(event);
+        }
+
+        // Check for historical events based on timeline
+        function checkHistoricalEvents() {
+            const eraEvents = historicalEvents[gameState.timelineEra] || [];
+            const currentEvent = eraEvents.find(event => 
+                event.year === gameState.year && event.month === gameState.month
+            );
+            
+            if (currentEvent) {
+                showHistoricalEvent(currentEvent);
             }
         }
 
-        function completeResearch(techId) {
-            const tech = gameState.research.available.find(t => t.id === techId);
-            gameState.research.unlocked.push(techId);
-            gameState.research.currentProject = null;
-            gameState.research.progress = 0;
+        // Show historical event
+        function showHistoricalEvent(event) {
+            const eventElement = document.createElement('div');
+            eventElement.className = `event-modal ${event.isMajor ? 'major' : ''}`;
             
-            // Apply research effects
-            if (tech.effect) {
-                Object.keys(tech.effect).forEach(key => {
-                    if (gameState[key] !== undefined) {
-                        if (key === 'military' || key === 'technology') {
-                            gameState[key] += tech.effect[key];
-                        } else if (key === 'money') {
-                            gameState.modifiers.money *= tech.effect[key];
+            let eventHTML = `
+                <div class="event-header">
+                    <div class="event-title">${event.title}</div>
+                    <div class="event-era">${gameState.timelineEra}</div>
+                </div>
+                <div class="event-description">${event.description}</div>
+            `;
+            
+            if (event.options) {
+                eventHTML += `<div class="event-actions">`;
+                event.options.forEach((option, index) => {
+                    eventHTML += `<button class="btn ${index === 0 ? 'btn-primary' : 'btn-secondary'} btn-small event-option" data-index="${index}">${option.text}</button>`;
+                });
+                eventHTML += `</div>`;
+            } else {
+                eventHTML += `<div class="event-actions">
+                    <button class="btn btn-primary btn-small event-close">Continue</button>
+                </div>`;
+            }
+            
+            eventElement.innerHTML = eventHTML;
+            DOM.eventContainer.appendChild(eventElement);
+            
+            // Add event listeners
+            if (event.options) {
+                eventElement.querySelectorAll('.event-option').forEach(button => {
+                    button.addEventListener('click', () => {
+                        const optionIndex = parseInt(button.dataset.index);
+                        const option = event.options[optionIndex];
+                        
+                        // Apply effects
+                        if (option.effect) {
+                            Object.keys(option.effect).forEach(key => {
+                                if (gameState.hasOwnProperty(key)) {
+                                    gameState[key] += option.effect[key];
+                                }
+                            });
                         }
-                    }
+                        
+                        eventElement.classList.remove('active');
+                        setTimeout(() => {
+                            eventElement.remove();
+                        }, 300);
+                        updateUI();
+                        showNotification(`Decision made: ${option.text}`, 'success');
+                        playSound('success');
+                    });
+                });
+            } else {
+                eventElement.querySelector('.event-close').addEventListener('click', () => {
+                    eventElement.classList.remove('active');
+                    setTimeout(() => {
+                        eventElement.remove();
+                    }, 300);
                 });
             }
             
-            showNotification(`Research completed: ${tech.name}`, 'success');
+            // Auto-remove after 30 seconds if not a major event
+            if (!event.isMajor) {
+                setTimeout(() => {
+                    if (eventElement.parentNode) {
+                        eventElement.classList.remove('active');
+                        setTimeout(() => {
+                            if (eventElement.parentNode) {
+                                eventElement.remove();
+                            }
+                        }, 300);
+                    }
+                }, 30000);
+            }
+            
+            playSound('success');
         }
 
-        function processCrises() {
-            gameState.crises = gameState.crises.filter(crisis => {
-                crisis.duration--;
-                
-                // Apply crisis effects
-                if (crisis.impact) {
-                    Object.keys(crisis.impact).forEach(key => {
-                        if (gameState[key] !== undefined) {
-                            gameState[key] += crisis.impact[key];
+        // Show event in modal
+        function showEventModal(event) {
+            DOM.modalTitle.textContent = event.title;
+            DOM.modalBody.textContent = event.description;
+            DOM.modalAction.textContent = 'Continue';
+            
+            DOM.modalAction.onclick = () => {
+                // Apply effects
+                if (event.effect) {
+                    Object.keys(event.effect).forEach(key => {
+                        if (gameState.hasOwnProperty(key)) {
+                            gameState[key] += event.effect[key];
                         }
                     });
                 }
                 
-                return crisis.duration > 0;
-            });
+                DOM.modalOverlay.classList.remove('active');
+                updateUI();
+                playSound('success');
+            };
+            
+            DOM.modalOverlay.classList.add('active');
+            playSound('click');
         }
 
-        function processEnvironmentalChanges() {
-            // Natural environmental changes
-            gameState.environment.temperature += 0.01; // Global warming
-            if (gameState.buildings.factory > 0) {
-                gameState.environment.pollution += gameState.buildings.factory * 0.2;
+        // Timeline functions
+        function getEraStartYear(era) {
+            switch(era) {
+                case 'WWII': return 1939;
+                case 'ColdWar': return 1947;
+                case 'Modern': return 1991;
+                default: return 1939;
             }
         }
 
-        function processPopulationChanges() {
-            // Population growth and demographic shifts
-            const growth = gameState.population * gameState.populationDetails.growthRate / 12;
-            gameState.population += growth;
+        function getEraEndYear(era) {
+            switch(era) {
+                case 'WWII': return 1945;
+                case 'ColdWar': return 1991;
+                case 'Modern': return 2023;
+                default: return 1945;
+            }
+        }
+
+        function resetTimeline() {
+            gameState.year = getEraStartYear(gameState.timelineEra);
+            gameState.month = 8;
+            updateTimeline();
+        }
+
+        function updateTimeline() {
+            const startYear = getEraStartYear(gameState.timelineEra);
+            const endYear = getEraEndYear(gameState.timelineEra);
+            const totalMonths = (endYear - startYear) * 12;
+            const currentMonth = (gameState.year - startYear) * 12 + gameState.month;
+            const progress = (currentMonth / totalMonths) * 100;
             
-            // Demographic aging
-            gameState.populationDetails.demographics.youth *= 0.999;
-            gameState.populationDetails.demographics.adult *= 1.001;
-            gameState.populationDetails.demographics.elderly *= 1.002;
+            DOM.timelineProgress.style.width = `${Math.min(100, progress)}%`;
+            DOM.currentEra.textContent = gameState.timelineEra;
+            
+            // Format date display
+            DOM.currentDate.textContent = `${monthNames[gameState.month]} ${gameState.year}`;
         }
 
-        function processEconomicChanges() {
-            // Economic fluctuations
-            gameState.economy.gdpGrowth += (Math.random() - 0.5) * 0.02;
-            gameState.economy.gdp *= (1 + gameState.economy.gdpGrowth / 12);
-            gameState.economy.inflation += (Math.random() - 0.5) * 0.1;
+        function startAutoPlay() {
+            if (gameState.autoPlay) {
+                setTimeout(() => {
+                    nextTurn();
+                    if (gameState.autoPlay) {
+                        startAutoPlay();
+                    }
+                }, 1000 / gameState.timelineSpeed);
+            }
         }
 
-        // Initialize the enhanced game
-        window.addEventListener('DOMContentLoaded', initEnhancedGame);
+        // Update UI
+        function updateUI() {
+            // Update stats
+            DOM.moneyValue.textContent = `$${gameState.money.toLocaleString()}`;
+            DOM.populationValue.textContent = `${(gameState.population / 1000000).toFixed(1)}M`;
+            DOM.techValue.textContent = gameState.technology;
+            DOM.stabilityValue.textContent = `${Math.max(0, Math.min(100, gameState.stability))}%`;
+            DOM.militaryValue.textContent = gameState.military;
+            DOM.mineralsValue.textContent = gameState.minerals;
+            DOM.foodValue.textContent = gameState.food.toLocaleString();
+            DOM.oilValue.textContent = gameState.oil;
+            DOM.influenceValue.textContent = gameState.influence;
+            DOM.alliancesValue.textContent = gameState.alliances;
+            DOM.conflictsValue.textContent = gameState.conflicts;
+            
+            // Update progress bars
+            DOM.moneyBar.style.width = `${Math.min(100, (gameState.money / 5000) * 100)}%`;
+            DOM.populationBar.style.width = `${Math.min(100, (gameState.population / 5000000) * 100)}%`;
+            DOM.techBar.style.width = `${Math.min(100, (gameState.technology / 100) * 100)}%`;
+            DOM.stabilityBar.style.width = `${Math.max(0, Math.min(100, gameState.stability))}%`;
+            DOM.militaryBar.style.width = `${Math.min(100, (gameState.military / 1000) * 100)}%`;
+            
+            // Update timeline
+            updateTimeline();
+            
+            // Update action costs
+            DOM.actionButtons.forEach(button => {
+                const action = button.dataset.action;
+                const cost = actionData[action]?.cost || 0;
+                const costElement = button.querySelector('.action-cost');
+                if (costElement) {
+                    costElement.textContent = `$${cost}`;
+                }
+                
+                // Disable buttons if not enough money
+                button.disabled = gameState.money < cost;
+            });
 
-        // ===== YOUR ORIGINAL FUNCTIONS REMAIN UNCHANGED =====
-        // All your existing functions (selectContinent, selectCountry, selectGovernment, etc.)
-        // remain exactly as they were - they're fully compatible with the new systems!
+            // Update war panel
+            if (gameState.atWar && gameState.currentWar) {
+                DOM.warPanel.style.display = 'block';
+                DOM.warEnemy.textContent = gameState.currentWar.enemy;
+                DOM.warProgress.style.width = `${gameState.currentWar.progress}%`;
+                DOM.warSupport.textContent = `${gameState.warSupport}%`;
+            } else {
+                DOM.warPanel.style.display = 'none';
+            }
 
+            // Update diplomacy lists
+            updateDiplomacyLists();
+            
+            // Update next turn button
+            updateNextTurnButton();
+        }
+
+        // Update diplomacy lists
+        function updateDiplomacyLists() {
+            // Allies
+            DOM.alliesList.innerHTML = '';
+            if (gameState.allies.length === 0) {
+                DOM.alliesList.innerHTML = '<div class="empty-state">No allies yet</div>';
+            } else {
+                gameState.allies.forEach(ally => {
+                    const allyElement = document.createElement('div');
+                    allyElement.className = 'nation-item';
+                    allyElement.innerHTML = `
+                        <span class="nation-name">${ally}</span>
+                        <span class="nation-status status-ally">Ally</span>
+                    `;
+                    DOM.alliesList.appendChild(allyElement);
+                });
+            }
+            
+            // Enemies
+            DOM.enemiesList.innerHTML = '';
+            if (gameState.enemies.length === 0) {
+                DOM.enemiesList.innerHTML = '<div class="empty-state">No enemies yet</div>';
+            } else {
+                gameState.enemies.forEach(enemy => {
+                    const enemyElement = document.createElement('div');
+                    enemyElement.className = 'nation-item';
+                    enemyElement.innerHTML = `
+                        <span class="nation-name">${enemy}</span>
+                        <span class="nation-status status-enemy">${gameState.atWar && gameState.currentWar?.enemy === enemy ? 'At War' : 'Hostile'}</span>
+                    `;
+                    DOM.enemiesList.appendChild(enemyElement);
+                });
+            }
+            
+            // Other nations
+            DOM.otherNationsList.innerHTML = '';
+            if (gameState.neutral.length === 0) {
+                DOM.otherNationsList.innerHTML = '<div class="empty-state">No diplomatic relations yet</div>';
+            } else {
+                gameState.neutral.forEach(nation => {
+                    const nationElement = document.createElement('div');
+                    nationElement.className = 'nation-item';
+                    nationElement.innerHTML = `
+                        <span class="nation-name">${nation}</span>
+                        <span class="nation-status status-neutral">Neutral</span>
+                    `;
+                    DOM.otherNationsList.appendChild(nationElement);
+                });
+            }
+        }
+
+        // Update next turn button state
+        function updateNextTurnButton() {
+            const canAdvance = gameState.gameStarted;
+            DOM.nextTurn.disabled = !canAdvance;
+            DOM.mobileNext.disabled = !canAdvance;
+        }
+
+        // Show notification
+        function showNotification(message, type = 'success') {
+            DOM.notification.textContent = message;
+            DOM.notification.className = 'notification';
+            
+            if (type === 'error') {
+                DOM.notification.classList.add('error');
+            }
+            
+            DOM.notification.classList.add('show');
+            
+            setTimeout(() => {
+                DOM.notification.classList.remove('show');
+            }, 3000);
+        }
+
+        // War functions
+        function launchOffensive() {
+            if (!gameState.atWar) return;
+            
+            const success = Math.random() > 0.3;
+            if (success) {
+                gameState.currentWar.progress += 10 + Math.floor(Math.random() * 20);
+                gameState.warSupport += 5;
+                showNotification('Offensive successful!', 'success');
+                playSound('success');
+                
+                if (gameState.currentWar.progress >= 100) {
+                    endWar(true);
+                }
+            } else {
+                gameState.currentWar.progress -= 5 + Math.floor(Math.random() * 15);
+                gameState.warSupport -= 10;
+                showNotification('Offensive failed!', 'error');
+                playSound('error');
+                
+                if (gameState.warSupport <= 0) {
+                    endWar(false);
+                }
+            }
+            
+            updateUI();
+        }
+
+        function peaceNegotiations() {
+            if (!gameState.atWar) return;
+            
+            const success = Math.random() > 0.5;
+            if (success) {
+                endWar(true);
+                showNotification('Peace treaty signed!', 'success');
+                playSound('success');
+            } else {
+                gameState.warSupport -= 5;
+                showNotification('Peace negotiations failed!', 'error');
+                playSound('error');
+                
+                if (gameState.warSupport <= 0) {
+                    endWar(false);
+                }
+            }
+            
+            updateUI();
+        }
+
+        function endWar(victory) {
+            if (victory) {
+                gameState.influence += 20;
+                gameState.money += 500;
+                showNotification(`Victory! You have defeated ${gameState.currentWar.enemy}`, 'success');
+            } else {
+                gameState.influence -= 15;
+                gameState.stability -= 10;
+                showNotification(`Defeat! You have lost the war with ${gameState.currentWar.enemy}`, 'error');
+            }
+            
+            gameState.atWar = false;
+            gameState.currentWar = null;
+            gameState.warSupport = 0;
+            
+            updateUI();
+        }
+
+        // Mobile menu
+        function showMobileMenu() {
+            showNotification('Mobile menu would open here', 'success');
+            playSound('click');
+        }
+
+        // Save game
+        function saveGame() {
+            try {
+                localStorage.setItem('nationcraft_save', JSON.stringify(gameState));
+                showNotification('Game saved successfully!', 'success');
+                playSound('success');
+            } catch (e) {
+                showNotification('Failed to save game.', 'error');
+                playSound('error');
+            }
+        }
+
+        // Load game
+        function loadGame() {
+            try {
+                const saved = localStorage.getItem('nationcraft_save');
+                if (saved) {
+                    const savedState = JSON.parse(saved);
+                    Object.assign(gameState, savedState);
+                    updateUI();
+                    showNotification('Game loaded successfully!', 'success');
+                    playSound('success');
+                    
+                    // Switch to the appropriate phase
+                    if (gameState.country && gameState.politicalSystem) {
+                        switchPhase(DOM.continentPhase, DOM.gamePhase);
+                    } else if (gameState.country) {
+                        switchPhase(DOM.continentPhase, DOM.politicsPhase);
+                    } else if (gameState.continent) {
+                        switchPhase(DOM.continentPhase, DOM.countryPhase);
+                        populateCountries(gameState.continent);
+                    }
+                } else {
+                    showNotification('No saved game found.', 'error');
+                    playSound('error');
+                }
+            } catch (e) {
+                showNotification('Failed to load game.', 'error');
+                playSound('error');
+            }
+        }
+
+        // Initialize the game when the page loads
+        window.addEventListener('DOMContentLoaded', initGame);
     </script>
 </body>
 </html>
