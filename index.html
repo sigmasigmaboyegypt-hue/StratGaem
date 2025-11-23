@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width,initial-scale=1" />
     <title>Country-Building Simulator — StratGaem</title>
 
-    <!-- Use a legible UI font; falls back to system fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&display=swap" rel="stylesheet">
 
     <style>
@@ -23,6 +22,7 @@
             --shadow: 0 8px 30px rgba(2,6,23,0.6);
             --glass-border: rgba(255,255,255,0.04);
             --transition: 220ms cubic-bezier(.2,.9,.2,1);
+            --timeline-height: 72px;
         }
 
         *{box-sizing:border-box;font-family:Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial; margin:0;padding:0;color:var(--muted);}
@@ -36,7 +36,6 @@
             -moz-osx-font-smoothing:grayscale;
         }
 
-        /* Layout */
         .app {
             max-width:1300px;
             margin:0 auto;
@@ -46,7 +45,6 @@
             align-items:start;
         }
 
-        /* Header (spans both columns) */
         header.app-header{
             grid-column: 1 / -1;
             display:flex;
@@ -88,7 +86,6 @@
         .btn:hover{ transform: translateY(-3px); }
         .btn:active{ transform: translateY(0); opacity:0.95; }
 
-        /* Left column / sidebar */
         .sidebar{
             background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
             border-radius:12px;
@@ -114,13 +111,7 @@
         .stat .meta{ display:flex; gap:8px; flex-direction:column; }
         .stat .value{ font-weight:800; color:#fff; font-size:1.05rem; }
 
-        /* Right column main area */
-        main {
-            min-height:60vh;
-            display:flex;
-            flex-direction:column;
-            gap:12px;
-        }
+        main { min-height:60vh; display:flex; flex-direction:column; gap:12px; }
 
         .panel {
             background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
@@ -130,7 +121,6 @@
             box-shadow: 0 10px 30px rgba(2,6,23,0.5);
         }
 
-        /* Selection areas */
         .selection-grid{ display:grid; gap:10px; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); }
         .card {
             background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
@@ -155,110 +145,66 @@
         .country-item:hover{ transform:translateY(-2px); background: rgba(255,255,255,0.03); border-color: rgba(255,255,255,0.04); }
         .country-item.selected{ background: linear-gradient(90deg, rgba(61,165,245,0.07), rgba(61,165,245,0.03)); border-color: rgba(61,165,245,0.14); color:#fff; }
 
-        /* Actions area (responsive) */
-        .actions {
-            display:grid;
-            gap:10px;
-            grid-template-columns: repeat(auto-fit, minmax(220px,1fr));
-        }
-        .action-item{
-            display:flex;
-            align-items:center;
-            justify-content:space-between;
-            gap:8px;
-            padding:8px;
-            border-radius:8px;
-            background: rgba(255,255,255,0.01);
-            border:1px solid rgba(255,255,255,0.02);
-        }
+        .actions { display:grid; gap:10px; grid-template-columns: repeat(auto-fit, minmax(220px,1fr)); }
+        .action-item{ display:flex; align-items:center; justify-content:space-between; gap:8px; padding:8px; border-radius:8px; background: rgba(255,255,255,0.01); border:1px solid rgba(255,255,255,0.02); }
         .action-item .left{ display:flex; gap:8px; align-items:center; }
         .action-item .cost{ font-weight:800; color:var(--danger); margin-left:8px; }
 
-        /* Floating event container */
         .event-container{
-            position:fixed;
-            right:18px;
-            bottom:18px;
-            display:flex;
-            flex-direction:column-reverse;
-            gap:10px;
-            z-index:1400;
-            pointer-events:none;
+            position:fixed; right:18px; bottom:18px; display:flex; flex-direction:column-reverse; gap:10px; z-index:1400; pointer-events:none;
         }
-        .event-modal{
-            pointer-events:auto;
-            width:360px;
-            max-width:92vw;
-            padding:12px;
-            border-radius:12px;
-            background:linear-gradient(180deg,#0b2a3a,#08202b);
-            color:var(--muted);
-            border:1px solid rgba(255,255,255,0.04);
-            box-shadow:0 20px 60px rgba(2,6,23,0.6);
-            transform:translateY(10px) scale(.98);
-            opacity:0;
-            transition: all 260ms cubic-bezier(.2,.9,.2,1);
-        }
+        .event-modal{ pointer-events:auto; width:360px; max-width:92vw; padding:12px; border-radius:12px; background:linear-gradient(180deg,#0b2a3a,#08202b); color:var(--muted); border:1px solid rgba(255,255,255,0.04); box-shadow:0 20px 60px rgba(2,6,23,0.6); transform:translateY(10px) scale(.98); opacity:0; transition: all 260ms cubic-bezier(.2,.9,.2,1); }
         .event-modal.active{ opacity:1; transform:translateY(0) scale(1); }
         .event-modal.major{ background: linear-gradient(180deg,#3f0f14,#5c151a); color:#fff; border:1px solid rgba(255,100,100,0.18); }
 
-        /* Center modal for messages */
-        .center-modal{
-            position:fixed;
-            left:50%;
-            top:50%;
-            transform:translate(-50%,-50%) scale(.98);
-            width:680px;
-            max-width:96%;
-            z-index:1500;
-            background:linear-gradient(180deg,#071725,#092233);
-            color:var(--muted);
-            padding:18px;
-            border-radius:12px;
-            box-shadow:0 30px 80px rgba(2,6,23,0.85);
-            opacity:0;
-            pointer-events:none;
-            transition: all 240ms cubic-bezier(.2,.9,.2,1);
-        }
+        .center-modal{ position:fixed; left:50%; top:50%; transform:translate(-50%,-50%) scale(.98); width:680px; max-width:96%; z-index:1500; background:linear-gradient(180deg,#071725,#092233); color:var(--muted); padding:18px; border-radius:12px; box-shadow:0 30px 80px rgba(2,6,23,0.85); opacity:0; pointer-events:none; transition: all 240ms cubic-bezier(.2,.9,.2,1); }
         .center-modal.active{ opacity:1; pointer-events:auto; transform:translate(-50%,-50%) scale(1); }
         .center-modal h3{ color:#fff; margin-bottom:8px; }
 
-        /* Mobile specific improvements */
+        /* Timeline UI */
+        .timeline {
+            height: var(--timeline-height);
+            display:flex;
+            align-items:center;
+            gap:12px;
+            padding:8px;
+            border-radius:10px;
+            background: linear-gradient(180deg, rgba(255,255,255,0.01), rgba(255,255,255,0.005));
+            border:1px solid rgba(255,255,255,0.02);
+            box-shadow: 0 8px 20px rgba(2,6,23,0.4);
+        }
+        .timeline .info { min-width:220px; display:flex; flex-direction:column; gap:6px; }
+        .timeline .info .era { font-weight:700; color:#fff; font-size:0.95rem; }
+        .timeline .info .year { font-weight:600; color:var(--muted); font-size:0.9rem; }
+
+        .timeline .track { flex:1; height:28px; position:relative; display:flex; align-items:center; gap:8px; }
+        .timeline .track input[type="range"]{ width:100%; appearance:none; height:6px; background:linear-gradient(90deg,var(--accent) 0%,var(--accent-2) 100%); border-radius:6px; outline:none; }
+        .timeline .track input[type="range"]::-webkit-slider-thumb{ appearance:none; width:18px; height:18px; border-radius:999px; background:#fff; box-shadow:0 4px 12px rgba(2,6,23,0.5); border:3px solid var(--accent-2); margin-top:-6px; cursor:pointer; }
+        .timeline .controls { display:flex; gap:8px; align-items:center; min-width:140px; justify-content:flex-end; }
+
+        /* small progress chips for stat bars in nation management */
+        .stat-bar { height:10px; background:rgba(255,255,255,0.04); border-radius:6px; overflow:hidden; }
+        .stat-bar .fill { height:100%; background:linear-gradient(90deg,var(--accent),var(--accent-2)); width:0%; transition:width 420ms cubic-bezier(.2,.9,.2,1); }
+
         @media (max-width:980px){
             .app{ grid-template-columns: 1fr; padding-bottom:80px; }
             .sidebar{ position:relative; height:auto; top:auto; }
             header.app-header{ position:sticky; top:0; border-radius:0 0 12px 12px; }
+            .timeline { flex-direction:column; align-items:flex-start; gap:6px; height:auto; }
+            .timeline .controls{ width:100%; justify-content:space-between; }
         }
 
-        /* Mobile bottom action bar */
-        .mobile-actionbar{
-            display:none;
-            position:fixed;
-            left:12px;
-            right:12px;
-            bottom:12px;
-            z-index:1600;
-            gap:8px;
-        }
-        @media (max-width:980px){
-            .mobile-actionbar{ display:flex; }
-            .mobile-actionbar .btn{ flex:1; }
-        }
-
-        /* Small utility */
         .muted{ opacity:0.9; color:var(--muted); font-size:0.9rem; }
         .title-row{ display:flex; justify-content:space-between; align-items:center; gap:12px; }
         .subtle{ opacity:0.86; font-size:0.9rem; }
         .small{ font-size:0.9rem; padding:6px 10px; border-radius:8px; }
-
-        /* keyboard focus */
         .card:focus, .country-item:focus, .btn:focus { outline: 3px solid rgba(61,165,245,.12); outline-offset:2px; }
     </style>
 </head>
 <body>
     <div class="app" id="app-root">
         <header class="app-header" role="banner" aria-label="Game header">
-            <div class="left">
+            <div style="display:flex; gap:12px; align-items:center;">
                 <div>
                     <h1>Country-Building Simulator</h1>
                     <p class="subtle" id="header-sub">Build your nation — Turn: <strong id="turn-counter">1</strong></p>
@@ -278,6 +224,27 @@
                 <button id="load-btn" class="btn ghost small" title="Load last save">📂 Load</button>
             </div>
         </header>
+
+        <!-- Timeline UI (new design) -->
+        <div style="grid-column:1 / -1; margin-top:12px;">
+            <div class="timeline panel" role="region" aria-label="Timeline control">
+                <div class="info">
+                    <div class="era" id="timeline-era">Era: WWII</div>
+                    <div class="year" id="timeline-year">1939</div>
+                </div>
+
+                <div class="track" aria-hidden="false" title="Drag to change year">
+                    <input id="timeline-range" type="range" min="0" max="100" value="0" aria-label="Timeline slider" />
+                    <!-- event markers area (visual only) -->
+                    <div id="timeline-markers" style="position:absolute; left:0; right:0; top:-8px; height:40px; pointer-events:none;"></div>
+                </div>
+
+                <div class="controls">
+                    <button id="timeline-play" class="btn small" title="Play timeline">Play ▶</button>
+                    <button id="timeline-fast" class="btn ghost small" title="Fast forward">×2</button>
+                </div>
+            </div>
+        </div>
 
         <!-- Sidebar -->
         <aside class="sidebar" role="complementary" aria-label="Nation stats">
@@ -317,7 +284,6 @@
 
         <!-- Main -->
         <main role="main" aria-live="polite">
-            <!-- Phase: Continent -->
             <section id="continent-phase" class="panel" aria-label="Continent selection">
                 <div class="title-row">
                     <h3>Choose Your Continent</h3>
@@ -358,7 +324,6 @@
                 </div>
             </section>
 
-            <!-- Phase: Country -->
             <section id="country-phase" class="panel" aria-label="Country selection" hidden>
                 <div class="title-row">
                     <h3>Choose Your Country</h3>
@@ -367,16 +332,13 @@
 
                 <p class="subtle" style="margin-top:6px">Tap a country to select it.</p>
 
-                <div class="country-grid" id="country-grid" style="margin-top:10px;">
-                    <!-- populated dynamically -->
-                </div>
+                <div class="country-grid" id="country-grid" style="margin-top:10px;"></div>
 
                 <div style="text-align:right; margin-top:12px;">
                     <button id="next-to-politics" class="btn small" disabled>Continue →</button>
                 </div>
             </section>
 
-            <!-- Phase: Politics -->
             <section id="politics-phase" class="panel" aria-label="Political system selection" hidden>
                 <div class="title-row">
                     <h3>Choose Political System</h3>
@@ -403,7 +365,6 @@
                 </div>
             </section>
 
-            <!-- Main Game -->
             <section id="game-phase" class="panel" aria-label="Main game" hidden>
                 <div class="title-row">
                     <h3>Nation Management</h3>
@@ -411,105 +372,100 @@
                 </div>
 
                 <div style="margin-top:10px;">
-                    <div class="actions" id="action-panel">
-                        <!-- action cards -->
-                        <div class="panel" style="padding:10px;">
-                            <h4 style="margin:0 0 8px 0">Economy</h4>
-                            <div class="action-item">
-                                <div class="left"><div>Build Factory</div></div>
-                                <div><button class="btn small" data-action="factory">Build <span class="cost" data-action="factory">$500</span></button></div>
-                            </div>
-                            <div class="action-item" style="margin-top:8px">
-                                <div class="left"><div>Develop Infrastructure</div></div>
-                                <div><button class="btn small" data-action="infrastructure">Develop <span class="cost" data-action="infrastructure">$300</span></button></div>
-                            </div>
-                            <div class="action-item" style="margin-top:8px">
-                                <div class="left"><div>Trade Agreement</div></div>
-                                <div><button class="btn small" data-action="trade">Negotiate <span class="cost" data-action="trade">$200</span></button></div>
+                    <div style="display:flex; gap:12px; flex-wrap:wrap;">
+                        <div style="flex:1 1 320px;">
+                            <h4 style="margin:0 0 8px 0">Overview</h4>
+                            <div style="display:grid; gap:8px;">
+                                <div style="display:flex; align-items:center; justify-content:space-between;">
+                                    <div style="flex:1; margin-right:12px;">
+                                        <div class="muted">Money</div>
+                                        <div class="stat-bar" aria-hidden="true"><div id="money-fill" class="fill" style="width:40%"></div></div>
+                                    </div>
+                                    <div style="min-width:80px; text-align:right; font-weight:700;" id="money-value-compact">$1000</div>
+                                </div>
+
+                                <div style="display:flex; align-items:center; justify-content:space-between;">
+                                    <div style="flex:1; margin-right:12px;">
+                                        <div class="muted">Population</div>
+                                        <div class="stat-bar"><div id="pop-fill" class="fill" style="width:40%"></div></div>
+                                    </div>
+                                    <div style="min-width:80px; text-align:right; font-weight:700;" id="population-value-compact">1.2M</div>
+                                </div>
+
+                                <div style="display:flex; align-items:center; justify-content:space-between;">
+                                    <div style="flex:1; margin-right:12px;">
+                                        <div class="muted">Technology</div>
+                                        <div class="stat-bar"><div id="tech-fill" class="fill" style="width:15%"></div></div>
+                                    </div>
+                                    <div style="min-width:80px; text-align:right; font-weight:700;" id="tech-value-compact">25</div>
+                                </div>
                             </div>
                         </div>
 
-                        <div class="panel" style="padding:10px;">
-                            <h4 style="margin:0 0 8px 0">Society</h4>
-                            <div class="action-item">
-                                <div class="left"><div>Education Reform</div></div>
-                                <div><button class="btn small" data-action="education">Reform <span class="cost" data-action="education">$400</span></button></div>
-                            </div>
-                            <div class="action-item" style="margin-top:8px">
-                                <div class="left"><div>Healthcare System</div></div>
-                                <div><button class="btn small" data-action="healthcare">Implement <span class="cost" data-action="healthcare">$600</span></button></div>
-                            </div>
-                            <div class="action-item" style="margin-top:8px">
-                                <div class="left"><div>Social Programs</div></div>
-                                <div><button class="btn small" data-action="social">Fund <span class="cost" data-action="social">$250</span></button></div>
+                        <div style="flex:1 1 520px;">
+                            <h4 style="margin:0 0 8px 0">Actions</h4>
+                            <div class="actions" id="action-panel">
+                                <!-- populated in HTML earlier; kept for layout -->
+                                <div class="panel" style="padding:10px;">
+                                    <h4 style="margin:0 0 8px 0">Economy</h4>
+                                    <div class="action-item">
+                                        <div class="left"><div>Build Factory</div></div>
+                                        <div><button class="btn small" data-action="factory">Build <span class="cost" data-action="factory">$500</span></button></div>
+                                    </div>
+                                    <div class="action-item" style="margin-top:8px">
+                                        <div class="left"><div>Develop Infrastructure</div></div>
+                                        <div><button class="btn small" data-action="infrastructure">Develop <span class="cost" data-action="infrastructure">$300</span></button></div>
+                                    </div>
+                                    <div class="action-item" style="margin-top:8px">
+                                        <div class="left"><div>Trade Agreement</div></div>
+                                        <div><button class="btn small" data-action="trade">Negotiate <span class="cost" data-action="trade">$200</span></button></div>
+                                    </div>
+                                </div>
+
+                                <div class="panel" style="padding:10px;">
+                                    <h4 style="margin:0 0 8px 0">Society</h4>
+                                    <div class="action-item">
+                                        <div class="left"><div>Education Reform</div></div>
+                                        <div><button class="btn small" data-action="education">Reform <span class="cost" data-action="education">$400</span></button></div>
+                                    </div>
+                                    <div class="action-item" style="margin-top:8px">
+                                        <div class="left"><div>Healthcare System</div></div>
+                                        <div><button class="btn small" data-action="healthcare">Implement <span class="cost" data-action="healthcare">$600</span></button></div>
+                                    </div>
+                                    <div class="action-item" style="margin-top:8px">
+                                        <div class="left"><div>Social Programs</div></div>
+                                        <div><button class="btn small" data-action="social">Fund <span class="cost" data-action="social">$250</span></button></div>
+                                    </div>
+                                </div>
+
+                                <div class="panel" style="padding:10px;">
+                                    <h4 style="margin:0 0 8px 0">Military & Diplomacy</h4>
+                                    <div class="action-item">
+                                        <div class="left"><div>Build Barracks</div></div>
+                                        <div><button class="btn small" data-action="barracks">Build <span class="cost" data-action="barracks">$700</span></button></div>
+                                    </div>
+                                    <div class="action-item" style="margin-top:8px">
+                                        <div class="left"><div>Recruit Division</div></div>
+                                        <div><button class="btn small" data-action="recruit">Recruit <span class="cost" data-action="recruit">$500</span></button></div>
+                                    </div>
+                                </div>
+
                             </div>
                         </div>
-
-                        <div class="panel" style="padding:10px;">
-                            <h4 style="margin:0 0 8px 0">Technology</h4>
-                            <div class="action-item">
-                                <div class="left"><div>Research Lab</div></div>
-                                <div><button class="btn small" data-action="research">Build <span class="cost" data-action="research">$800</span></button></div>
-                            </div>
-                            <div class="action-item" style="margin-top:8px">
-                                <div class="left"><div>Tech Education</div></div>
-                                <div><button class="btn small" data-action="techedu">Implement <span class="cost" data-action="techedu">$350</span></button></div>
-                            </div>
-                            <div class="action-item" style="margin-top:8px">
-                                <div class="left"><div>Innovation Fund</div></div>
-                                <div><button class="btn small" data-action="innovation">Create <span class="cost" data-action="innovation">$450</span></button></div>
-                            </div>
-                        </div>
-
-                        <div class="panel" style="padding:10px;">
-                            <h4 style="margin:0 0 8px 0">Resources</h4>
-                            <div class="action-item">
-                                <div class="left"><div>Mine Expansion</div></div>
-                                <div><button class="btn small" data-action="mine">Expand <span class="cost" data-action="mine">$400</span></button></div>
-                            </div>
-                            <div class="action-item" style="margin-top:8px">
-                                <div class="left"><div>Agriculture</div></div>
-                                <div><button class="btn small" data-action="agriculture">Develop <span class="cost" data-action="agriculture">$300</span></button></div>
-                            </div>
-                            <div class="action-item" style="margin-top:8px">
-                                <div class="left"><div>Resource Trade</div></div>
-                                <div><button class="btn small" data-action="resourcetrade">Trade <span class="cost" data-action="resourcetrade">$150</span></button></div>
-                            </div>
-                        </div>
-
-                        <div class="panel" style="padding:10px;">
-                            <h4 style="margin:0 0 8px 0">Military & Diplomacy</h4>
-                            <div class="action-item">
-                                <div class="left"><div>Build Barracks</div></div>
-                                <div><button class="btn small" data-action="barracks">Build <span class="cost" data-action="barracks">$700</span></button></div>
-                            </div>
-                            <div class="action-item" style="margin-top:8px">
-                                <div class="left"><div>Recruit Division</div></div>
-                                <div><button class="btn small" data-action="recruit">Recruit <span class="cost" data-action="recruit">$500</span></button></div>
-                            </div>
-                            <div class="action-item" style="margin-top:8px">
-                                <div class="left"><div>Propose Alliance</div></div>
-                                <div><button class="btn small" data-action="ally">Propose <span class="cost" data-action="ally">$200</span></button></div>
-                            </div>
-                        </div>
-
                     </div>
                 </div>
             </section>
         </main>
     </div>
 
-    <!-- mobile action bar -->
-    <div class="mobile-actionbar" aria-hidden="false">
+    <div class="mobile-actionbar" aria-hidden="false" style="display:none;">
         <button id="mobile-next" class="btn small">Next Turn</button>
         <button id="mobile-save" class="btn ghost small">Save</button>
         <button id="mobile-open" class="btn ghost small">Menu</button>
     </div>
 
-    <!-- Event container -->
     <div class="event-container" id="event-container" aria-live="polite"></div>
 
-    <!-- center modal -->
     <div id="center-modal" class="center-modal" role="dialog" aria-modal="true" aria-hidden="true">
         <h3 id="center-title">Title</h3>
         <p id="center-body">Body</p>
@@ -521,40 +477,30 @@
 
     <script>
         /**************************************************************************
-         * Improved UI & UX, responsive layout, mobile action bar, keyboard hints
-         * Core game logic simplified & robust, event handling, save/load/export
+         * UI fixes to Nation Management + new Timeline UI
+         *
+         * What I changed:
+         * - Added a horizontal Timeline control (range slider + play/fast controls)
+         * - Connected timeline to gameState.timelineEra & timelineYear
+         * - Improved nation management overview with stat bars and compact values
+         * - Kept action logic and enhanced UI refresh to animate stat-bar fills
+         * - Timeline supports play/pause, scrubbing, and fast-forward multiplier
          **************************************************************************/
 
-        // --- Default state
         const DEFAULT_STATE = {
-            continent: null,
-            country: null,
-            politicalSystem: null,
-            money: 1000,
-            population: 1200000,
-            technology: 25,
-            minerals: 500,
-            stability: 75,
-            influence: 10,
-            militaryPower: 0,
-            manpower: 300000,
-            diplomacyReputation: 0,
-            turn: 1,
-            timelineEra: 'WWII',
-            timelineYear: 1939,
+            continent: null, country: null, politicalSystem: null,
+            money: 1000, population: 1200000, technology: 25,
+            minerals: 500, stability: 75, influence: 10,
+            militaryPower: 0, manpower: 300000, diplomacyReputation: 0,
+            turn: 1, timelineEra: 'WWII', timelineYear: 1939,
+            timelinePlaying: false, timelineSpeed: 1,
             buildings: { factory:0, infrastructure:0, research:0, mine:0, barracks:0 },
             modifiers: { money:1, population:1, technology:1, minerals:1, stability:1, influence:1 },
-            scaledCosts: {},
-            eventQueue: [],
-            flags: {},
-            allies: [],
-            enemies: [],
-            isInWar: false
+            scaledCosts: {}, eventQueue: [], flags: {}, allies: [], enemies: [], isInWar:false
         };
 
         let gameState = JSON.parse(JSON.stringify(DEFAULT_STATE));
 
-        // Country lists
         const COUNTRIES_BY_CONTINENT = {
             europe: ["France","United Kingdom","Germany","Italy","Spain","Poland","Netherlands","Belgium","Sweden","Norway","Denmark","Finland","Austria","Switzerland","Portugal","Greece"],
             asia: ["Japan","China","India","South Korea","North Korea","Vietnam","Thailand","Philippines","Indonesia","Malaysia","Singapore","Pakistan","Bangladesh","Sri Lanka","Myanmar","Cambodia"],
@@ -572,14 +518,7 @@
             barracks:700, recruit:500, spy:300,
             ally:200, offer_trade:150, sanction:100
         };
-        const COST_SCALE = {
-            factory:1.18, infrastructure:1.12, trade:1.08,
-            education:1.15, healthcare:1.18, social:1.10,
-            research:1.2, techedu:1.12, innovation:1.14,
-            mine:1.15, agriculture:1.12, resourcetrade:1.06,
-            barracks:1.20, recruit:1.25, spy:1.15,
-            ally:1.10, offer_trade:1.08, sanction:1.05
-        };
+        const COST_SCALE = { factory:1.18, infrastructure:1.12, trade:1.08, education:1.15, healthcare:1.18, social:1.10, research:1.2, techedu:1.12, innovation:1.14, mine:1.15, agriculture:1.12, resourcetrade:1.06, barracks:1.20, recruit:1.25, spy:1.15, ally:1.10, offer_trade:1.08, sanction:1.05 };
 
         const continentBonuses = {
             africa: { minerals:1.5, infrastructure:0.8 },
@@ -616,10 +555,9 @@
             sanction:{ influence:-6, money:-100 }
         };
 
-        // Simple events (subset)
         const EVENTS = [
             { id:'natural_disaster', title:'Natural Disaster', description:'A severe natural disaster struck.', era:'Modern', yearRange:[1990,2030], option1:'Send emergency funds', option2:'Ask for aid', effects1:{money:-300,stability:-5}, effects2:{stability:-10,influence:-2} },
-            { id:'pandemic', title:'Pandemic', description:'A global pandemic spreads fast.', era:'Modern', yearRange:[2020,2025], option1:'Lockdown (hurt economy)', option2:'Keep open', effects1:{money:-800,population:-50000,stability:5}, effects2:{money:200,population:-150000,stability:-8} }
+            { id:'pandemic', title:'Pandemic', description:'A global pandemic spreads fast.', era:'Modern', yearRange:[2020,2025], option1:'Lockdown', option2:'Keep open', effects1:{money:-800,population:-50000,stability:5}, effects2:{money:200,population:-150000,stability:-8} }
         ];
 
         // DOM
@@ -650,6 +588,12 @@
             headerSub: document.getElementById('header-sub'),
             turnCounter: document.getElementById('turn-counter'),
             timelineSelect: document.getElementById('timeline-select'),
+            timelineEra: document.getElementById('timeline-era'),
+            timelineYear: document.getElementById('timeline-year'),
+            timelineRange: document.getElementById('timeline-range'),
+            timelinePlay: document.getElementById('timeline-play'),
+            timelineFast: document.getElementById('timeline-fast'),
+            timelineMarkers: document.getElementById('timeline-markers'),
             countryNameDisplay: document.getElementById('country-name-display'),
             moneyValue: document.getElementById('money-value'),
             populationValue: document.getElementById('population-value'),
@@ -660,11 +604,16 @@
             militaryValue: document.getElementById('military-value'),
             diploValue: document.getElementById('diplo-value'),
             nextTurnBtn: document.getElementById('next-turn'),
+            moneyFill: document.getElementById('money-fill'),
+            popFill: document.getElementById('pop-fill'),
+            techFill: document.getElementById('tech-fill'),
+            moneyCompact: document.getElementById('money-value-compact'),
+            populationCompact: document.getElementById('population-value-compact'),
+            techCompact: document.getElementById('tech-value-compact'),
             mobileNext: document.getElementById('mobile-next'),
             mobileSave: document.getElementById('mobile-save')
         };
 
-        // Utilities
         function formatNumber(n){
             if (Math.abs(n) >= 1000000) return (n/1000000).toFixed(1) + 'M';
             if (Math.abs(n) >= 1000) return (n/1000).toFixed(1) + 'k';
@@ -675,118 +624,31 @@
             return Math.max(1, Math.round(gameState.scaledCosts[action] || BASE_COSTS[action] || 0));
         }
 
-        // Audio feedback
         const audioCtx = (window.AudioContext || window.webkitAudioContext) ? new (window.AudioContext || window.webkitAudioContext)() : null;
         function playClickTone(){
             if (!audioCtx) return;
-            const o = audioCtx.createOscillator();
-            const g = audioCtx.createGain();
-            o.type = 'sine';
-            o.frequency.value = 440;
-            g.gain.value = 0.02;
-            o.connect(g); g.connect(audioCtx.destination);
-            o.start(); o.stop(audioCtx.currentTime + 0.06);
+            const o = audioCtx.createOscillator(); const g = audioCtx.createGain();
+            o.type = 'sine'; o.frequency.value = 440; g.gain.value = 0.02;
+            o.connect(g); g.connect(audioCtx.destination); o.start(); o.stop(audioCtx.currentTime + 0.06);
         }
 
-        // Save / Load
-        const STORAGE_KEY = 'stratgaem_v3';
-        function saveGame(){
-            try {
-                localStorage.setItem(STORAGE_KEY, JSON.stringify(gameState));
-                showCenterModal('Saved', 'Game saved locally.');
-            } catch(e){
-                showCenterModal('Save Failed', 'Saving to localStorage failed.');
-            }
-        }
-        function loadGame(){
-            try {
-                const raw = localStorage.getItem(STORAGE_KEY);
-                if (!raw){ showCenterModal('No Save', 'No save found'); return; }
-                const parsed = JSON.parse(raw);
-                gameState = Object.assign({}, DEFAULT_STATE, parsed);
-                initializeScaledCosts();
-                applyBonuses();
-                updateUI(true);
-                showCenterModal('Loaded', 'Save loaded.');
-            } catch(e){
-                showCenterModal('Load Error', 'Failed to load save.');
-            }
-        }
-        function exportSave(){
-            const data = JSON.stringify(gameState, null, 2);
-            const blob = new Blob([data], { type: 'application/json' });
-            const url = URL.createObjectURL(blob);
-            const a = document.createElement('a');
-            a.href = url; a.download = 'stratgaem_save.json'; a.click();
-            URL.revokeObjectURL(url);
-        }
-        function importSave(){
-            const input = document.createElement('input');
-            input.type = 'file';
-            input.accept = '.json,application/json';
-            input.onchange = e=>{
-                const file = e.target.files[0];
-                if (!file) return;
-                const reader = new FileReader();
-                reader.onload = ()=>{
-                    try {
-                        const parsed = JSON.parse(reader.result);
-                        gameState = Object.assign({}, DEFAULT_STATE, parsed);
-                        initializeScaledCosts();
-                        applyBonuses();
-                        updateUI(true);
-                        showCenterModal('Imported', 'Save imported.');
-                    } catch(err){
-                        showCenterModal('Import Error', 'Invalid JSON file.');
-                    }
-                };
-                reader.readAsText(file);
-            };
-            input.click();
-        }
+        const STORAGE_KEY = 'stratgaem_v3_timeline';
+        function saveGame(){ try { localStorage.setItem(STORAGE_KEY, JSON.stringify(gameState)); showCenterModal('Saved','Game saved locally.'); } catch(e){ showCenterModal('Save Failed','Saving failed.'); } }
+        function loadGame(){ try { const raw = localStorage.getItem(STORAGE_KEY); if (!raw) { showCenterModal('No Save','No save found'); return; } gameState = Object.assign({}, DEFAULT_STATE, JSON.parse(raw)); initAfterLoad(); showCenterModal('Loaded','Save loaded.'); } catch(e){ showCenterModal('Load Error','Failed to load save.'); } }
+        function exportSave(){ const data = JSON.stringify(gameState, null, 2); const blob = new Blob([data], { type: 'application/json' }); const url = URL.createObjectURL(blob); const a = document.createElement('a'); a.href = url; a.download = 'stratgaem_save.json'; a.click(); URL.revokeObjectURL(url); }
+        function importSave(){ const input = document.createElement('input'); input.type='file'; input.accept='.json,application/json'; input.onchange = e=>{ const f = e.target.files[0]; if (!f) return; const r = new FileReader(); r.onload = ()=>{ try { gameState = Object.assign({}, DEFAULT_STATE, JSON.parse(r.result)); initAfterLoad(); showCenterModal('Imported','Save imported.'); } catch(err){ showCenterModal('Import Error','Invalid JSON.'); } }; r.readAsText(f); }; input.click(); }
 
-        function showCenterModal(title, body, autoClose=false){
-            DOM.centerTitle.textContent = title;
-            DOM.centerBody.textContent = body;
-            DOM.centerModal.classList.add('active');
-            DOM.centerModal.setAttribute('aria-hidden','false');
-            playClickTone();
-            if (autoClose) setTimeout(hideCenterModal, 1200);
-        }
-        function hideCenterModal(){
-            DOM.centerModal.classList.remove('active');
-            DOM.centerModal.setAttribute('aria-hidden','true');
-        }
+        function showCenterModal(title, body, autoClose=false){ DOM.centerTitle.textContent = title; DOM.centerBody.textContent = body; DOM.centerModal.classList.add('active'); DOM.centerModal.setAttribute('aria-hidden','false'); playClickTone(); if (autoClose) setTimeout(hideCenterModal, 1200); }
+        function hideCenterModal(){ DOM.centerModal.classList.remove('active'); DOM.centerModal.setAttribute('aria-hidden','true'); }
 
-        // Initialize scaled costs
-        function initializeScaledCosts(){
-            gameState.scaledCosts = gameState.scaledCosts || {};
-            Object.keys(BASE_COSTS).forEach(k=> {
-                if (!gameState.scaledCosts[k]) gameState.scaledCosts[k] = BASE_COSTS[k];
-            });
-        }
+        function initializeScaledCosts(){ gameState.scaledCosts = gameState.scaledCosts || {}; Object.keys(BASE_COSTS).forEach(k=> { if (!gameState.scaledCosts[k]) gameState.scaledCosts[k] = BASE_COSTS[k]; }); }
 
-        // Apply continent/political bonuses
-        function applyBonuses(){
-            // reset modifiers
-            Object.keys(gameState.modifiers).forEach(k => gameState.modifiers[k] = 1);
-            if (gameState.continent && continentBonuses[gameState.continent]){
-                Object.keys(continentBonuses[gameState.continent]).forEach(k=>{
-                    gameState.modifiers[k] = (gameState.modifiers[k]||1) * continentBonuses[gameState.continent][k];
-                });
-            }
-            if (gameState.politicalSystem && politicalBonuses[gameState.politicalSystem]){
-                Object.keys(politicalBonuses[gameState.politicalSystem]).forEach(k=>{
-                    gameState.modifiers[k] = (gameState.modifiers[k]||1) * politicalBonuses[gameState.politicalSystem][k];
-                });
-            }
-        }
+        function applyBonuses(){ Object.keys(gameState.modifiers).forEach(k=> gameState.modifiers[k]=1); if (gameState.continent && continentBonuses[gameState.continent]) Object.keys(continentBonuses[gameState.continent]).forEach(k=> gameState.modifiers[k]*=continentBonuses[gameState.continent][k]); if (gameState.politicalSystem && politicalBonuses[gameState.politicalSystem]) Object.keys(politicalBonuses[gameState.politicalSystem]).forEach(k=> gameState.modifiers[k]*=politicalBonuses[gameState.politicalSystem][k]); }
 
-        // Render countries for continent
         function renderCountries(continent){
             DOM.countryGrid.innerHTML = '';
             const list = COUNTRIES_BY_CONTINENT[continent] || [];
-            list.forEach(name=>{
+            list.forEach(name=> {
                 const el = document.createElement('div');
                 el.className = 'country-item';
                 el.tabIndex = 0;
@@ -805,7 +667,6 @@
             });
         }
 
-        // Refresh cost labels and button disabled state
         function refreshCostsAndButtons(){
             document.querySelectorAll('.cost[data-action]').forEach(span=>{
                 const act = span.getAttribute('data-action');
@@ -818,21 +679,13 @@
             });
         }
 
-        // Core action execution
         function performAction(action){
             const cost = safeGetCost(action);
-            if (gameState.money < cost){
-                showCenterModal('Not enough money', 'You need more money to perform this action.');
-                return;
-            }
+            if (gameState.money < cost){ showCenterModal('Not enough money','You need more money to perform this action.'); return; }
             gameState.money -= cost;
-
             const eff = actionEffects[action];
             if (eff){
-                // moneyMod: apply multiplicative increase (apply to next income)
-                if (eff.moneyMod){
-                    gameState.money = Math.round(gameState.money * eff.moneyMod);
-                }
+                if (eff.moneyMod) gameState.money = Math.round(gameState.money * eff.moneyMod);
                 if (eff.population) gameState.population = Math.max(0, Math.round(gameState.population + eff.population));
                 if (eff.technology) gameState.technology = Math.max(0, Math.round(gameState.technology + eff.technology));
                 if (eff.minerals) gameState.minerals = Math.max(0, Math.round(gameState.minerals + eff.minerals));
@@ -841,26 +694,15 @@
                 if (eff.militaryPower) gameState.militaryPower = Math.max(0, gameState.militaryPower + eff.militaryPower);
                 if (eff.diplomacyReputation) gameState.diplomacyReputation = Math.round((gameState.diplomacyReputation || 0) + eff.diplomacyReputation);
                 if (eff.manpower) gameState.manpower = Math.max(0, (gameState.manpower || 0) + eff.manpower);
-                if (eff.buildings){
-                    Object.keys(eff.buildings).forEach(b=>{
-                        gameState.buildings[b] = (gameState.buildings[b] || 0) + eff.buildings[b];
-                    });
-                }
+                if (eff.buildings) Object.keys(eff.buildings).forEach(b=> gameState.buildings[b] = (gameState.buildings[b]||0) + eff.buildings[b]);
             }
-
-            // scale cost for next time
             if (COST_SCALE[action]) gameState.scaledCosts[action] = Math.round((gameState.scaledCosts[action] || BASE_COSTS[action]) * COST_SCALE[action]);
-
             refreshCostsAndButtons();
             updateUI();
             playClickTone();
         }
 
-        // Show event (simple implementation)
-        function pushEvent(evt){
-            gameState.eventQueue.push(evt);
-            renderNextEvent();
-        }
+        function pushEvent(evt){ gameState.eventQueue.push(evt); renderNextEvent(); }
         function renderNextEvent(){
             if (!gameState.eventQueue.length) return;
             const evt = gameState.eventQueue.shift();
@@ -881,8 +723,7 @@
                 modal.classList.remove('active');
                 setTimeout(()=> modal.remove(), 300);
             }));
-            // auto remove after 20s if non-major
-            if (!evt.isMajor) setTimeout(()=> { modal.classList.remove('active'); setTimeout(()=> modal.remove(),300); }, 20000);
+            if (!evt.isMajor) setTimeout(()=> { if (modal.parentNode) { modal.classList.remove('active'); setTimeout(()=> modal.remove(),300); } }, 20000);
         }
 
         function applyEffects(effects){
@@ -900,13 +741,9 @@
             updateUI();
         }
 
-        // Update UI
         function updateUI(full=false){
-            // header / turn
             DOM.turnCounter.textContent = gameState.turn;
             DOM.headerSub.textContent = `Era: ${gameState.timelineEra} • Year: ${gameState.timelineYear} • Turn ${gameState.turn}`;
-
-            // stats
             DOM.moneyValue.textContent = `$${formatNumber(gameState.money)}`;
             DOM.populationValue.textContent = formatNumber(gameState.population);
             DOM.techValue.textContent = gameState.technology;
@@ -916,57 +753,161 @@
             DOM.militaryValue.textContent = gameState.militaryPower;
             DOM.diploValue.textContent = gameState.diplomacyReputation || 0;
             DOM.countryNameDisplay.textContent = gameState.country || 'Unselected';
+            const smallTurn = document.getElementById('turn-count-small'); if (smallTurn) smallTurn.textContent = `Turn ${gameState.turn}`;
 
-            // small turn count
-            const smallTurn = document.getElementById('turn-count-small');
-            if (smallTurn) smallTurn.textContent = `Turn ${gameState.turn}`;
+            // compact values
+            DOM.moneyCompact && (DOM.moneyCompact.textContent = `$${formatNumber(gameState.money)}`);
+            DOM.populationCompact && (DOM.populationCompact.textContent = formatNumber(gameState.population));
+            DOM.techCompact && (DOM.techCompact.textContent = gameState.technology);
 
-            // costs & buttons
+            // stat bar fills (normalize to reasonable ranges)
+            const moneyPct = Math.min(100, Math.round((gameState.money / 5000) * 100));
+            const popPct = Math.min(100, Math.round((gameState.population / 5000000) * 100));
+            const techPct = Math.min(100, Math.round((gameState.technology / 200) * 100));
+            DOM.moneyFill.style.width = moneyPct + '%';
+            DOM.popFill.style.width = popPct + '%';
+            DOM.techFill.style.width = techPct + '%';
+
+            // timeline UI update
+            DOM.timelineEra.textContent = `Era: ${gameState.timelineEra}`;
+            DOM.timelineYear.textContent = gameState.timelineYear;
+
+            updateTimelineRange();
+
             refreshCostsAndButtons();
-
-            // enable/disable next-turn when event modal is major and unresolved
-            const majorEventBlocking = false; // can be enhanced to check flags
-            DOM.nextTurnBtn.disabled = majorEventBlocking;
-            document.getElementById('mobile-next').disabled = majorEventBlocking;
         }
 
-        // Next turn
+        // Timeline helpers
+        const ERA_RANGES = {
+            'WWII': { min: 1939, max: 1945 },
+            'ColdWar': { min: 1947, max: 1991 },
+            'Modern': { min: 1991, max: 2100 }
+        };
+
+        function updateTimelineRange(){
+            const era = gameState.timelineEra || 'Modern';
+            const rng = ERA_RANGES[era];
+            const total = rng.max - rng.min;
+            const pct = Math.round(((gameState.timelineYear - rng.min) / Math.max(1, total)) * 100);
+            DOM.timelineRange.min = rng.min;
+            DOM.timelineRange.max = rng.max;
+            DOM.timelineRange.value = gameState.timelineYear;
+            // markers: clear & re-add simple major-event markers (if any)
+            renderTimelineMarkers(era);
+        }
+
+        function renderTimelineMarkers(era){
+            const markers = DOM.timelineMarkers;
+            markers.innerHTML = '';
+            // Add simple markers for known events (static for demo)
+            const known = {
+                'WWII': [{year:1940,label:'Fall of France'},{year:1941,label:'Pearl Harbor'}],
+                'ColdWar': [{year:1961,label:'Berlin Wall'},{year:1962,label:'Cuban Missile'}],
+                'Modern': [{year:2001,label:'Terrorism'},{year:2020,label:'Pandemic'}]
+            };
+            const list = known[era] || [];
+            const rng = ERA_RANGES[era];
+            list.forEach(k=>{
+                const pct = ((k.year - rng.min) / (rng.max - rng.min)) * 100;
+                const dot = document.createElement('div');
+                dot.style.position = 'absolute';
+                dot.style.left = `calc(${pct}% - 6px)`;
+                dot.style.top = '6px';
+                dot.style.width = '12px';
+                dot.style.height = '12px';
+                dot.style.borderRadius = '99px';
+                dot.style.background = 'rgba(255,255,255,0.9)';
+                dot.style.boxShadow = '0 2px 6px rgba(0,0,0,0.6)';
+                dot.title = `${k.year}: ${k.label}`;
+                markers.appendChild(dot);
+            });
+        }
+
+        let timelineInterval = null;
+        function timelinePlayToggle(){
+            gameState.timelinePlaying = !gameState.timelinePlaying;
+            DOM.timelinePlay.textContent = gameState.timelinePlaying ? 'Pause ⏸' : 'Play ▶';
+            if (gameState.timelinePlaying){
+                timelineInterval = setInterval(()=> {
+                    advanceTimelineYear(1 * gameState.timelineSpeed);
+                }, 800 / gameState.timelineSpeed);
+            } else {
+                clearInterval(timelineInterval); timelineInterval = null;
+            }
+        }
+
+        function advanceTimelineYear(delta){
+            const era = gameState.timelineEra;
+            const rng = ERA_RANGES[era];
+            gameState.timelineYear = Math.min(rng.max, Math.max(rng.min, gameState.timelineYear + delta));
+            // optional: push era-specific major event on particular years
+            if (Math.random() < 0.05) pushEvent(EVENTS[Math.floor(Math.random()*EVENTS.length)]);
+            updateUI();
+        }
+
+        // Wire timeline interactions
+        function setupTimelineControls(){
+            DOM.timelineRange.addEventListener('input', (e) => {
+                gameState.timelineYear = parseInt(e.target.value, 10);
+                updateUI();
+            });
+            DOM.timelinePlay.addEventListener('click', () => {
+                timelinePlayToggle();
+                playClickTone();
+            });
+            DOM.timelineFast.addEventListener('click', () => {
+                gameState.timelineSpeed = gameState.timelineSpeed === 1 ? 2 : 1;
+                DOM.timelineFast.textContent = gameState.timelineSpeed === 2 ? '×2' : '×1';
+                playClickTone();
+                if (gameState.timelinePlaying){
+                    clearInterval(timelineInterval);
+                    timelineInterval = setInterval(()=> advanceTimelineYear(1 * gameState.timelineSpeed), 800 / gameState.timelineSpeed);
+                }
+            });
+            DOM.timelineSelect.addEventListener('change', (e)=> {
+                const v = e.target.value;
+                gameState.timelineEra = v === 'Modern' ? 'Modern' : (v === 'ColdWar' ? 'ColdWar' : 'WWII');
+                gameState.timelineYear = (gameState.timelineEra === 'WWII') ? 1939 : (gameState.timelineEra === 'ColdWar') ? 1947 : 1991;
+                updateUI();
+            });
+        }
+
+        function refreshCostsAndButtons(){
+            document.querySelectorAll('.cost[data-action]').forEach(span=>{
+                const act = span.getAttribute('data-action');
+                const cost = safeGetCost(act);
+                span.textContent = `$${cost}`;
+            });
+            document.querySelectorAll('button[data-action]').forEach(btn=>{
+                const act = btn.dataset.action;
+                btn.disabled = (gameState.money < safeGetCost(act));
+            });
+        }
+
         function nextTurn(){
             gameState.turn += 1;
-            // timeline/year adjustments
-            if (gameState.timelineEra === 'WWII'){ gameState.timelineYear += 1; if (gameState.timelineYear > 1945) gameState.timelineYear = 1945; }
-            else if (gameState.timelineEra === 'ColdWar'){ gameState.timelineYear += 1; if (gameState.timelineYear > 1991) gameState.timelineYear = 1991; }
-            else { gameState.timelineYear += 1; if (gameState.timelineYear > 2100) gameState.timelineYear = 2100; }
+            // year progression by turn (keeps timeline in sync)
+            const era = gameState.timelineEra;
+            const rng = ERA_RANGES[era];
+            gameState.timelineYear = Math.min(rng.max, gameState.timelineYear + 1);
 
-            // passive incomes & growth (simple)
             const moneyGain = Math.round(120 * (gameState.modifiers.money||1));
             gameState.money += moneyGain;
-
             const popGain = Math.round(Math.max(1000, (gameState.population * 0.01) * ((gameState.modifiers.population||1)-1 + 1)));
             gameState.population += Math.round(popGain * 0.05);
-
-            // tech progress small per turn
             gameState.technology += Math.round(1 * (gameState.modifiers.technology||1));
-
-            // minerals
             gameState.minerals += Math.round(10 * (gameState.modifiers.minerals||1));
-
-            // small stability drift
             gameState.stability = Math.max(0, Math.min(100, gameState.stability - (Math.random()*1.2)));
-
-            // random chance for an event each few turns
-            if (Math.random() < 0.22){
-                // pick event for era
+            if (Math.random() < 0.22) {
                 const possible = EVENTS.filter(e => e.era === gameState.timelineEra || e.era === 'Modern');
                 const evt = possible[Math.floor(Math.random() * possible.length)];
                 if (evt) pushEvent(Object.assign({}, evt));
             }
-
             updateUI();
             playClickTone();
         }
 
-        // Wire up flows: continent -> country -> politics -> start
+        // Flow wiring
         function setupFlows(){
             document.querySelectorAll('[data-continent]').forEach(card=>{
                 card.addEventListener('click', ()=>{
@@ -1015,16 +956,14 @@
                 window.scrollTo({top:0,behavior:'smooth'});
             });
 
-            // action buttons
             document.querySelectorAll('button[data-action]').forEach(btn=>{
                 btn.addEventListener('click', ()=> performAction(btn.dataset.action));
             });
         }
 
-        // Wire other controls
         function setupControls(){
             DOM.nextTurnBtn.addEventListener('click', nextTurn);
-            document.getElementById('mobile-next').addEventListener('click', ()=> { DOM.nextTurnBtn.click(); });
+            DOM.mobileNext && DOM.mobileNext.addEventListener('click', ()=> DOM.nextTurnBtn.click());
             DOM.mobileSave && DOM.mobileSave.addEventListener('click', saveGame);
             DOM.saveBtn.addEventListener('click', saveGame);
             DOM.loadBtn.addEventListener('click', loadGame);
@@ -1033,37 +972,32 @@
             DOM.centerClose.addEventListener('click', hideCenterModal);
             DOM.centerRestart.addEventListener('click', ()=>{
                 gameState = JSON.parse(JSON.stringify(DEFAULT_STATE));
-                initializeScaledCosts();
-                applyBonuses();
-                updateUI(true);
+                initAfterLoad();
                 hideCenterModal();
             });
-            DOM.timelineSelect.addEventListener('change', (e)=>{
-                const val = e.target.value;
-                gameState.timelineEra = val === 'Modern' ? 'Modern' : (val === 'ColdWar' ? 'ColdWar' : 'WWII');
-                // quick year set
-                gameState.timelineYear = (val === 'WWII') ? 1939 : (val === 'ColdWar' ? 1947 : 1991);
-                updateUI();
-            });
-
-            // keyboard shortcuts
             window.addEventListener('keydown', (e)=>{
                 if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 's'){ e.preventDefault(); saveGame(); }
-                if (e.key === ' '){ e.preventDefault(); nextTurn(); }
+                if (e.key === ' ') { e.preventDefault(); nextTurn(); }
             });
         }
 
-        // Initial setup
+        function initAfterLoad(){
+            initializeScaledCosts();
+            applyBonuses();
+            updateUI(true);
+            // ensure timeline UI consistent
+            updateTimelineRange();
+        }
+
         function start(){
             initializeScaledCosts();
             setupFlows();
             setupControls();
+            setupTimelineControls();
             updateUI(true);
-            // friendly hint for first-time players
-            setTimeout(()=> showCenterModal('Welcome', 'Use the left column to monitor stats. Space = Next Turn • Ctrl+S = Save', true), 700);
+            setTimeout(()=> showCenterModal('Welcome','Timeline added — drag the slider or press Play to scrub years. Space = Next Turn • Ctrl+S = Save', true), 700);
         }
 
-        // run
         start();
     </script>
 </body>
