@@ -35,6 +35,7 @@
             min-height: 100vh;
             padding: 16px;
             line-height: 1.6;
+            overflow-x: hidden;
         }
 
         .container {
@@ -93,6 +94,7 @@
             position: relative;
             overflow: hidden;
             font-size: 0.9rem;
+            min-height: 44px; /* Better touch target */
         }
 
         .btn::after {
@@ -157,6 +159,7 @@
         .btn-small {
             padding: 8px 12px;
             font-size: 0.85rem;
+            min-height: 36px;
         }
 
         /* Purchase Animation */
@@ -361,6 +364,10 @@
             transition: var(--transition);
             border: 2px solid transparent;
             text-align: center;
+            min-height: 180px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
         }
 
         .selection-card:hover {
@@ -419,6 +426,10 @@
             text-align: center;
             border: 2px solid transparent;
             font-size: 0.9rem;
+            min-height: 50px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
 
         .country-item:hover {
@@ -886,6 +897,48 @@
             }
         }
 
+        /* Mobile Menu */
+        .mobile-menu {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: var(--bg-primary);
+            z-index: 2000;
+            display: flex;
+            flex-direction: column;
+            padding: 20px;
+            transform: translateY(-100%);
+            transition: transform 0.3s ease;
+        }
+
+        .mobile-menu.active {
+            transform: translateY(0);
+        }
+
+        .mobile-menu-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+        }
+
+        .mobile-menu-items {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .mobile-menu-item {
+            padding: 16px;
+            background: var(--bg-card);
+            border-radius: var(--border-radius);
+            text-align: center;
+            font-size: 1.1rem;
+            font-weight: 600;
+        }
+
         /* Accessibility */
         .sr-only {
             position: absolute;
@@ -903,6 +956,69 @@
         button:focus, select:focus, .selection-card:focus, .country-item:focus {
             outline: 3px solid rgba(58, 134, 255, 0.5);
             outline-offset: 2px;
+        }
+
+        /* Mobile-specific improvements */
+        @media (max-width: 768px) {
+            .container {
+                padding-bottom: 80px; /* Space for mobile action bar */
+            }
+            
+            .game-phase {
+                padding: 16px;
+            }
+            
+            .action-item {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 8px;
+            }
+            
+            .action-item button {
+                align-self: stretch;
+            }
+            
+            .timeline-header h3 {
+                font-size: 1rem;
+            }
+            
+            .timeline-controls {
+                flex-wrap: wrap;
+            }
+            
+            .header-controls {
+                gap: 4px;
+            }
+            
+            .header-controls .btn {
+                flex: 1;
+                min-width: 0;
+                justify-content: center;
+            }
+            
+            .selection-card {
+                min-height: 160px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .selection-grid {
+                gap: 8px;
+            }
+            
+            .country-grid {
+                grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+            }
+            
+            .stat {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 4px;
+            }
+            
+            .progress-bar {
+                width: 100%;
+            }
         }
     </style>
 </head>
@@ -1368,6 +1484,22 @@
         <button id="mobile-menu" class="btn btn-secondary btn-small">☰ Menu</button>
     </div>
 
+    <!-- Mobile Menu -->
+    <div class="mobile-menu" id="mobile-menu-panel">
+        <div class="mobile-menu-header">
+            <h2>NationCraft</h2>
+            <button id="mobile-menu-close" class="btn btn-secondary btn-small">✕</button>
+        </div>
+        <div class="mobile-menu-items">
+            <div class="mobile-menu-item" data-target="continent-phase">Select Continent</div>
+            <div class="mobile-menu-item" data-target="country-phase">Select Country</div>
+            <div class="mobile-menu-item" data-target="politics-phase">Select Government</div>
+            <div class="mobile-menu-item" data-target="game-phase">Game Dashboard</div>
+            <div class="mobile-menu-item" id="mobile-save-menu">Save Game</div>
+            <div class="mobile-menu-item" id="mobile-load-menu">Load Game</div>
+        </div>
+    </div>
+
     <!-- Event Container -->
     <div class="event-container" id="event-container"></div>
 
@@ -1463,7 +1595,7 @@
             oceania: ["Australia", "New Zealand", "Papua New Guinea", "Fiji", "Solomon Islands", "Vanuatu", "New Caledonia", "Samoa", "Tonga", "Kiribati", "Micronesia", "Palau"]
         };
 
-        // Action Costs and Effects
+        // Action Costs and Effects - FIXED MATH SYSTEM
         const actionData = {
             'tax-reform': { cost: 200, effect: { money: 150, stability: -5 } },
             'policy-reform': { cost: 150, effect: { stability: 10 } },
@@ -1672,7 +1804,12 @@
             
             // Mobile
             mobileSave: document.getElementById('mobile-save'),
-            mobileMenu: document.getElementById('mobile-menu')
+            mobileMenu: document.getElementById('mobile-menu'),
+            mobileMenuPanel: document.getElementById('mobile-menu-panel'),
+            mobileMenuClose: document.getElementById('mobile-menu-close'),
+            mobileSaveMenu: document.getElementById('mobile-save-menu'),
+            mobileLoadMenu: document.getElementById('mobile-load-menu'),
+            mobileMenuItems: document.querySelectorAll('.mobile-menu-item[data-target]')
         };
 
         // Initialize the game
@@ -1788,6 +1925,8 @@
             document.getElementById('save-btn').addEventListener('click', saveGame);
             document.getElementById('load-btn').addEventListener('click', loadGame);
             DOM.mobileSave.addEventListener('click', saveGame);
+            DOM.mobileSaveMenu.addEventListener('click', saveGame);
+            DOM.mobileLoadMenu.addEventListener('click', loadGame);
 
             // War buttons
             DOM.warOffensive.addEventListener('click', () => {
@@ -1800,7 +1939,32 @@
 
             // Mobile menu
             DOM.mobileMenu.addEventListener('click', () => {
-                showMobileMenu();
+                DOM.mobileMenuPanel.classList.add('active');
+            });
+            
+            DOM.mobileMenuClose.addEventListener('click', () => {
+                DOM.mobileMenuPanel.classList.remove('active');
+            });
+            
+            // Mobile menu navigation
+            DOM.mobileMenuItems.forEach(item => {
+                item.addEventListener('click', () => {
+                    const target = item.dataset.target;
+                    const targetPhase = document.getElementById(target);
+                    
+                    if (targetPhase) {
+                        // Hide all phases
+                        document.querySelectorAll('.game-phase').forEach(phase => {
+                            phase.classList.remove('active');
+                        });
+                        
+                        // Show target phase
+                        targetPhase.classList.add('active');
+                        
+                        // Close mobile menu
+                        DOM.mobileMenuPanel.classList.remove('active');
+                    }
+                });
             });
         }
 
@@ -1967,7 +2131,7 @@
             }
         }
 
-        // Perform an action
+        // Perform an action - FIXED MATH SYSTEM
         function performAction(action, button) {
             const actionInfo = actionData[action];
             
@@ -1995,11 +2159,26 @@
             // Deduct cost
             gameState.money -= actionInfo.cost;
 
-            // Apply effects
+            // Apply effects - FIXED: Ensure negative values are properly handled
             if (actionInfo.effect) {
                 Object.keys(actionInfo.effect).forEach(key => {
                     if (gameState.hasOwnProperty(key)) {
-                        gameState[key] += actionInfo.effect[key];
+                        // Ensure we're not going below 0 for critical resources
+                        let newValue = gameState[key] + actionInfo.effect[key];
+                        
+                        // Special handling for different resource types
+                        if (key === 'stability') {
+                            // Stability should stay between 0 and 100
+                            newValue = Math.max(0, Math.min(100, newValue));
+                        } else if (key === 'population' && newValue < 100000) {
+                            // Don't let population drop below 100,000
+                            newValue = 100000;
+                        } else if (['money', 'minerals', 'food', 'oil'].includes(key) && newValue < 0) {
+                            // Don't let these resources go negative
+                            newValue = 0;
+                        }
+                        
+                        gameState[key] = newValue;
                     }
                 });
             }
@@ -2035,13 +2214,16 @@
                 gameState.year++;
             }
             
-            // Passive income and growth
+            // Passive income and growth - FIXED: Apply modifiers correctly
             gameState.money += Math.floor(100 * gameState.modifiers.money);
             gameState.population += Math.floor(50000 * gameState.modifiers.population);
             gameState.technology += Math.floor(2 * gameState.modifiers.technology);
             gameState.minerals += Math.floor(50);
             gameState.food += Math.floor(100);
             gameState.oil += Math.floor(20);
+            
+            // Ensure stability stays in bounds
+            gameState.stability = Math.max(0, Math.min(100, gameState.stability));
             
             // Random events
             if (Math.random() < 0.3) {
@@ -2136,11 +2318,22 @@
                         const optionIndex = parseInt(button.dataset.index);
                         const option = event.options[optionIndex];
                         
-                        // Apply effects
+                        // Apply effects - FIXED: Ensure proper bounds checking
                         if (option.effect) {
                             Object.keys(option.effect).forEach(key => {
                                 if (gameState.hasOwnProperty(key)) {
-                                    gameState[key] += option.effect[key];
+                                    let newValue = gameState[key] + option.effect[key];
+                                    
+                                    // Apply bounds checking
+                                    if (key === 'stability') {
+                                        newValue = Math.max(0, Math.min(100, newValue));
+                                    } else if (key === 'population' && newValue < 100000) {
+                                        newValue = 100000;
+                                    } else if (['money', 'minerals', 'food', 'oil'].includes(key) && newValue < 0) {
+                                        newValue = 0;
+                                    }
+                                    
+                                    gameState[key] = newValue;
                                 }
                             });
                         }
@@ -2187,11 +2380,22 @@
             DOM.modalAction.textContent = 'Continue';
             
             DOM.modalAction.onclick = () => {
-                // Apply effects
+                // Apply effects with bounds checking
                 if (event.effect) {
                     Object.keys(event.effect).forEach(key => {
                         if (gameState.hasOwnProperty(key)) {
-                            gameState[key] += event.effect[key];
+                            let newValue = gameState[key] + event.effect[key];
+                            
+                            // Apply bounds checking
+                            if (key === 'stability') {
+                                newValue = Math.max(0, Math.min(100, newValue));
+                            } else if (key === 'population' && newValue < 100000) {
+                                newValue = 100000;
+                            } else if (['money', 'minerals', 'food', 'oil'].includes(key) && newValue < 0) {
+                                newValue = 0;
+                            }
+                            
+                            gameState[key] = newValue;
                         }
                     });
                 }
@@ -2452,13 +2656,6 @@
             // This is simplified - in a full implementation, you'd track hostility separately
             
             updateUI();
-        }
-
-        // Mobile menu
-        function showMobileMenu() {
-            // In a full implementation, this would show a navigation menu
-            showNotification('Mobile menu would open here', 'success');
-            playSound('click');
         }
 
         // Save game
