@@ -5,355 +5,266 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <title>NationCraft - Historical Country Builder</title>
     <style>
-        :root {
-            --bg-primary: #0a0f1c;
-            --bg-secondary: #131a2d;
-            --bg-card: #1a2238;
-            --accent-primary: #3a86ff;
-            --accent-secondary: #8338ec;
-            --accent-success: #38b000;
-            --accent-warning: #ff9e00;
-            --accent-danger: #ff006e;
-            --text-primary: #ffffff;
-            --text-secondary: #b0b8d1;
-            --text-muted: #6b7280;
-            --border-radius: 12px;
-            --shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
-            --transition: all 0.3s ease;
-        }
-
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        }
-
-        body {
-            background: linear-gradient(135deg, var(--bg-primary) 0%, var(--bg-secondary) 100%);
-            color: var(--text-primary);
-            min-height: 100vh;
-            padding: 16px;
-            line-height: 1.6;
-        }
-
-        .container {
-            max-width: 1400px;
-            margin: 0 auto;
-        }
-
-        /* Header Styles */
-        header {
-            display: flex;
-            flex-direction: column;
-            gap: 16px;
-            padding: 16px;
-            background: var(--bg-card);
-            border-radius: var(--border-radius);
-            margin-bottom: 16px;
-            box-shadow: var(--shadow);
-            border: 1px solid rgba(255, 255, 255, 0.05);
-        }
-
-        .logo {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            justify-content: center;
-        }
-
-        .logo h1 {
-            font-size: 1.5rem;
-            background: linear-gradient(90deg, var(--accent-primary), var(--accent-secondary));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            font-weight: 800;
-            text-align: center;
-        }
-
-        .header-controls {
-            display: flex;
-            gap: 8px;
-            align-items: center;
-            flex-wrap: wrap;
-            justify-content: center;
-        }
-
-        /* Button Styles */
-        .btn {
-            padding: 10px 16px;
-            border: none;
-            border-radius: 8px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: var(--transition);
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            position: relative;
-            overflow: hidden;
-            font-size: 0.9rem;
-        }
-
-        .btn::after {
-            content: '';
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            width: 0;
-            height: 0;
-            border-radius: 50%;
-            background: rgba(255, 255, 255, 0.2);
-            transform: translate(-50%, -50%);
-            transition: width 0.3s, height 0.3s;
-        }
-
-        .btn:active::after {
-            width: 100px;
-            height: 100px;
-        }
-
-        .btn-primary {
-            background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
-            color: white;
-        }
-
-        .btn-primary:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(58, 134, 255, 0.4);
-        }
-
-        .btn-secondary {
-            background: var(--bg-card);
-            color: var(--text-primary);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-        }
-
-        .btn-secondary:hover {
-            background: rgba(255, 255, 255, 0.05);
-        }
-
-        .btn-success {
-            background: var(--accent-success);
-            color: white;
-        }
-
-        .btn-warning {
-            background: var(--accent-warning);
-            color: white;
-        }
-
-        .btn-danger {
-            background: var(--accent-danger);
-            color: white;
-        }
-
-        .btn:disabled {
-            opacity: 0.5;
-            cursor: not-allowed;
-            transform: none !important;
-        }
-
-        .btn-small {
-            padding: 8px 12px;
-            font-size: 0.85rem;
-        }
-
-        /* Purchase Animation */
-        .purchase-effect {
-            position: fixed;
-            pointer-events: none;
-            z-index: 10000;
-            font-weight: bold;
-            font-size: 1.2rem;
-            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
-            animation: floatUp 1.5s ease-out forwards;
-        }
-
-        @keyframes floatUp {
-            0% {
-                transform: translateY(0) scale(1);
-                opacity: 1;
-            }
-            100% {
-                transform: translateY(-80px) scale(1.5);
-                opacity: 0;
-            }
-        }
-
-        /* Game Layout */
-        .game-layout {
-            display: flex;
-            flex-direction: column;
-            gap: 16px;
-        }
-
-        @media (min-width: 1024px) {
-            .game-layout {
-                display: grid;
-                grid-template-columns: 280px 1fr 280px;
-                gap: 16px;
-            }
-            
-            header {
-                flex-direction: row;
-                justify-content: space-between;
-                align-items: center;
-            }
-            
-            .logo {
-                justify-content: flex-start;
-            }
-            
-            .header-controls {
-                justify-content: flex-end;
-            }
-        }
-
-        /* Sidebar */
-        .sidebar {
-            background: var(--bg-card);
-            border-radius: var(--border-radius);
-            padding: 16px;
-            box-shadow: var(--shadow);
-            border: 1px solid rgba(255, 255, 255, 0.05);
-            order: 2;
-        }
-
-        @media (min-width: 1024px) {
-            .sidebar {
-                order: 1;
-                position: sticky;
-                top: 16px;
-                height: fit-content;
-            }
-        }
-
-        .sidebar-section {
-            margin-bottom: 20px;
-        }
-
-        .sidebar-section h3 {
-            margin-bottom: 12px;
-            font-size: 1.1rem;
-            color: var(--text-primary);
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-            padding-bottom: 8px;
-        }
-
-        /* Stats */
-        .stat {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 10px;
-            padding: 8px;
-            background: rgba(255, 255, 255, 0.03);
-            border-radius: 8px;
-            transition: var(--transition);
-        }
-
-        .stat:hover {
-            background: rgba(255, 255, 255, 0.06);
-        }
-
-        .stat-name {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            font-size: 0.9rem;
-        }
-
-        .stat-value {
-            font-weight: 700;
-            font-size: 1rem;
-        }
-
-        /* Progress Bars */
-        .progress-bar {
-            height: 6px;
-            background: rgba(255, 255, 255, 0.1);
-            border-radius: 4px;
-            overflow: hidden;
-            margin-top: 4px;
-        }
-
-        .progress-fill {
-            height: 100%;
-            border-radius: 4px;
-            transition: width 0.5s ease;
-        }
-
-        .money-fill { background: linear-gradient(90deg, var(--accent-success), #7ae582); }
-        .population-fill { background: linear-gradient(90deg, var(--accent-primary), #6ab0ff); }
-        .tech-fill { background: linear-gradient(90deg, var(--accent-secondary), #a855f7); }
-        .stability-fill { background: linear-gradient(90deg, var(--accent-warning), #ffb347); }
-        .military-fill { background: linear-gradient(90deg, var(--accent-danger), #ff5c8d); }
-
-        /* Main Content */
-        .main-content {
-            display: flex;
-            flex-direction: column;
-            gap: 16px;
-            order: 1;
-        }
-
-        @media (min-width: 1024px) {
-            .main-content {
-                order: 2;
-            }
-        }
-
-        /* Game Phase */
-        .game-phase {
-            background: var(--bg-card);
-            border-radius: var(--border-radius);
-            padding: 20px;
-            box-shadow: var(--shadow);
-            border: 1px solid rgba(255, 255, 255, 0.05);
-            display: none;
-        }
-
-        .game-phase.active {
-            display: block;
-            animation: fadeIn 0.5s ease;
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        .phase-header {
-            margin-bottom: 16px;
-        }
-
-        .phase-header h2 {
-            font-size: 1.5rem;
-            margin-bottom: 8px;
-            color: var(--text-primary);
-        }
-
-        .phase-header p {
-            color: var(--text-secondary);
-            font-size: 0.95rem;
-        }
-
-        /* Selection Grid */
-        .selection-grid {
+        /* Previous CSS remains the same, adding new styles for new features */
+        
+        /* National Spirits Styles */
+        .spirit-container {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
             gap: 12px;
             margin-top: 16px;
         }
-
-        @media (max-width: 640px) {
-            .selection-grid {
-                grid-template-columns: 1fr;
-            }
+        
+        .spirit-card {
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: var(--border-radius);
+            padding: 16px;
+            border-left: 4px solid var(--accent-primary);
         }
-
-        .selection-card {
+        
+        .spirit-card.negative {
+            border-left-color: var(--accent-danger);
+        }
+        
+        .spirit-card.neutral {
+            border-left-color: var(--accent-warning);
+        }
+        
+        .spirit-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 8px;
+        }
+        
+        .spirit-title {
+            font-weight: 700;
+            font-size: 1rem;
+        }
+        
+        .spirit-era {
+            background: var(--accent-primary);
+            color: white;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-size: 0.7rem;
+        }
+        
+        .spirit-description {
+            color: var(--text-secondary);
+            font-size: 0.85rem;
+            margin-bottom: 8px;
+        }
+        
+        .spirit-effects {
+            font-size: 0.8rem;
+            background: rgba(255, 255, 255, 0.05);
+            padding: 8px;
+            border-radius: 6px;
+        }
+        
+        /* World Tension Styles */
+        .tension-container {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-top: 8px;
+        }
+        
+        .tension-bar {
+            flex: 1;
+            height: 20px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            overflow: hidden;
+            position: relative;
+        }
+        
+        .tension-fill {
+            height: 100%;
+            border-radius: 10px;
+            background: linear-gradient(90deg, var(--accent-warning), var(--accent-danger));
+            width: 0%;
+            transition: width 0.5s ease;
+        }
+        
+        .tension-value {
+            font-weight: 700;
+            min-width: 40px;
+            text-align: center;
+        }
+        
+        .tension-low { color: var(--accent-success); }
+        .tension-medium { color: var(--accent-warning); }
+        .tension-high { color: var(--accent-danger); }
+        
+        /* Focus Tree Styles */
+        .focus-tree {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+            margin-top: 16px;
+            max-height: 500px;
+            overflow-y: auto;
+            padding: 8px;
+        }
+        
+        .focus-branch {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            padding-left: 20px;
+            border-left: 2px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .focus-item {
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 8px;
+            padding: 12px;
+            cursor: pointer;
+            transition: var(--transition);
+            border: 2px solid transparent;
+            position: relative;
+        }
+        
+        .focus-item:hover {
+            background: rgba(255, 255, 255, 0.06);
+        }
+        
+        .focus-item.active {
+            border-color: var(--accent-primary);
+            background: rgba(58, 134, 255, 0.1);
+        }
+        
+        .focus-item.completed {
+            border-color: var(--accent-success);
+            background: rgba(56, 176, 0, 0.1);
+        }
+        
+        .focus-item.locked {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+        
+        .focus-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 8px;
+        }
+        
+        .focus-title {
+            font-weight: 600;
+            font-size: 0.95rem;
+        }
+        
+        .focus-duration {
+            background: var(--bg-secondary);
+            color: var(--text-secondary);
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-size: 0.7rem;
+        }
+        
+        .focus-description {
+            color: var(--text-secondary);
+            font-size: 0.8rem;
+            margin-bottom: 8px;
+        }
+        
+        .focus-effects {
+            font-size: 0.75rem;
+            color: var(--accent-primary);
+        }
+        
+        .focus-progress {
+            height: 4px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 2px;
+            margin-top: 8px;
+            overflow: hidden;
+        }
+        
+        .focus-progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--accent-primary), var(--accent-secondary));
+            width: 0%;
+            transition: width 0.5s ease;
+        }
+        
+        /* Logistics Styles */
+        .logistics-container {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-top: 4px;
+        }
+        
+        .logistics-bar {
+            flex: 1;
+            height: 6px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 3px;
+            overflow: hidden;
+        }
+        
+        .logistics-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--accent-success), #7ae582);
+            width: 0%;
+            transition: width 0.5s ease;
+        }
+        
+        .logistics-value {
+            font-size: 0.8rem;
+            min-width: 30px;
+            text-align: right;
+        }
+        
+        /* Crisis Event Styles */
+        .crisis-timer {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            margin: 12px 0;
+            padding: 8px;
+            background: rgba(255, 0, 110, 0.1);
+            border-radius: 8px;
+        }
+        
+        .timer-circle {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: conic-gradient(var(--accent-danger) 0%, transparent 0%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+        }
+        
+        .timer-text {
+            position: absolute;
+            font-weight: 700;
+            font-size: 0.9rem;
+        }
+        
+        .timer-label {
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: var(--accent-danger);
+        }
+        
+        /* Faction Selection Styles */
+        .faction-selection {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 16px;
+            margin-top: 16px;
+        }
+        
+        .faction-card {
             background: rgba(255, 255, 255, 0.03);
             border-radius: var(--border-radius);
             padding: 16px;
@@ -362,547 +273,70 @@
             border: 2px solid transparent;
             text-align: center;
         }
-
-        .selection-card:hover {
+        
+        .faction-card:hover {
             transform: translateY(-5px);
             background: rgba(255, 255, 255, 0.06);
-            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
         }
-
-        .selection-card.selected {
+        
+        .faction-card.selected {
             border-color: var(--accent-primary);
             background: rgba(58, 134, 255, 0.1);
         }
-
-        .card-icon {
-            font-size: 2rem;
+        
+        .faction-icon {
+            font-size: 2.5rem;
             margin-bottom: 12px;
         }
-
-        .card-title {
-            font-size: 1.1rem;
+        
+        .faction-title {
+            font-size: 1.2rem;
             margin-bottom: 8px;
             color: var(--text-primary);
         }
-
-        .card-description {
+        
+        .faction-description {
             color: var(--text-secondary);
             font-size: 0.85rem;
             margin-bottom: 12px;
         }
-
-        .card-bonus {
+        
+        .faction-bonus {
             background: rgba(58, 134, 255, 0.1);
             padding: 6px 10px;
             border-radius: 6px;
             font-size: 0.8rem;
             color: var(--accent-primary);
         }
-
-        /* Country Grid */
-        .country-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
-            gap: 8px;
-            max-height: 400px;
-            overflow-y: auto;
-            padding: 8px;
-            margin-top: 16px;
-        }
-
-        .country-item {
-            padding: 10px 12px;
-            background: rgba(255, 255, 255, 0.03);
-            border-radius: 8px;
-            cursor: pointer;
-            transition: var(--transition);
-            text-align: center;
-            border: 2px solid transparent;
-            font-size: 0.9rem;
-        }
-
-        .country-item:hover {
-            background: rgba(255, 255, 255, 0.06);
-            transform: translateY(-2px);
-        }
-
-        .country-item.selected {
-            border-color: var(--accent-primary);
-            background: rgba(58, 134, 255, 0.1);
-        }
-
-        /* Action Panel */
-        .action-panel {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-            gap: 16px;
-            margin-top: 16px;
-        }
-
-        @media (max-width: 640px) {
-            .action-panel {
-                grid-template-columns: 1fr;
-            }
-        }
-
-        .action-category {
-            background: rgba(255, 255, 255, 0.03);
-            border-radius: var(--border-radius);
-            padding: 16px;
-            border: 1px solid rgba(255, 255, 255, 0.05);
-        }
-
-        .action-category h3 {
-            margin-bottom: 12px;
-            font-size: 1.1rem;
-            color: var(--text-primary);
+        
+        /* Tab System for Game Phase */
+        .tab-container {
             display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .action-item {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 10px 0;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-        }
-
-        .action-item:last-child {
-            border-bottom: none;
-        }
-
-        .action-info {
-            flex: 1;
-        }
-
-        .action-name {
-            font-weight: 600;
-            margin-bottom: 4px;
-            font-size: 0.9rem;
-        }
-
-        .action-description {
-            font-size: 0.8rem;
-            color: var(--text-secondary);
-        }
-
-        .action-cost {
-            font-weight: 700;
-            color: var(--accent-warning);
-            margin-left: 8px;
-            font-size: 0.9rem;
-        }
-
-        /* Timeline */
-        .timeline-container {
-            background: var(--bg-card);
-            border-radius: var(--border-radius);
-            padding: 16px;
-            box-shadow: var(--shadow);
-            border: 1px solid rgba(255, 255, 255, 0.05);
-            margin-bottom: 16px;
-        }
-
-        .timeline-header {
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
-            margin-bottom: 12px;
-        }
-
-        @media (min-width: 768px) {
-            .timeline-header {
-                flex-direction: row;
-                justify-content: space-between;
-                align-items: center;
-            }
-        }
-
-        .timeline-controls {
-            display: flex;
-            gap: 8px;
-            align-items: center;
-        }
-
-        .timeline-track {
-            height: 50px;
-            background: rgba(255, 255, 255, 0.03);
-            border-radius: 10px;
-            position: relative;
-            margin-top: 8px;
-            overflow: hidden;
-        }
-
-        .timeline-progress {
-            height: 100%;
-            background: linear-gradient(90deg, var(--accent-primary), var(--accent-secondary));
-            width: 0%;
-            border-radius: 10px;
-            transition: width 0.5s ease;
-            position: relative;
-        }
-
-        .timeline-marker {
-            position: absolute;
-            top: 0;
-            height: 100%;
-            width: 3px;
-            background: rgba(255, 255, 255, 0.7);
-            transform: translateX(-50%);
-        }
-
-        .timeline-label {
-            position: absolute;
-            top: -22px;
-            transform: translateX(-50%);
-            font-size: 0.75rem;
-            color: var(--text-secondary);
-            white-space: nowrap;
-        }
-
-        /* Events */
-        .event-container {
-            position: fixed;
-            right: 16px;
-            bottom: 16px;
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
-            z-index: 1000;
-            max-width: 360px;
-            width: calc(100% - 32px);
-        }
-
-        @media (max-width: 640px) {
-            .event-container {
-                right: 16px;
-                left: 16px;
-                width: auto;
-            }
-        }
-
-        .event-modal {
-            background: var(--bg-card);
-            border-radius: var(--border-radius);
-            padding: 16px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
-            border-left: 5px solid var(--accent-primary);
-            animation: slideIn 0.5s ease;
-            max-width: 100%;
-        }
-
-        .event-modal.major {
-            border-left-color: var(--accent-danger);
-            background: linear-gradient(135deg, var(--bg-card) 0%, #2a1a38 100%);
-        }
-
-        @keyframes slideIn {
-            from { transform: translateX(100%); opacity: 0; }
-            to { transform: translateX(0); opacity: 1; }
-        }
-
-        .event-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: flex-start;
-            margin-bottom: 12px;
-        }
-
-        .event-title {
-            font-size: 1.2rem;
-            font-weight: 700;
-            color: var(--text-primary);
-        }
-
-        .event-era {
-            background: var(--accent-primary);
-            color: white;
-            padding: 4px 8px;
-            border-radius: 4px;
-            font-size: 0.75rem;
-            font-weight: 600;
-        }
-
-        .event-description {
-            margin-bottom: 16px;
-            color: var(--text-secondary);
-            line-height: 1.5;
-            font-size: 0.9rem;
-        }
-
-        .event-actions {
-            display: flex;
-            gap: 8px;
-            flex-wrap: wrap;
-        }
-
-        /* Modal */
-        .modal-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: rgba(0, 0, 0, 0.7);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            z-index: 2000;
-            opacity: 0;
-            pointer-events: none;
-            transition: opacity 0.3s ease;
-            padding: 16px;
-        }
-
-        .modal-overlay.active {
-            opacity: 1;
-            pointer-events: all;
-        }
-
-        .modal {
-            background: var(--bg-card);
-            border-radius: var(--border-radius);
-            padding: 24px;
-            box-shadow: var(--shadow);
-            max-width: 500px;
-            width: 100%;
-            transform: scale(0.9);
-            transition: transform 0.3s ease;
-        }
-
-        .modal-overlay.active .modal {
-            transform: scale(1);
-        }
-
-        .modal-header {
-            margin-bottom: 16px;
-            text-align: center;
-        }
-
-        .modal-title {
-            font-size: 1.5rem;
-            margin-bottom: 8px;
-            color: var(--text-primary);
-        }
-
-        .modal-body {
-            margin-bottom: 20px;
-            text-align: center;
-            color: var(--text-secondary);
-            font-size: 0.95rem;
-        }
-
-        .modal-actions {
-            display: flex;
-            justify-content: center;
-            gap: 12px;
-            flex-wrap: wrap;
-        }
-
-        /* Dashboard */
-        .dashboard {
-            background: var(--bg-card);
-            border-radius: var(--border-radius);
-            padding: 16px;
-            box-shadow: var(--shadow);
-            border: 1px solid rgba(255, 255, 255, 0.05);
-            order: 3;
-        }
-
-        @media (min-width: 1024px) {
-            .dashboard {
-                order: 3;
-                position: sticky;
-                top: 16px;
-                height: fit-content;
-            }
-        }
-
-        .dashboard-section {
-            margin-bottom: 16px;
-        }
-
-        .dashboard-section h3 {
-            margin-bottom: 12px;
-            font-size: 1.1rem;
-            color: var(--text-primary);
             border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-            padding-bottom: 8px;
+            margin-bottom: 16px;
         }
-
-        .nation-item {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 8px;
-            background: rgba(255, 255, 255, 0.03);
-            border-radius: 8px;
-            margin-bottom: 6px;
+        
+        .tab {
+            padding: 10px 16px;
+            cursor: pointer;
+            border-bottom: 3px solid transparent;
             transition: var(--transition);
-        }
-
-        .nation-item:hover {
-            background: rgba(255, 255, 255, 0.06);
-        }
-
-        .nation-name {
             font-weight: 600;
             font-size: 0.9rem;
         }
-
-        .nation-status {
-            font-size: 0.75rem;
-            padding: 3px 6px;
-            border-radius: 4px;
+        
+        .tab.active {
+            border-bottom-color: var(--accent-primary);
+            color: var(--accent-primary);
         }
-
-        .status-ally {
-            background: rgba(56, 176, 0, 0.2);
-            color: var(--accent-success);
+        
+        .tab-content {
+            display: none;
         }
-
-        .status-enemy {
-            background: rgba(255, 0, 110, 0.2);
-            color: var(--accent-danger);
-        }
-
-        .status-neutral {
-            background: rgba(255, 255, 255, 0.1);
-            color: var(--text-secondary);
-        }
-
-        .empty-state {
-            text-align: center;
-            padding: 20px;
-            color: var(--text-muted);
-            font-style: italic;
-        }
-
-        /* War Panel */
-        .war-panel {
-            background: rgba(255, 0, 110, 0.1);
-            border: 1px solid rgba(255, 0, 110, 0.3);
-            border-radius: var(--border-radius);
-            padding: 12px;
-            margin-top: 12px;
-        }
-
-        .war-panel h4 {
-            color: var(--accent-danger);
-            margin-bottom: 8px;
-            display: flex;
-            align-items: center;
-            gap: 6px;
-            font-size: 1rem;
-        }
-
-        /* Floating notifications */
-        .notification {
-            position: fixed;
-            top: 16px;
-            right: 16px;
-            padding: 12px 16px;
-            background: var(--accent-success);
-            color: white;
-            border-radius: 8px;
-            box-shadow: var(--shadow);
-            z-index: 1500;
-            transform: translateX(150%);
-            transition: transform 0.5s ease;
-            max-width: 320px;
-        }
-
-        .notification.show {
-            transform: translateX(0);
-        }
-
-        .notification.error {
-            background: var(--accent-danger);
-        }
-
-        /* Tooltip */
-        .tooltip {
-            position: relative;
-            display: inline-block;
-        }
-
-        .tooltip .tooltip-text {
-            visibility: hidden;
-            width: 200px;
-            background: var(--bg-primary);
-            color: var(--text-primary);
-            text-align: center;
-            border-radius: 6px;
-            padding: 8px;
-            position: absolute;
-            z-index: 1;
-            bottom: 125%;
-            left: 50%;
-            transform: translateX(-50%);
-            opacity: 0;
-            transition: opacity 0.3s;
-            font-size: 0.8rem;
-            box-shadow: var(--shadow);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-        }
-
-        .tooltip:hover .tooltip-text {
-            visibility: visible;
-            opacity: 1;
-        }
-
-        /* Shake animation for errors */
-        @keyframes shake {
-            0%, 100% { transform: translateX(0); }
-            10%, 30%, 50%, 70%, 90% { transform: translateX(-5px); }
-            20%, 40%, 60%, 80% { transform: translateX(5px); }
-        }
-
-        .shake {
-            animation: shake 0.5s ease-in-out;
-        }
-
-        /* Mobile Action Bar */
-        .mobile-action-bar {
-            position: fixed;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            background: var(--bg-card);
-            padding: 12px 16px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            box-shadow: 0 -5px 20px rgba(0, 0, 0, 0.3);
-            z-index: 100;
-            border-top: 1px solid rgba(255, 255, 255, 0.05);
-        }
-
-        @media (min-width: 1024px) {
-            .mobile-action-bar {
-                display: none;
-            }
-        }
-
-        /* Accessibility */
-        .sr-only {
-            position: absolute;
-            width: 1px;
-            height: 1px;
-            padding: 0;
-            margin: -1px;
-            overflow: hidden;
-            clip: rect(0, 0, 0, 0);
-            white-space: nowrap;
-            border: 0;
-        }
-
-        /* Focus styles for better accessibility */
-        button:focus, select:focus, .selection-card:focus, .country-item:focus {
-            outline: 3px solid rgba(58, 134, 255, 0.5);
-            outline-offset: 2px;
+        
+        .tab-content.active {
+            display: block;
+            animation: fadeIn 0.5s ease;
         }
     </style>
 </head>
@@ -925,7 +359,7 @@
             </div>
         </header>
 
-        <!-- Unified Timeline/Next Turn System -->
+        <!-- World Tension Display -->
         <div class="timeline-container">
             <div class="timeline-header">
                 <div>
@@ -939,7 +373,13 @@
             </div>
             <div class="timeline-track">
                 <div class="timeline-progress" id="timeline-progress"></div>
-                <!-- Timeline markers will be added dynamically -->
+            </div>
+            <div class="tension-container">
+                <span>World Tension:</span>
+                <div class="tension-bar">
+                    <div class="tension-fill" id="tension-fill"></div>
+                </div>
+                <span class="tension-value" id="tension-value">0%</span>
             </div>
         </div>
 
@@ -997,6 +437,20 @@
                     <div class="progress-bar">
                         <div class="progress-fill military-fill" id="military-bar"></div>
                     </div>
+                    
+                    <!-- Logistics Stat -->
+                    <div class="stat">
+                        <div class="stat-name">
+                            <span>🚚 Logistics</span>
+                        </div>
+                        <div class="stat-value" id="logistics-value">50</div>
+                    </div>
+                    <div class="logistics-container">
+                        <div class="logistics-bar">
+                            <div class="logistics-fill" id="logistics-bar"></div>
+                        </div>
+                        <div class="logistics-value" id="logistics-percent">100%</div>
+                    </div>
                 </div>
 
                 <div class="sidebar-section">
@@ -1042,12 +496,21 @@
                         <div class="stat-value" id="conflicts-value">0</div>
                     </div>
                 </div>
+                
+                <!-- National Spirits Display -->
+                <div class="sidebar-section" id="spirits-section" style="display: none;">
+                    <h3>National Spirits</h3>
+                    <div id="spirits-list">
+                        <!-- National spirits will be populated here -->
+                    </div>
+                </div>
             </aside>
 
             <!-- Main Content -->
             <main class="main-content">
                 <!-- Continent Selection Phase -->
                 <section id="continent-phase" class="game-phase active">
+                    <!-- Previous continent selection content remains the same -->
                     <div class="phase-header">
                         <h2>Choose Your Continent</h2>
                         <p>Select a continent to establish your nation. Each continent offers unique advantages and challenges.</p>
@@ -1097,6 +560,7 @@
 
                 <!-- Country Selection Phase -->
                 <section id="country-phase" class="game-phase">
+                    <!-- Previous country selection content remains the same -->
                     <div class="phase-header">
                         <h2>Choose Your Country</h2>
                         <p>Select a country from <span id="selected-continent-name">your chosen continent</span>.</p>
@@ -1111,6 +575,7 @@
 
                 <!-- Political System Selection Phase -->
                 <section id="politics-phase" class="game-phase">
+                    <!-- Previous politics selection content remains the same -->
                     <div class="phase-header">
                         <h2>Choose Your Government</h2>
                         <p>Select a political system that will shape your nation's development and policies.</p>
@@ -1158,162 +623,209 @@
                     </div>
                 </section>
 
+                <!-- Faction Selection Phase (New) -->
+                <section id="faction-phase" class="game-phase">
+                    <div class="phase-header">
+                        <h2>Choose Your Faction</h2>
+                        <p>World tension has reached a critical level. You must align with a major power bloc.</p>
+                    </div>
+                    <div class="faction-selection" id="faction-selection">
+                        <!-- Factions will be populated dynamically based on era -->
+                    </div>
+                    <div style="text-align: center; margin-top: 20px;">
+                        <button id="confirm-faction" class="btn btn-primary">Confirm Faction</button>
+                    </div>
+                </section>
+
                 <!-- Main Game Phase -->
                 <section id="game-phase" class="game-phase">
                     <div class="phase-header">
-                        <h2>Nation Management</h2>
+                        <h2>Nation Management - <span id="nation-name-display"></span></h2>
                         <p>Manage your country's development through strategic decisions and policies.</p>
                     </div>
+                    
+                    <!-- Tab System -->
+                    <div class="tab-container">
+                        <div class="tab active" data-tab="actions">Actions</div>
+                        <div class="tab" data-tab="focus">National Focus</div>
+                        <div class="tab" data-tab="spirits">National Spirits</div>
+                    </div>
+                    
+                    <!-- Actions Tab -->
+                    <div class="tab-content active" id="actions-tab">
+                        <div class="action-panel">
+                            <!-- Previous action panel content remains the same -->
+                            <div class="action-category">
+                                <h3>🏛️ Government</h3>
+                                <div class="action-item">
+                                    <div class="action-info">
+                                        <div class="action-name">Tax Reform</div>
+                                        <div class="action-description">Restructure tax system to increase revenue</div>
+                                    </div>
+                                    <button class="btn btn-secondary btn-small" data-action="tax-reform">Enact <span class="action-cost">$200</span></button>
+                                </div>
+                                <div class="action-item">
+                                    <div class="action-info">
+                                        <div class="action-name">Policy Reform</div>
+                                        <div class="action-description">Implement new domestic policies</div>
+                                    </div>
+                                    <button class="btn btn-secondary btn-small" data-action="policy-reform">Implement <span class="action-cost">$150</span></button>
+                                </div>
+                                <div class="action-item">
+                                    <div class="action-info">
+                                        <div class="action-name">Anti-Corruption</div>
+                                        <div class="action-description">Crack down on government corruption</div>
+                                    </div>
+                                    <button class="btn btn-secondary btn-small" data-action="anti-corruption">Launch <span class="action-cost">$300</span></button>
+                                </div>
+                            </div>
 
-                    <div class="action-panel">
-                        <div class="action-category">
-                            <h3>🏛️ Government</h3>
-                            <div class="action-item">
-                                <div class="action-info">
-                                    <div class="action-name">Tax Reform</div>
-                                    <div class="action-description">Restructure tax system to increase revenue</div>
+                            <div class="action-category">
+                                <h3>🏭 Economy</h3>
+                                <div class="action-item">
+                                    <div class="action-info">
+                                        <div class="action-name">Build Factory</div>
+                                        <div class="action-description">Construct new manufacturing facilities</div>
+                                    </div>
+                                    <button class="btn btn-secondary btn-small" data-action="factory">Build <span class="action-cost">$500</span></button>
                                 </div>
-                                <button class="btn btn-secondary btn-small" data-action="tax-reform">Enact <span class="action-cost">$200</span></button>
+                                <div class="action-item">
+                                    <div class="action-info">
+                                        <div class="action-name">Infrastructure</div>
+                                        <div class="action-description">Develop roads, bridges, and utilities</div>
+                                    </div>
+                                    <button class="btn btn-secondary btn-small" data-action="infrastructure">Develop <span class="action-cost">$400</span></button>
+                                </div>
+                                <div class="action-item">
+                                    <div class="action-info">
+                                        <div class="action-name">Trade Agreement</div>
+                                        <div class="action-description">Establish international trade deals</div>
+                                    </div>
+                                    <button class="btn btn-secondary btn-small" data-action="trade">Negotiate <span class="action-cost">$250</span></button>
+                                </div>
                             </div>
-                            <div class="action-item">
-                                <div class="action-info">
-                                    <div class="action-name">Policy Reform</div>
-                                    <div class="action-description">Implement new domestic policies</div>
+
+                            <div class="action-category">
+                                <h3>🔬 Technology</h3>
+                                <div class="action-item">
+                                    <div class="action-info">
+                                        <div class="action-name">Research Lab</div>
+                                        <div class="action-description">Build advanced research facilities</div>
+                                    </div>
+                                    <button class="btn btn-secondary btn-small" data-action="research">Build <span class="action-cost">$600</span></button>
                                 </div>
-                                <button class="btn btn-secondary btn-small" data-action="policy-reform">Implement <span class="action-cost">$150</span></button>
+                                <div class="action-item">
+                                    <div class="action-info">
+                                        <div class="action-name">Education Reform</div>
+                                        <div class="action-description">Improve national education system</div>
+                                    </div>
+                                    <button class="btn btn-secondary btn-small" data-action="education">Reform <span class="action-cost">$450</span></button>
+                                </div>
+                                <div class="action-item">
+                                    <div class="action-info">
+                                        <div class="action-name">Tech Initiative</div>
+                                        <div class="action-description">Fund technological innovation</div>
+                                    </div>
+                                    <button class="btn btn-secondary btn-small" data-action="innovation">Fund <span class="action-cost">$350</span></button>
+                                </div>
                             </div>
-                            <div class="action-item">
-                                <div class="action-info">
-                                    <div class="action-name">Anti-Corruption</div>
-                                    <div class="action-description">Crack down on government corruption</div>
+
+                            <div class="action-category">
+                                <h3>⚔️ Military</h3>
+                                <div class="action-item">
+                                    <div class="action-info">
+                                        <div class="action-name">Build Barracks</div>
+                                        <div class="action-description">Construct military training facilities</div>
+                                    </div>
+                                    <button class="btn btn-secondary btn-small" data-action="barracks">Build <span class="action-cost">$700</span></button>
                                 </div>
-                                <button class="btn btn-secondary btn-small" data-action="anti-corruption">Launch <span class="action-cost">$300</span></button>
+                                <div class="action-item">
+                                    <div class="action-info">
+                                        <div class="action-name">Recruit Soldiers</div>
+                                        <div class="action-description">Expand military forces</div>
+                                    </div>
+                                    <button class="btn btn-secondary btn-small" data-action="recruit">Recruit <span class="action-cost">$400</span></button>
+                                </div>
+                                <div class="action-item">
+                                    <div class="action-info">
+                                        <div class="action-name">Military Research</div>
+                                        <div class="action-description">Develop advanced weaponry</div>
+                                    </div>
+                                    <button class="btn btn-secondary btn-small" data-action="military-research">Research <span class="action-cost">$550</span></button>
+                                </div>
+                            </div>
+
+                            <div class="action-category">
+                                <h3>🌍 Diplomacy</h3>
+                                <div class="action-item">
+                                    <div class="action-info">
+                                        <div class="action-name">Form Alliance</div>
+                                        <div class="action-description">Establish defensive pact with another nation</div>
+                                    </div>
+                                    <button class="btn btn-secondary btn-small" data-action="alliance">Propose <span class="action-cost">$300</span></button>
+                                </div>
+                                <div class="action-item">
+                                    <div class="action-info">
+                                        <div class="action-name">Trade Sanctions</div>
+                                        <div class="action-description">Impose economic restrictions on rivals</div>
+                                    </div>
+                                    <button class="btn btn-secondary btn-small" data-action="sanctions">Impose <span class="action-cost">$200</span></button>
+                                </div>
+                                <div class="action-item">
+                                    <div class="action-info">
+                                        <div class="action-name">Diplomatic Mission</div>
+                                        <div class="action-description">Send envoys to improve relations</div>
+                                    </div>
+                                    <button class="btn btn-secondary btn-small" data-action="diplomacy">Send <span class="action-cost">$150</span></button>
+                                </div>
+                            </div>
+
+                            <div class="action-category">
+                                <h3>🏥 Society</h3>
+                                <div class="action-item">
+                                    <div class="action-info">
+                                        <div class="action-name">Healthcare System</div>
+                                        <div class="action-description">Implement national healthcare</div>
+                                    </div>
+                                    <button class="btn btn-secondary btn-small" data-action="healthcare">Implement <span class="action-cost">$600</span></button>
+                                </div>
+                                <div class="action-item">
+                                    <div class="action-info">
+                                        <div class="action-name">Social Programs</div>
+                                        <div class="action-description">Fund welfare and assistance programs</div>
+                                    </div>
+                                    <button class="btn btn-secondary btn-small" data-action="social">Fund <span class="action-cost">$350</span></button>
+                                </div>
+                                <div class="action-item">
+                                    <div class="action-info">
+                                        <div class="action-name">Cultural Development</div>
+                                        <div class="action-description">Support arts and cultural institutions</div>
+                                    </div>
+                                    <button class="btn btn-secondary btn-small" data-action="culture">Support <span class="action-cost">$250</span></button>
+                                </div>
                             </div>
                         </div>
-
-                        <div class="action-category">
-                            <h3>🏭 Economy</h3>
-                            <div class="action-item">
-                                <div class="action-info">
-                                    <div class="action-name">Build Factory</div>
-                                    <div class="action-description">Construct new manufacturing facilities</div>
-                                </div>
-                                <button class="btn btn-secondary btn-small" data-action="factory">Build <span class="action-cost">$500</span></button>
-                            </div>
-                            <div class="action-item">
-                                <div class="action-info">
-                                    <div class="action-name">Infrastructure</div>
-                                    <div class="action-description">Develop roads, bridges, and utilities</div>
-                                </div>
-                                <button class="btn btn-secondary btn-small" data-action="infrastructure">Develop <span class="action-cost">$400</span></button>
-                            </div>
-                            <div class="action-item">
-                                <div class="action-info">
-                                    <div class="action-name">Trade Agreement</div>
-                                    <div class="action-description">Establish international trade deals</div>
-                                </div>
-                                <button class="btn btn-secondary btn-small" data-action="trade">Negotiate <span class="action-cost">$250</span></button>
-                            </div>
+                    </div>
+                    
+                    <!-- Focus Tree Tab -->
+                    <div class="tab-content" id="focus-tab">
+                        <div class="phase-header">
+                            <h3>National Focus Tree</h3>
+                            <p>Pursue long-term national goals that shape your country's development path.</p>
                         </div>
-
-                        <div class="action-category">
-                            <h3>🔬 Technology</h3>
-                            <div class="action-item">
-                                <div class="action-info">
-                                    <div class="action-name">Research Lab</div>
-                                    <div class="action-description">Build advanced research facilities</div>
-                                </div>
-                                <button class="btn btn-secondary btn-small" data-action="research">Build <span class="action-cost">$600</span></button>
-                            </div>
-                            <div class="action-item">
-                                <div class="action-info">
-                                    <div class="action-name">Education Reform</div>
-                                    <div class="action-description">Improve national education system</div>
-                                </div>
-                                <button class="btn btn-secondary btn-small" data-action="education">Reform <span class="action-cost">$450</span></button>
-                            </div>
-                            <div class="action-item">
-                                <div class="action-info">
-                                    <div class="action-name">Tech Initiative</div>
-                                    <div class="action-description">Fund technological innovation</div>
-                                </div>
-                                <button class="btn btn-secondary btn-small" data-action="innovation">Fund <span class="action-cost">$350</span></button>
-                            </div>
+                        <div class="focus-tree" id="focus-tree">
+                            <!-- Focus tree will be populated dynamically -->
                         </div>
-
-                        <div class="action-category">
-                            <h3>⚔️ Military</h3>
-                            <div class="action-item">
-                                <div class="action-info">
-                                    <div class="action-name">Build Barracks</div>
-                                    <div class="action-description">Construct military training facilities</div>
-                                </div>
-                                <button class="btn btn-secondary btn-small" data-action="barracks">Build <span class="action-cost">$700</span></button>
-                            </div>
-                            <div class="action-item">
-                                <div class="action-info">
-                                    <div class="action-name">Recruit Soldiers</div>
-                                    <div class="action-description">Expand military forces</div>
-                                </div>
-                                <button class="btn btn-secondary btn-small" data-action="recruit">Recruit <span class="action-cost">$400</span></button>
-                            </div>
-                            <div class="action-item">
-                                <div class="action-info">
-                                    <div class="action-name">Military Research</div>
-                                    <div class="action-description">Develop advanced weaponry</div>
-                                </div>
-                                <button class="btn btn-secondary btn-small" data-action="military-research">Research <span class="action-cost">$550</span></button>
-                            </div>
+                    </div>
+                    
+                    <!-- National Spirits Tab -->
+                    <div class="tab-content" id="spirits-tab">
+                        <div class="phase-header">
+                            <h3>National Spirits</h3>
+                            <p>These permanent modifiers represent your nation's historical context and unique characteristics.</p>
                         </div>
-
-                        <div class="action-category">
-                            <h3>🌍 Diplomacy</h3>
-                            <div class="action-item">
-                                <div class="action-info">
-                                    <div class="action-name">Form Alliance</div>
-                                    <div class="action-description">Establish defensive pact with another nation</div>
-                                </div>
-                                <button class="btn btn-secondary btn-small" data-action="alliance">Propose <span class="action-cost">$300</span></button>
-                            </div>
-                            <div class="action-item">
-                                <div class="action-info">
-                                    <div class="action-name">Trade Sanctions</div>
-                                    <div class="action-description">Impose economic restrictions on rivals</div>
-                                </div>
-                                <button class="btn btn-secondary btn-small" data-action="sanctions">Impose <span class="action-cost">$200</span></button>
-                            </div>
-                            <div class="action-item">
-                                <div class="action-info">
-                                    <div class="action-name">Diplomatic Mission</div>
-                                    <div class="action-description">Send envoys to improve relations</div>
-                                </div>
-                                <button class="btn btn-secondary btn-small" data-action="diplomacy">Send <span class="action-cost">$150</span></button>
-                            </div>
-                        </div>
-
-                        <div class="action-category">
-                            <h3>🏥 Society</h3>
-                            <div class="action-item">
-                                <div class="action-info">
-                                    <div class="action-name">Healthcare System</div>
-                                    <div class="action-description">Implement national healthcare</div>
-                                </div>
-                                <button class="btn btn-secondary btn-small" data-action="healthcare">Implement <span class="action-cost">$600</span></button>
-                            </div>
-                            <div class="action-item">
-                                <div class="action-info">
-                                    <div class="action-name">Social Programs</div>
-                                    <div class="action-description">Fund welfare and assistance programs</div>
-                                </div>
-                                <button class="btn btn-secondary btn-small" data-action="social">Fund <span class="action-cost">$350</span></button>
-                            </div>
-                            <div class="action-item">
-                                <div class="action-info">
-                                    <div class="action-name">Cultural Development</div>
-                                    <div class="action-description">Support arts and cultural institutions</div>
-                                </div>
-                                <button class="btn btn-secondary btn-small" data-action="culture">Support <span class="action-cost">$250</span></button>
-                            </div>
+                        <div class="spirit-container" id="spirit-container">
+                            <!-- National spirits will be populated dynamically -->
                         </div>
                     </div>
                 </section>
@@ -1391,11 +903,12 @@
     </div>
 
     <script>
-        // Game State
+        // Game State - UPDATED with new features
         const gameState = {
             continent: null,
             country: null,
             politicalSystem: null,
+            faction: null,
             money: 1000,
             population: 1200000,
             technology: 25,
@@ -1410,6 +923,7 @@
             month: 8, // September (0-indexed)
             year: 1939,
             timelineEra: 'WWII',
+            worldTension: 0,
             buildings: {
                 factory: 0,
                 infrastructure: 0,
@@ -1421,8 +935,13 @@
                 population: 1,
                 technology: 1,
                 stability: 1,
-                military: 1
+                military: 1,
+                logistics: 1
             },
+            nationalSpirits: [],
+            activeFocus: null,
+            focusProgress: 0,
+            completedFocuses: [],
             eventQueue: [],
             isPlaying: false,
             timelineSpeed: 1,
@@ -1434,7 +953,8 @@
             currentWar: null,
             warSupport: 0,
             gameStarted: false,
-            isProcessingAction: false
+            isProcessingAction: false,
+            crisisActive: false
         };
 
         // Month names for display
@@ -1464,23 +984,378 @@
             oceania: ["Australia", "New Zealand", "Papua New Guinea", "Fiji", "Solomon Islands", "Vanuatu", "New Caledonia", "Samoa", "Tonga", "Kiribati", "Micronesia", "Palau"]
         };
 
-        // Action Costs and Effects - FIXED: Removed money from effects
+        // RECOMMENDATION 1: National Spirits Data
+        const nationalSpiritsData = {
+            // WWII Era Spirits
+            "WWII": {
+                "United States": [
+                    {
+                        name: "Arsenal of Democracy",
+                        description: "The immense industrial capacity that allows the US to supply itself and its allies.",
+                        effects: { "factory": 0.7, "minerals": 1.25 },
+                        type: "positive"
+                    },
+                    {
+                        name: "Isolationist Sentiment",
+                        description: "Public opinion favors staying out of foreign conflicts.",
+                        effects: { "stability": 0.9, "influence": 0.8 },
+                        type: "negative",
+                        removable: true
+                    }
+                ],
+                "Soviet Union": [
+                    {
+                        name: "Great Patriotic War",
+                        description: "The massive mobilization and resilience of the Soviet people.",
+                        effects: { "military": 0.8, "stability": 1.5 },
+                        type: "positive"
+                    },
+                    {
+                        name: "Initial Purges",
+                        description: "Stalin's military purges have weakened the officer corps.",
+                        effects: { "military": 0.85 },
+                        type: "negative",
+                        removable: true,
+                        removalTime: 12
+                    }
+                ],
+                "United Kingdom": [
+                    {
+                        name: "Finest Hour",
+                        description: "British defiance during the Blitz and their reliance on naval strength.",
+                        effects: { "stability": 1.15, "military": 1.25 },
+                        type: "positive"
+                    },
+                    {
+                        name: "War Economy",
+                        description: "The economy is fully dedicated to the war effort.",
+                        effects: { "money": 0.9 },
+                        type: "negative"
+                    }
+                ],
+                "Germany": [
+                    {
+                        name: "Blitzkrieg Doctrine",
+                        description: "The effective but resource-intensive German war strategy.",
+                        effects: { "military": 1.25, "technology": 1.25 },
+                        type: "positive"
+                    },
+                    {
+                        name: "Resource Shortage",
+                        description: "Germany lacks sufficient natural resources for a prolonged war.",
+                        effects: { "oil": 0.8, "minerals": 0.8 },
+                        type: "negative"
+                    }
+                ],
+                "France": [
+                    {
+                        name: "Maginot Line Mentality",
+                        description: "Overreliance on static defenses has made the military inflexible.",
+                        effects: { "military": 0.9, "stability": 0.9 },
+                        type: "negative",
+                        removable: true
+                    }
+                ],
+                "Japan": [
+                    {
+                        name: "Imperial Ambition",
+                        description: "Drive to expand the empire across Asia and the Pacific.",
+                        effects: { "military": 1.2, "influence": 1.1 },
+                        type: "positive"
+                    },
+                    {
+                        name: "Resource Dependence",
+                        description: "Heavy reliance on imported oil and raw materials.",
+                        effects: { "oil": 0.7, "minerals": 0.8 },
+                        type: "negative"
+                    }
+                ]
+            },
+            // Cold War Era Spirits
+            "ColdWar": {
+                "United States": [
+                    {
+                        name: "Cold War Arsenal",
+                        description: "Massive military-industrial complex focused on global containment.",
+                        effects: { "military": 1.3, "technology": 1.2 },
+                        type: "positive"
+                    }
+                ],
+                "Soviet Union": [
+                    {
+                        name: "Iron Curtain",
+                        description: "Closed society with tight control over information and movement.",
+                        effects: { "stability": 1.2, "technology": 0.9 },
+                        type: "mixed"
+                    }
+                ]
+            },
+            // Modern Era Spirits
+            "Modern": {
+                "United States": [
+                    {
+                        name: "Global Superpower",
+                        description: "Unparalleled military and economic influence worldwide.",
+                        effects: { "influence": 1.4, "money": 1.2 },
+                        type: "positive"
+                    }
+                ],
+                "China": [
+                    {
+                        name: "Economic Miracle",
+                        description: "Rapid industrialization and economic growth.",
+                        effects: { "money": 1.4, "technology": 1.1 },
+                        type: "positive"
+                    }
+                ]
+            }
+        };
+
+        // RECOMMENDATION 2: Factions Data
+        const factionsData = {
+            "WWII": [
+                {
+                    id: "allies",
+                    name: "Allies",
+                    description: "Democratic nations fighting against Axis aggression.",
+                    icon: "🕊️",
+                    bonus: "+20% Stability when defending, +15% Alliance influence",
+                    members: ["United States", "United Kingdom", "France", "Soviet Union"]
+                },
+                {
+                    id: "axis",
+                    name: "Axis Powers",
+                    description: "Fascist states seeking territorial expansion.",
+                    icon: "⚔️",
+                    bonus: "+25% Military attack, +10% Resource extraction",
+                    members: ["Germany", "Italy", "Japan"]
+                },
+                {
+                    id: "comintern",
+                    name: "Comintern",
+                    description: "International communist organization led by the Soviet Union.",
+                    icon: "☭",
+                    bonus: "+15% Stability in allied territories, +20% Partisan effectiveness",
+                    members: ["Soviet Union"]
+                },
+                {
+                    id: "neutral",
+                    name: "Non-Aligned",
+                    description: "Nations seeking to avoid direct involvement in the war.",
+                    icon: "⚖️",
+                    bonus: "+10% Trade income, -30% World Tension growth",
+                    members: ["Sweden", "Switzerland", "Spain", "Portugal"]
+                }
+            ],
+            "ColdWar": [
+                {
+                    id: "nato",
+                    name: "NATO",
+                    description: "Western military alliance for collective defense.",
+                    icon: "🛡️",
+                    bonus: "+25% Defense when allied, +15% Technology sharing",
+                    members: ["United States", "United Kingdom", "France", "West Germany"]
+                },
+                {
+                    id: "warsaw",
+                    name: "Warsaw Pact",
+                    description: "Eastern bloc military alliance led by the Soviet Union.",
+                    icon: "🚩",
+                    bonus: "+20% Military coordination, +10% Stability in member states",
+                    members: ["Soviet Union", "East Germany", "Poland", "Czechoslovakia"]
+                },
+                {
+                    id: "non-aligned",
+                    name: "Non-Aligned Movement",
+                    description: "Nations not formally aligned with any major power bloc.",
+                    icon: "🌍",
+                    bonus: "+15% Diplomatic flexibility, -25% Tension from actions",
+                    members: ["India", "Yugoslavia", "Egypt", "Indonesia"]
+                }
+            ],
+            "Modern": [
+                {
+                    id: "nato-modern",
+                    name: "NATO",
+                    description: "Transatlantic alliance for collective security.",
+                    icon: "🛡️",
+                    bonus: "+20% Defense spending efficiency, +15% Intelligence sharing",
+                    members: ["United States", "United Kingdom", "France", "Germany"]
+                },
+                {
+                    id: "sco",
+                    name: "Shanghai Cooperation Organization",
+                    description: "Eurasian political, economic, and security alliance.",
+                    icon: "🐉",
+                    bonus: "+15% Regional influence, +10% Economic cooperation",
+                    members: ["China", "Russia", "India", "Pakistan"]
+                },
+                {
+                    id: "neutral-modern",
+                    name: "Neutral Bloc",
+                    description: "Nations maintaining strategic autonomy.",
+                    icon: "⚖️",
+                    bonus: "+10% Trade with all factions, -20% Sanction effectiveness",
+                    members: ["Brazil", "South Africa", "Indonesia", "Mexico"]
+                }
+            ]
+        };
+
+        // RECOMMENDATION 3: Focus Trees Data
+        const focusTreesData = {
+            "WWII": {
+                "United States": [
+                    {
+                        id: "us_isolationism",
+                        name: "Isolationism",
+                        description: "Focus on domestic issues and avoid foreign entanglements.",
+                        duration: 3,
+                        effects: { "stability": 10, "influence": -5 },
+                        branch: "political",
+                        position: 1,
+                        prerequisites: []
+                    },
+                    {
+                        id: "us_preparedness",
+                        name: "Preparedness",
+                        description: "Begin military buildup in case of involvement in the war.",
+                        duration: 4,
+                        effects: { "military": 50, "worldTension": 5 },
+                        branch: "political",
+                        position: 1,
+                        prerequisites: []
+                    },
+                    {
+                        id: "us_lend_lease",
+                        name: "Lend-Lease Act",
+                        description: "Provide material support to allies without direct involvement.",
+                        duration: 3,
+                        effects: { "influence": 10, "money": -200 },
+                        branch: "political",
+                        position: 2,
+                        prerequisites: ["us_isolationism"]
+                    },
+                    {
+                        id: "us_two_ocean_navy",
+                        name: "Two-Ocean Navy",
+                        description: "Massive naval expansion to protect both Atlantic and Pacific interests.",
+                        duration: 5,
+                        effects: { "military": 100, "oil": -2 },
+                        branch: "military",
+                        position: 2,
+                        prerequisites: ["us_preparedness"]
+                    }
+                ],
+                "Germany": [
+                    {
+                        id: "ger_anschluss",
+                        name: "Anschluss with Austria",
+                        description: "Political union with Austria, expanding German territory.",
+                        duration: 2,
+                        effects: { "population": 500000, "stability": 5 },
+                        branch: "political",
+                        position: 1,
+                        prerequisites: []
+                    },
+                    {
+                        id: "ger_rhineland",
+                        name: "Remilitarize the Rhineland",
+                        description: "Send troops into the demilitarized Rhineland region.",
+                        duration: 2,
+                        effects: { "military": 30, "worldTension": 10 },
+                        branch: "military",
+                        position: 1,
+                        prerequisites: []
+                    },
+                    {
+                        id: "ger_munich",
+                        name: "Munich Agreement",
+                        description: "Diplomatic annexation of the Sudetenland from Czechoslovakia.",
+                        duration: 3,
+                        effects: { "population": 3000000, "worldTension": 15 },
+                        branch: "political",
+                        position: 2,
+                        prerequisites: ["ger_anschluss"]
+                    },
+                    {
+                        id: "ger_blitzkrieg",
+                        name: "Blitzkrieg Doctrine",
+                        description: "Develop and implement lightning warfare tactics.",
+                        duration: 4,
+                        effects: { "military": 80, "technology": 20 },
+                        branch: "military",
+                        position: 2,
+                        prerequisites: ["ger_rhineland"]
+                    }
+                ]
+            }
+        };
+
+        // RECOMMENDATION 5: Crisis Events Data
+        const crisisEventsData = {
+            "WWII": [
+                {
+                    title: "Refugee Crisis",
+                    description: "Thousands of civilians are fleeing conflict zones and seeking refuge in your country.",
+                    timer: 10,
+                    options: [
+                        { text: "Open our borders", effect: { population: 50000, stability: -10 } },
+                        { text: "Close our borders", effect: { influence: -15, stability: 5 } },
+                        { text: "Establish refugee camps", effect: { population: 25000, money: -100, stability: -5 } }
+                    ]
+                },
+                {
+                    title: "Intelligence Breach",
+                    description: "Your intelligence agency has been compromised, and sensitive information may have fallen into enemy hands.",
+                    timer: 10,
+                    options: [
+                        { text: "Publicly acknowledge", effect: { stability: -10, influence: 5 } },
+                        { text: "Cover it up", effect: { stability: -25, technology: -10 }, risk: 0.7 },
+                        { text: "Launch counter-intelligence", effect: { money: -150, technology: 5 } }
+                    ]
+                },
+                {
+                    title: "Economic Depression",
+                    description: "A sudden economic downturn is causing widespread unemployment and social unrest.",
+                    timer: 10,
+                    options: [
+                        { text: "Austerity measures", effect: { stability: -15, money: 500 } },
+                        { text: "Stimulus spending", effect: { money: -300, stability: 10 } },
+                        { text: "Nationalize industries", effect: { money: 200, stability: -5, technology: -5 } }
+                    ]
+                }
+            ],
+            "ColdWar": [
+                {
+                    title: "Nuclear Standoff",
+                    description: "Tensions have escalated to the point where nuclear weapons are being placed on high alert.",
+                    timer: 15,
+                    options: [
+                        { text: "Stand firm", effect: { stability: -20, military: 50 } },
+                        { text: "Seek diplomatic solution", effect: { influence: 10, worldTension: -10 } },
+                        { text: "Back down cautiously", effect: { stability: 10, influence: -10 } }
+                    ]
+                }
+            ]
+        };
+
+        // Action Costs and Effects
         const actionData = {
             'tax-reform': { cost: 200, effect: { stability: -5 } },
             'policy-reform': { cost: 150, effect: { stability: 10 } },
             'anti-corruption': { cost: 300, effect: { stability: 15 } },
             'factory': { cost: 500, effect: { } },
-            'infrastructure': { cost: 400, effect: { stability: 10, population: 50000 } },
+            'infrastructure': { cost: 400, effect: { stability: 10, population: 50000, logistics: 5 } },
             'trade': { cost: 250, effect: { influence: 5 } },
             'research': { cost: 600, effect: { technology: 25 } },
             'education': { cost: 450, effect: { technology: 15, stability: 5 } },
             'innovation': { cost: 350, effect: { technology: 20 } },
             'barracks': { cost: 700, effect: { military: 50 } },
             'recruit': { cost: 400, effect: { military: 80, population: -20000 } },
-            'military-research': { cost: 550, effect: { military: 40, technology: 10 } },
+            'military-research': { cost: 550, effect: { military: 40, technology: 10, worldTension: 2 } },
             'alliance': { cost: 300, effect: { alliances: 1, influence: 10 } },
-            'sanctions': { cost: 200, effect: { influence: -5, conflicts: 1 } },
-            'diplomacy': { cost: 150, effect: { influence: 8 } },
+            'sanctions': { cost: 200, effect: { influence: -5, conflicts: 1, worldTension: 5 } },
+            'diplomacy': { cost: 150, effect: { influence: 8, worldTension: -1 } },
             'healthcare': { cost: 600, effect: { stability: 15, population: 100000 } },
             'social': { cost: 350, effect: { stability: 12 } },
             'culture': { cost: 250, effect: { stability: 8, influence: 5 } }
@@ -1536,15 +1411,18 @@
             continentPhase: document.getElementById('continent-phase'),
             countryPhase: document.getElementById('country-phase'),
             politicsPhase: document.getElementById('politics-phase'),
+            factionPhase: document.getElementById('faction-phase'),
             gamePhase: document.getElementById('game-phase'),
             nextToCountry: document.getElementById('next-to-country'),
             nextToPolitics: document.getElementById('next-to-politics'),
             nextToGame: document.getElementById('next-to-game'),
+            confirmFaction: document.getElementById('confirm-faction'),
             nextTurn: document.getElementById('next-turn'),
             mobileNext: document.getElementById('mobile-next'),
             continentGrid: document.getElementById('continent-grid'),
             countryGrid: document.getElementById('country-grid'),
             politicsGrid: document.getElementById('politics-grid'),
+            factionSelection: document.getElementById('faction-selection'),
             selectedContinentName: document.getElementById('selected-continent-name'),
             currentEra: document.getElementById('current-era'),
             currentDate: document.getElementById('current-date'),
@@ -1559,11 +1437,16 @@
             influenceValue: document.getElementById('influence-value'),
             alliancesValue: document.getElementById('alliances-value'),
             conflictsValue: document.getElementById('conflicts-value'),
+            logisticsValue: document.getElementById('logistics-value'),
+            logisticsPercent: document.getElementById('logistics-percent'),
             moneyBar: document.getElementById('money-bar'),
             populationBar: document.getElementById('population-bar'),
             techBar: document.getElementById('tech-bar'),
             stabilityBar: document.getElementById('stability-bar'),
             militaryBar: document.getElementById('military-bar'),
+            logisticsBar: document.getElementById('logistics-bar'),
+            tensionFill: document.getElementById('tension-fill'),
+            tensionValue: document.getElementById('tension-value'),
             timelineSelect: document.getElementById('timeline-select'),
             timelineProgress: document.getElementById('timeline-progress'),
             timelineSpeed: document.getElementById('timeline-speed'),
@@ -1586,7 +1469,14 @@
             warOffensive: document.getElementById('war-offensive'),
             warPeace: document.getElementById('war-peace'),
             mobileSave: document.getElementById('mobile-save'),
-            mobileMenu: document.getElementById('mobile-menu')
+            mobileMenu: document.getElementById('mobile-menu'),
+            nationNameDisplay: document.getElementById('nation-name-display'),
+            spiritsSection: document.getElementById('spirits-section'),
+            spiritsList: document.getElementById('spirits-list'),
+            spiritContainer: document.getElementById('spirit-container'),
+            focusTree: document.getElementById('focus-tree'),
+            tabs: document.querySelectorAll('.tab'),
+            tabContents: document.querySelectorAll('.tab-content')
         };
 
         // Initialize the game
@@ -1636,6 +1526,18 @@
                     return;
                 }
                 startGame();
+            });
+
+            // Faction selection
+            DOM.confirmFaction.addEventListener('click', () => {
+                if (!gameState.faction) {
+                    showNotification('Please select a faction first.', 'error');
+                    playSound('error');
+                    return;
+                }
+                switchPhase(DOM.factionPhase, DOM.gamePhase);
+                applyFactionBonus();
+                playSound('click');
             });
 
             // Action buttons
@@ -1704,6 +1606,41 @@
             DOM.mobileMenu.addEventListener('click', () => {
                 showMobileMenu();
             });
+
+            // Tab system
+            DOM.tabs.forEach(tab => {
+                tab.addEventListener('click', () => {
+                    const tabId = tab.dataset.tab;
+                    switchTab(tabId);
+                });
+            });
+
+            // Focus tree items
+            document.addEventListener('click', (e) => {
+                if (e.target.closest('.focus-item') && !e.target.closest('.focus-item.locked')) {
+                    const focusItem = e.target.closest('.focus-item');
+                    const focusId = focusItem.dataset.focusId;
+                    selectFocus(focusId);
+                }
+            });
+        }
+
+        // Switch between tabs
+        function switchTab(tabId) {
+            // Update tabs
+            DOM.tabs.forEach(tab => {
+                tab.classList.toggle('active', tab.dataset.tab === tabId);
+            });
+            
+            // Update tab contents
+            DOM.tabContents.forEach(content => {
+                content.classList.toggle('active', content.id === `${tabId}-tab`);
+            });
+            
+            // Special handling for focus tab
+            if (tabId === 'focus') {
+                updateFocusTree();
+            }
         }
 
         // Select continent
@@ -1728,11 +1665,22 @@
 
         // Start the game
         function startGame() {
-            switchPhase(DOM.politicsPhase, DOM.gamePhase);
+            // Apply national spirits before switching phase
+            applyNationalSpirits();
+            
+            // Show faction selection if world tension is high enough
+            if (gameState.worldTension >= 70) {
+                switchPhase(DOM.politicsPhase, DOM.factionPhase);
+                populateFactions();
+            } else {
+                switchPhase(DOM.politicsPhase, DOM.gamePhase);
+            }
+            
             applyBonuses();
             gameState.gameStarted = true;
             updateNextTurnButton();
             updateUI();
+            DOM.nationNameDisplay.textContent = gameState.country;
             showNotification(`Welcome to ${gameState.country}! Start managing your nation.`, 'success');
             playSound('success');
             
@@ -1742,13 +1690,414 @@
             }, 1000);
         }
 
-        // Trigger initial historical event
-        function triggerInitialEvent() {
-            const eraEvents = historicalEvents[gameState.timelineEra];
-            if (eraEvents && eraEvents.length > 0) {
-                const initialEvent = eraEvents[0];
-                showHistoricalEvent(initialEvent);
+        // RECOMMENDATION 1: Apply National Spirits
+        function applyNationalSpirits() {
+            const eraSpirits = nationalSpiritsData[gameState.timelineEra];
+            if (!eraSpirits) return;
+            
+            const countrySpirits = eraSpirits[gameState.country];
+            if (!countrySpirits) return;
+            
+            gameState.nationalSpirits = countrySpirits;
+            
+            // Apply spirit effects to modifiers
+            countrySpirits.forEach(spirit => {
+                if (spirit.effects) {
+                    Object.keys(spirit.effects).forEach(key => {
+                        if (gameState.modifiers.hasOwnProperty(key)) {
+                            gameState.modifiers[key] *= spirit.effects[key];
+                        }
+                    });
+                }
+            });
+            
+            // Show spirits in sidebar
+            DOM.spiritsSection.style.display = 'block';
+            updateNationalSpiritsDisplay();
+        }
+
+        // Update National Spirits display
+        function updateNationalSpiritsDisplay() {
+            // Sidebar spirits
+            DOM.spiritsList.innerHTML = '';
+            gameState.nationalSpirits.forEach(spirit => {
+                const spiritElement = document.createElement('div');
+                spiritElement.className = 'stat';
+                spiritElement.innerHTML = `
+                    <div class="stat-name">
+                        <span>${spirit.type === 'positive' ? '✅' : spirit.type === 'negative' ? '❌' : '⚠️'} ${spirit.name}</span>
+                    </div>
+                `;
+                DOM.spiritsList.appendChild(spiritElement);
+            });
+            
+            // Detailed spirits in tab
+            DOM.spiritContainer.innerHTML = '';
+            gameState.nationalSpirits.forEach(spirit => {
+                const spiritCard = document.createElement('div');
+                spiritCard.className = `spirit-card ${spirit.type === 'positive' ? '' : spirit.type === 'negative' ? 'negative' : 'neutral'}`;
+                
+                let effectsHTML = '';
+                if (spirit.effects) {
+                    Object.keys(spirit.effects).forEach(key => {
+                        const value = spirit.effects[key];
+                        const percentage = value !== 1 ? ` ${value > 1 ? '+' : ''}${Math.round((value - 1) * 100)}%` : '';
+                        effectsHTML += `<div>${key}: ${percentage}</div>`;
+                    });
+                }
+                
+                spiritCard.innerHTML = `
+                    <div class="spirit-header">
+                        <div class="spirit-title">${spirit.name}</div>
+                        <div class="spirit-era">${gameState.timelineEra}</div>
+                    </div>
+                    <div class="spirit-description">${spirit.description}</div>
+                    <div class="spirit-effects">${effectsHTML}</div>
+                `;
+                
+                DOM.spiritContainer.appendChild(spiritCard);
+            });
+        }
+
+        // RECOMMENDATION 2: Populate Factions
+        function populateFactions() {
+            DOM.factionSelection.innerHTML = '';
+            const eraFactions = factionsData[gameState.timelineEra];
+            if (!eraFactions) return;
+            
+            eraFactions.forEach(faction => {
+                const factionElement = document.createElement('div');
+                factionElement.className = 'faction-card';
+                factionElement.dataset.factionId = faction.id;
+                
+                // Check if this faction is a natural fit for the player's country
+                const isNaturalFit = faction.members.includes(gameState.country);
+                
+                factionElement.innerHTML = `
+                    <div class="faction-icon">${faction.icon}</div>
+                    <div class="faction-title">${faction.name}</div>
+                    <div class="faction-description">${faction.description} ${isNaturalFit ? '<br><strong>Natural alignment for your country</strong>' : ''}</div>
+                    <div class="faction-bonus">${faction.bonus}</div>
+                `;
+                
+                factionElement.addEventListener('click', () => {
+                    DOM.factionSelection.querySelectorAll('.faction-card').forEach(card => {
+                        card.classList.remove('selected');
+                    });
+                    factionElement.classList.add('selected');
+                    gameState.faction = faction.id;
+                    playSound('click');
+                });
+                
+                DOM.factionSelection.appendChild(factionElement);
+                
+                // Auto-select if this is a natural fit
+                if (isNaturalFit) {
+                    factionElement.classList.add('selected');
+                    gameState.faction = faction.id;
+                }
+            });
+        }
+
+        // Apply faction bonus
+        function applyFactionBonus() {
+            const eraFactions = factionsData[gameState.timelineEra];
+            if (!eraFactions) return;
+            
+            const faction = eraFactions.find(f => f.id === gameState.faction);
+            if (!faction) return;
+            
+            // In a full implementation, we would parse the bonus text and apply effects
+            // For now, we'll just show a notification
+            showNotification(`Joined ${faction.name}! ${faction.bonus}`, 'success');
+        }
+
+        // RECOMMENDATION 3: Update Focus Tree
+        function updateFocusTree() {
+            DOM.focusTree.innerHTML = '';
+            const eraFocuses = focusTreesData[gameState.timelineEra];
+            if (!eraFocuses) {
+                DOM.focusTree.innerHTML = '<div class="empty-state">No focus tree available for this country/era</div>';
+                return;
             }
+            
+            const countryFocuses = eraFocuses[gameState.country];
+            if (!countryFocuses) {
+                DOM.focusTree.innerHTML = '<div class="empty-state">No focus tree available for this country/era</div>';
+                return;
+            }
+            
+            // Group focuses by branch
+            const branches = {};
+            countryFocuses.forEach(focus => {
+                if (!branches[focus.branch]) {
+                    branches[focus.branch] = [];
+                }
+                branches[focus.branch].push(focus);
+            });
+            
+            // Render each branch
+            Object.keys(branches).forEach(branchName => {
+                const branchElement = document.createElement('div');
+                branchElement.className = 'focus-branch';
+                
+                // Sort focuses by position
+                const sortedFocuses = branches[branchName].sort((a, b) => a.position - b.position);
+                
+                sortedFocuses.forEach(focus => {
+                    const focusElement = document.createElement('div');
+                    focusElement.className = 'focus-item';
+                    focusElement.dataset.focusId = focus.id;
+                    
+                    // Check if focus is completed, active, or available
+                    const isCompleted = gameState.completedFocuses.includes(focus.id);
+                    const isActive = gameState.activeFocus === focus.id;
+                    const prerequisitesMet = focus.prerequisites.every(prereq => 
+                        gameState.completedFocuses.includes(prereq)
+                    );
+                    
+                    if (isCompleted) {
+                        focusElement.classList.add('completed');
+                    } else if (isActive) {
+                        focusElement.classList.add('active');
+                    } else if (!prerequisitesMet) {
+                        focusElement.classList.add('locked');
+                    }
+                    
+                    let effectsHTML = '';
+                    if (focus.effects) {
+                        Object.keys(focus.effects).forEach(key => {
+                            const value = focus.effects[key];
+                            effectsHTML += `<span>${key}: ${value > 0 ? '+' : ''}${value}</span> `;
+                        });
+                    }
+                    
+                    focusElement.innerHTML = `
+                        <div class="focus-header">
+                            <div class="focus-title">${focus.name}</div>
+                            <div class="focus-duration">${focus.duration} months</div>
+                        </div>
+                        <div class="focus-description">${focus.description}</div>
+                        <div class="focus-effects">${effectsHTML}</div>
+                        ${isActive ? `
+                            <div class="focus-progress">
+                                <div class="focus-progress-fill" style="width: ${(gameState.focusProgress / focus.duration) * 100}%"></div>
+                            </div>
+                        ` : ''}
+                    `;
+                    
+                    branchElement.appendChild(focusElement);
+                });
+                
+                DOM.focusTree.appendChild(branchElement);
+            });
+        }
+
+        // Select a focus to research
+        function selectFocus(focusId) {
+            const eraFocuses = focusTreesData[gameState.timelineEra];
+            if (!eraFocuses) return;
+            
+            const countryFocuses = eraFocuses[gameState.country];
+            if (!countryFocuses) return;
+            
+            const focus = countryFocuses.find(f => f.id === focusId);
+            if (!focus) return;
+            
+            // Check prerequisites
+            const prerequisitesMet = focus.prerequisites.every(prereq => 
+                gameState.completedFocuses.includes(prereq)
+            );
+            
+            if (!prerequisitesMet) {
+                showNotification('Prerequisites not met for this focus', 'error');
+                playSound('error');
+                return;
+            }
+            
+            // Check if already completed or active
+            if (gameState.completedFocuses.includes(focusId) || gameState.activeFocus === focusId) {
+                return;
+            }
+            
+            // Set as active focus
+            gameState.activeFocus = focusId;
+            gameState.focusProgress = 0;
+            
+            showNotification(`Started research: ${focus.name}`, 'success');
+            playSound('success');
+            updateFocusTree();
+        }
+
+        // Progress focus research
+        function progressFocus() {
+            if (!gameState.activeFocus) return;
+            
+            const eraFocuses = focusTreesData[gameState.timelineEra];
+            if (!eraFocuses) return;
+            
+            const countryFocuses = eraFocuses[gameState.country];
+            if (!countryFocuses) return;
+            
+            const focus = countryFocuses.find(f => f.id === gameState.activeFocus);
+            if (!focus) return;
+            
+            gameState.focusProgress++;
+            
+            // Check if focus is completed
+            if (gameState.focusProgress >= focus.duration) {
+                // Apply focus effects
+                if (focus.effects) {
+                    Object.keys(focus.effects).forEach(key => {
+                        if (gameState.hasOwnProperty(key)) {
+                            gameState[key] += focus.effects[key];
+                        } else if (key === 'worldTension') {
+                            gameState.worldTension += focus.effects[key];
+                        }
+                    });
+                }
+                
+                // Mark as completed
+                gameState.completedFocuses.push(gameState.activeFocus);
+                gameState.activeFocus = null;
+                gameState.focusProgress = 0;
+                
+                showNotification(`Focus completed: ${focus.name}`, 'success');
+                playSound('success');
+            }
+            
+            updateFocusTree();
+        }
+
+        // RECOMMENDATION 4: Calculate Logistics
+        function calculateLogistics() {
+            // Base logistics from infrastructure and technology
+            const baseLogistics = gameState.buildings.infrastructure * 10 + gameState.technology / 5;
+            
+            // Apply modifiers
+            const effectiveLogistics = baseLogistics * gameState.modifiers.logistics;
+            
+            // Update game state
+            gameState.logistics = Math.floor(effectiveLogistics);
+            
+            // Calculate logistics percentage (capped at 100%)
+            const logisticsPercent = Math.min(100, Math.floor((gameState.logistics / 100) * 100));
+            
+            // Update UI
+            DOM.logisticsValue.textContent = gameState.logistics;
+            DOM.logisticsPercent.textContent = `${logisticsPercent}%`;
+            DOM.logisticsBar.style.width = `${logisticsPercent}%`;
+            
+            return logisticsPercent;
+        }
+
+        // RECOMMENDATION 5: Trigger Crisis Event
+        function triggerCrisisEvent() {
+            if (gameState.crisisActive) return;
+            
+            const eraCrises = crisisEventsData[gameState.timelineEra];
+            if (!eraCrises || eraCrises.length === 0) return;
+            
+            // Random chance to trigger a crisis
+            if (Math.random() < 0.1) { // 10% chance each turn
+                const crisis = eraCrises[Math.floor(Math.random() * eraCrises.length)];
+                showCrisisEvent(crisis);
+            }
+        }
+
+        // Show crisis event with timer
+        function showCrisisEvent(crisis) {
+            gameState.crisisActive = true;
+            
+            const modal = document.createElement('div');
+            modal.className = 'modal-overlay active';
+            modal.innerHTML = `
+                <div class="modal">
+                    <div class="modal-header">
+                        <h3 class="modal-title">${crisis.title}</h3>
+                    </div>
+                    <div class="modal-body">
+                        <p>${crisis.description}</p>
+                        <div class="crisis-timer">
+                            <div class="timer-circle" id="crisis-timer-circle">
+                                <div class="timer-text" id="crisis-timer-text">${crisis.timer}</div>
+                            </div>
+                            <div class="timer-label">Seconds remaining</div>
+                        </div>
+                        <div class="modal-actions">
+                            ${crisis.options.map((option, index) => `
+                                <button class="btn ${index === 0 ? 'btn-primary' : 'btn-secondary'} btn-small crisis-option" data-index="${index}">${option.text}</button>
+                            `).join('')}
+                        </div>
+                    </div>
+                </div>
+            `;
+            
+            document.body.appendChild(modal);
+            
+            // Start timer
+            let timeLeft = crisis.timer;
+            const timerCircle = modal.querySelector('#crisis-timer-circle');
+            const timerText = modal.querySelector('#crisis-timer-text');
+            
+            const timerInterval = setInterval(() => {
+                timeLeft--;
+                timerText.textContent = timeLeft;
+                
+                // Update circle progress
+                const progress = (timeLeft / crisis.timer) * 100;
+                timerCircle.style.background = `conic-gradient(var(--accent-danger) ${progress}%, transparent ${progress}%)`;
+                
+                if (timeLeft <= 0) {
+                    clearInterval(timerInterval);
+                    // Auto-select the first option if time runs out
+                    resolveCrisis(crisis, crisis.options[0]);
+                    modal.remove();
+                }
+            }, 1000);
+            
+            // Add event listeners to options
+            modal.querySelectorAll('.crisis-option').forEach(button => {
+                button.addEventListener('click', () => {
+                    clearInterval(timerInterval);
+                    const optionIndex = parseInt(button.dataset.index);
+                    const option = crisis.options[optionIndex];
+                    resolveCrisis(crisis, option);
+                    modal.remove();
+                });
+            });
+        }
+
+        // Resolve crisis event
+        function resolveCrisis(crisis, option) {
+            gameState.crisisActive = false;
+            
+            // Apply effects
+            if (option.effect) {
+                Object.keys(option.effect).forEach(key => {
+                    if (gameState.hasOwnProperty(key)) {
+                        gameState[key] += option.effect[key];
+                    } else if (key === 'worldTension') {
+                        gameState.worldTension += option.effect[key];
+                    }
+                });
+            }
+            
+            // Handle risk
+            if (option.risk && Math.random() < option.risk) {
+                // Risk triggered - apply negative effects
+                showNotification('Your decision backfired!', 'error');
+                playSound('error');
+                
+                // Apply additional negative effects
+                gameState.stability -= 10;
+                gameState.influence -= 5;
+            } else {
+                showNotification(`Crisis resolved: ${option.text}`, 'success');
+                playSound('success');
+            }
+            
+            updateUI();
         }
 
         // Play sound effect
@@ -1860,7 +2209,7 @@
             }
         }
 
-        // Perform an action - FIXED VERSION
+        // Perform an action
         function performAction(action, button) {
             // Prevent multiple simultaneous actions
             if (gameState.isProcessingAction) {
@@ -1894,16 +2243,20 @@
                 return;
             }
 
-            // Deduct cost - THIS IS THE ONLY PLACE WHERE MONEY SHOULD BE DEDUCTED
+            // Deduct cost
             gameState.money -= actionInfo.cost;
 
-            // Apply effects (but NOT money effects - those were removed from actionData)
+            // Apply effects
             if (actionInfo.effect) {
                 Object.keys(actionInfo.effect).forEach(key => {
                     if (gameState.hasOwnProperty(key)) {
                         gameState[key] += actionInfo.effect[key];
                         // Ensure values don't go below 0
                         if (gameState[key] < 0) gameState[key] = 0;
+                    } else if (key === 'worldTension') {
+                        gameState.worldTension += actionInfo.effect[key];
+                    } else if (key === 'logistics') {
+                        // Logistics is handled separately
                     }
                 });
             }
@@ -1944,7 +2297,7 @@
                 gameState.year++;
             }
             
-            // Passive income and growth - FIXED: This only happens during next turn, not during actions
+            // Passive income and growth
             gameState.money += Math.floor(100 * gameState.modifiers.money);
             gameState.population += Math.floor(50000 * gameState.modifiers.population);
             gameState.technology += Math.floor(2 * gameState.modifiers.technology);
@@ -1955,10 +2308,19 @@
             // Ensure stability stays within bounds
             gameState.stability = Math.max(0, Math.min(100, gameState.stability));
             
+            // Progress focus research
+            progressFocus();
+            
+            // Calculate logistics
+            calculateLogistics();
+            
             // Random events
             if (Math.random() < 0.3) {
                 triggerRandomEvent();
             }
+            
+            // Check for crisis events
+            triggerCrisisEvent();
             
             // Check for historical events
             checkHistoricalEvents();
@@ -2117,6 +2479,15 @@
             playSound('click');
         }
 
+        // Trigger initial historical event
+        function triggerInitialEvent() {
+            const eraEvents = historicalEvents[gameState.timelineEra];
+            if (eraEvents && eraEvents.length > 0) {
+                const initialEvent = eraEvents[0];
+                showHistoricalEvent(initialEvent);
+            }
+        }
+
         // Timeline functions
         function getEraStartYear(era) {
             switch(era) {
@@ -2154,6 +2525,27 @@
             
             // Format date display
             DOM.currentDate.textContent = `${monthNames[gameState.month]} ${gameState.year}`;
+            
+            // Update world tension
+            DOM.tensionFill.style.width = `${Math.min(100, gameState.worldTension)}%`;
+            DOM.tensionValue.textContent = `${Math.min(100, gameState.worldTension)}%`;
+            
+            // Update tension value color
+            DOM.tensionValue.className = 'tension-value';
+            if (gameState.worldTension < 30) {
+                DOM.tensionValue.classList.add('tension-low');
+            } else if (gameState.worldTension < 70) {
+                DOM.tensionValue.classList.add('tension-medium');
+            } else {
+                DOM.tensionValue.classList.add('tension-high');
+                
+                // Trigger faction selection if not already in a faction
+                if (!gameState.faction && gameState.gameStarted && !document.getElementById('faction-phase').classList.contains('active')) {
+                    switchPhase(DOM.gamePhase, DOM.factionPhase);
+                    populateFactions();
+                    showNotification('World tension has reached critical levels! You must choose a faction.', 'error');
+                }
+            }
         }
 
         function startAutoPlay() {
@@ -2189,7 +2581,10 @@
             DOM.stabilityBar.style.width = `${Math.max(0, Math.min(100, gameState.stability))}%`;
             DOM.militaryBar.style.width = `${Math.min(100, (gameState.military / 1000) * 100)}%`;
             
-            // Update timeline
+            // Calculate and update logistics
+            calculateLogistics();
+            
+            // Update timeline and tension
             updateTimeline();
             
             // Update action costs
@@ -2220,6 +2615,9 @@
             
             // Update next turn button
             updateNextTurnButton();
+            
+            // Update national spirits display
+            updateNationalSpiritsDisplay();
         }
 
         // Update diplomacy lists
@@ -2394,12 +2792,24 @@
                     
                     // Switch to the appropriate phase
                     if (gameState.country && gameState.politicalSystem) {
-                        switchPhase(DOM.continentPhase, DOM.gamePhase);
+                        if (gameState.faction) {
+                            switchPhase(DOM.continentPhase, DOM.gamePhase);
+                        } else if (gameState.worldTension >= 70) {
+                            switchPhase(DOM.continentPhase, DOM.factionPhase);
+                            populateFactions();
+                        } else {
+                            switchPhase(DOM.continentPhase, DOM.gamePhase);
+                        }
                     } else if (gameState.country) {
                         switchPhase(DOM.continentPhase, DOM.politicsPhase);
                     } else if (gameState.continent) {
                         switchPhase(DOM.continentPhase, DOM.countryPhase);
                         populateCountries(gameState.continent);
+                    }
+                    
+                    // Update nation name display
+                    if (gameState.country) {
+                        DOM.nationNameDisplay.textContent = gameState.country;
                     }
                 } else {
                     showNotification('No saved game found.', 'error');
