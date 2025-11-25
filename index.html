@@ -3,293 +3,295 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    <title>NationCraft - Historical Country Builder</title>
+    <title>NationCraft - Build Your Empire</title>
     <style>
-        /* Reset and Base Styles */
+        /* Modern CSS Reset and Variables */
+        :root {
+            --primary: #2563eb;
+            --primary-dark: #1d4ed8;
+            --primary-light: #3b82f6;
+            --secondary: #7c3aed;
+            --success: #10b981;
+            --warning: #f59e0b;
+            --danger: #ef4444;
+            --dark: #0f172a;
+            --dark-light: #1e293b;
+            --darker: #020617;
+            --text: #f8fafc;
+            --text-secondary: #cbd5e1;
+            --text-muted: #64748b;
+            --border: #334155;
+            --border-light: #475569;
+            --radius: 12px;
+            --radius-sm: 8px;
+            --shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.3);
+            --shadow-lg: 0 20px 40px -10px rgba(0, 0, 0, 0.4);
+            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        }
-
-        :root {
-            --bg-primary: #0a0f1c;
-            --bg-secondary: #131a2d;
-            --bg-card: #1a2238;
-            --accent-primary: #3a86ff;
-            --accent-secondary: #8338ec;
-            --accent-success: #38b000;
-            --accent-warning: #ff9e00;
-            --accent-danger: #ff006e;
-            --text-primary: #ffffff;
-            --text-secondary: #b0b8d1;
-            --text-muted: #6b7280;
-            --border-radius: 12px;
-            --shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
-            --transition: all 0.3s ease;
         }
 
         body {
-            background: linear-gradient(135deg, var(--bg-primary) 0%, var(--bg-secondary) 100%);
-            color: var(--text-primary);
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: linear-gradient(135deg, var(--darker) 0%, var(--dark) 100%);
+            color: var(--text);
             min-height: 100vh;
-            padding: 16px;
             line-height: 1.6;
+            overflow-x: hidden;
         }
 
-        .container {
+        /* Modern Header */
+        .app-header {
+            background: rgba(15, 23, 42, 0.8);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--border);
+            padding: 1rem 2rem;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .header-content {
             max-width: 1400px;
             margin: 0 auto;
-        }
-
-        /* Header Styles */
-        header {
             display: flex;
-            flex-direction: column;
-            gap: 16px;
-            padding: 16px;
-            background: var(--bg-card);
-            border-radius: var(--border-radius);
-            margin-bottom: 16px;
-            box-shadow: var(--shadow);
-            border: 1px solid rgba(255, 255, 255, 0.05);
+            align-items: center;
+            justify-content: space-between;
+            gap: 2rem;
         }
 
         .logo {
             display: flex;
             align-items: center;
-            gap: 10px;
-            justify-content: center;
+            gap: 0.75rem;
         }
 
-        .logo h1 {
+        .logo-icon {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 800;
+            font-size: 1.2rem;
+        }
+
+        .logo-text {
             font-size: 1.5rem;
-            background: linear-gradient(90deg, var(--accent-primary), var(--accent-secondary));
+            font-weight: 800;
+            background: linear-gradient(135deg, var(--text), var(--text-secondary));
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
-            font-weight: 800;
-            text-align: center;
         }
 
         .header-controls {
             display: flex;
-            gap: 8px;
             align-items: center;
-            flex-wrap: wrap;
-            justify-content: center;
+            gap: 1rem;
         }
 
-        /* Button Styles */
+        /* Modern Button System */
         .btn {
-            padding: 10px 16px;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.75rem 1.5rem;
             border: none;
-            border-radius: 8px;
+            border-radius: var(--radius-sm);
             font-weight: 600;
+            font-size: 0.875rem;
             cursor: pointer;
             transition: var(--transition);
-            display: flex;
-            align-items: center;
-            gap: 8px;
+            text-decoration: none;
             position: relative;
             overflow: hidden;
-            font-size: 0.9rem;
+        }
+
+        .btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent);
+            transition: left 0.5s;
+        }
+
+        .btn:hover::before {
+            left: 100%;
         }
 
         .btn-primary {
-            background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
             color: white;
+            box-shadow: var(--shadow);
         }
 
         .btn-primary:hover {
             transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(58, 134, 255, 0.4);
+            box-shadow: var(--shadow-lg);
         }
 
         .btn-secondary {
-            background: var(--bg-card);
-            color: var(--text-primary);
-            border: 1px solid rgba(255, 255, 255, 0.1);
+            background: rgba(255, 255, 255, 0.05);
+            color: var(--text);
+            border: 1px solid var(--border);
         }
 
         .btn-secondary:hover {
-            background: rgba(255, 255, 255, 0.05);
+            background: rgba(255, 255, 255, 0.1);
+            border-color: var(--border-light);
         }
 
         .btn-success {
-            background: var(--accent-success);
-            color: white;
-        }
-
-        .btn-warning {
-            background: var(--accent-warning);
+            background: var(--success);
             color: white;
         }
 
         .btn-danger {
-            background: var(--accent-danger);
+            background: var(--danger);
+            color: white;
+        }
+
+        .btn-warning {
+            background: var(--warning);
             color: white;
         }
 
         .btn-small {
-            padding: 8px 12px;
-            font-size: 0.85rem;
+            padding: 0.5rem 1rem;
+            font-size: 0.8rem;
         }
 
-        /* Game Layout */
-        .game-layout {
-            display: flex;
-            flex-direction: column;
-            gap: 16px;
-        }
-
-        @media (min-width: 1024px) {
-            .game-layout {
-                display: grid;
-                grid-template-columns: 280px 1fr 280px;
-                gap: 16px;
-            }
-            
-            header {
-                flex-direction: row;
-                justify-content: space-between;
-                align-items: center;
-            }
-            
-            .logo {
-                justify-content: flex-start;
-            }
-            
-            .header-controls {
-                justify-content: flex-end;
-            }
+        /* Main Layout */
+        .app-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 2rem;
+            display: grid;
+            grid-template-columns: 300px 1fr 300px;
+            gap: 2rem;
+            min-height: calc(100vh - 80px);
         }
 
         /* Sidebar */
         .sidebar {
-            background: var(--bg-card);
-            border-radius: var(--border-radius);
-            padding: 16px;
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        .sidebar-card {
+            background: var(--dark-light);
+            border-radius: var(--radius);
+            padding: 1.5rem;
+            border: 1px solid var(--border);
             box-shadow: var(--shadow);
-            border: 1px solid rgba(255, 255, 255, 0.05);
-            order: 2;
         }
 
-        @media (min-width: 1024px) {
-            .sidebar {
-                order: 1;
-                position: sticky;
-                top: 16px;
-                height: fit-content;
-            }
+        .card-header {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+            font-weight: 600;
+            color: var(--text);
+            font-size: 1rem;
         }
 
-        .sidebar-section {
-            margin-bottom: 20px;
-        }
-
-        .sidebar-section h3 {
-            margin-bottom: 12px;
-            font-size: 1.1rem;
-            color: var(--text-primary);
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-            padding-bottom: 8px;
+        .card-header svg {
+            width: 20px;
+            height: 20px;
+            opacity: 0.8;
         }
 
         /* Stats */
         .stat {
             display: flex;
-            justify-content: space-between;
+            justify-content: between;
             align-items: center;
-            margin-bottom: 10px;
-            padding: 8px;
+            padding: 0.75rem;
             background: rgba(255, 255, 255, 0.03);
-            border-radius: 8px;
+            border-radius: var(--radius-sm);
+            margin-bottom: 0.5rem;
             transition: var(--transition);
         }
 
         .stat:hover {
-            background: rgba(255, 255, 255, 0.06);
+            background: rgba(255, 255, 255, 0.05);
         }
 
-        .stat-name {
+        .stat-label {
             display: flex;
             align-items: center;
-            gap: 8px;
-            font-size: 0.9rem;
+            gap: 0.5rem;
+            flex: 1;
+            font-size: 0.875rem;
+            color: var(--text-secondary);
         }
 
         .stat-value {
             font-weight: 700;
-            font-size: 1rem;
+            font-size: 0.95rem;
+            color: var(--text);
         }
 
-        /* Progress Bars */
         .progress-bar {
             height: 6px;
             background: rgba(255, 255, 255, 0.1);
-            border-radius: 4px;
+            border-radius: 3px;
             overflow: hidden;
-            margin-top: 4px;
+            margin-top: 0.25rem;
         }
 
         .progress-fill {
             height: 100%;
-            border-radius: 4px;
+            border-radius: 3px;
             transition: width 0.5s ease;
         }
 
-        .money-fill { background: linear-gradient(90deg, var(--accent-success), #7ae582); }
-        .population-fill { background: linear-gradient(90deg, var(--accent-primary), #6ab0ff); }
-        .tech-fill { background: linear-gradient(90deg, var(--accent-secondary), #a855f7); }
-        .stability-fill { background: linear-gradient(90deg, var(--accent-warning), #ffb347); }
-        .military-fill { background: linear-gradient(90deg, var(--accent-danger), #ff5c8d); }
+        .money-fill { background: linear-gradient(90deg, var(--success), #34d399); }
+        .population-fill { background: linear-gradient(90deg, var(--primary), var(--primary-light)); }
+        .tech-fill { background: linear-gradient(90deg, var(--secondary), #a855f7); }
+        .stability-fill { background: linear-gradient(90deg, var(--warning), #fbbf24); }
+        .military-fill { background: linear-gradient(90deg, var(--danger), #f87171); }
 
         /* Main Content */
         .main-content {
             display: flex;
             flex-direction: column;
-            gap: 16px;
-            order: 1;
+            gap: 1.5rem;
         }
 
-        @media (min-width: 1024px) {
-            .main-content {
-                order: 2;
-            }
-        }
-
-        /* Game Phase */
-        .game-phase {
-            background: var(--bg-card);
-            border-radius: var(--border-radius);
-            padding: 20px;
+        .content-card {
+            background: var(--dark-light);
+            border-radius: var(--radius);
+            padding: 2rem;
+            border: 1px solid var(--border);
             box-shadow: var(--shadow);
-            border: 1px solid rgba(255, 255, 255, 0.05);
-            display: none;
         }
 
-        .game-phase.active {
-            display: block;
-            animation: fadeIn 0.5s ease;
+        .content-header {
+            margin-bottom: 1.5rem;
         }
 
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        .phase-header {
-            margin-bottom: 16px;
-        }
-
-        .phase-header h2 {
+        .content-title {
             font-size: 1.5rem;
-            margin-bottom: 8px;
-            color: var(--text-primary);
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            background: linear-gradient(135deg, var(--text), var(--text-secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
         }
 
-        .phase-header p {
+        .content-subtitle {
             color: var(--text-secondary);
             font-size: 0.95rem;
         }
@@ -297,24 +299,47 @@
         /* Tab System */
         .tab-container {
             display: flex;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-            margin-bottom: 16px;
-            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin-bottom: 1.5rem;
+            border-bottom: 1px solid var(--border);
+            padding-bottom: 0.5rem;
         }
 
         .tab {
-            padding: 10px 16px;
+            padding: 0.75rem 1.5rem;
+            background: transparent;
+            border: none;
+            color: var(--text-secondary);
+            font-weight: 500;
             cursor: pointer;
-            border-bottom: 3px solid transparent;
+            border-radius: var(--radius-sm);
             transition: var(--transition);
-            font-weight: 600;
-            font-size: 0.9rem;
-            white-space: nowrap;
+            position: relative;
+        }
+
+        .tab::after {
+            content: '';
+            position: absolute;
+            bottom: -0.5rem;
+            left: 50%;
+            width: 0;
+            height: 2px;
+            background: var(--primary);
+            transition: var(--transition);
+            transform: translateX(-50%);
         }
 
         .tab.active {
-            border-bottom-color: var(--accent-primary);
-            color: var(--accent-primary);
+            color: var(--text);
+        }
+
+        .tab.active::after {
+            width: 100%;
+        }
+
+        .tab:hover:not(.active) {
+            background: rgba(255, 255, 255, 0.05);
+            color: var(--text);
         }
 
         .tab-content {
@@ -323,584 +348,131 @@
 
         .tab-content.active {
             display: block;
-            animation: fadeIn 0.5s ease;
+            animation: fadeIn 0.3s ease;
         }
 
-        /* Diplomacy Tab Styles */
-        .diplomacy-container {
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Action Grid */
+        .action-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1rem;
+        }
+
+        .action-card {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 1.5rem;
+            transition: var(--transition);
+            cursor: pointer;
+        }
+
+        .action-card:hover {
+            background: rgba(255, 255, 255, 0.05);
+            border-color: var(--border-light);
+            transform: translateY(-2px);
+        }
+
+        .action-icon {
+            width: 48px;
+            height: 48px;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 1rem;
+            font-size: 1.5rem;
+        }
+
+        .action-title {
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            font-size: 1.1rem;
+        }
+
+        .action-description {
+            color: var(--text-secondary);
+            font-size: 0.875rem;
+            margin-bottom: 1rem;
+            line-height: 1.5;
+        }
+
+        .action-cost {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: var(--warning);
+            font-weight: 600;
+            font-size: 0.875rem;
+        }
+
+        /* Diplomacy */
+        .diplomacy-grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
-            gap: 20px;
-            margin-top: 16px;
-        }
-        
-        @media (max-width: 1024px) {
-            .diplomacy-container {
-                grid-template-columns: 1fr;
-            }
-        }
-        
-        .diplomacy-panel {
-            background: rgba(255, 255, 255, 0.03);
-            border-radius: var(--border-radius);
-            padding: 16px;
-            border: 1px solid rgba(255, 255, 255, 0.05);
-        }
-        
-        .diplomacy-panel h3 {
-            margin-bottom: 12px;
-            font-size: 1.1rem;
-            color: var(--text-primary);
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-        
-        .diplomacy-list {
-            max-height: 300px;
-            overflow-y: auto;
-            margin-bottom: 16px;
-        }
-        
-        .diplomacy-item {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 10px;
-            background: rgba(255, 255, 255, 0.03);
-            border-radius: 8px;
-            margin-bottom: 8px;
-            transition: var(--transition);
-        }
-        
-        .diplomacy-item:hover {
-            background: rgba(255, 255, 255, 0.06);
-        }
-        
-        .diplomacy-info {
-            flex: 1;
-        }
-        
-        .diplomacy-name {
-            font-weight: 600;
-            font-size: 0.9rem;
-        }
-        
-        .diplomacy-relation {
-            font-size: 0.8rem;
-            color: var(--text-secondary);
-        }
-        
-        .diplomacy-actions {
-            display: flex;
-            gap: 6px;
+            gap: 1.5rem;
         }
 
-        /* Message System Styles */
-        .message-modal {
-            max-width: 600px;
+        .diplomacy-section {
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: var(--radius);
+            padding: 1.5rem;
+            border: 1px solid var(--border);
         }
-        
-        .message-form {
+
+        .diplomacy-header {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+            font-weight: 600;
+        }
+
+        .nation-list {
             display: flex;
             flex-direction: column;
-            gap: 12px;
-        }
-        
-        .message-recipient {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            padding: 8px;
-            background: rgba(255, 255, 255, 0.03);
-            border-radius: 6px;
-        }
-        
-        .message-type {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
-            gap: 8px;
-            margin-bottom: 8px;
-        }
-        
-        .message-type-btn {
-            padding: 8px;
-            background: rgba(255, 255, 255, 0.03);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 6px;
-            cursor: pointer;
-            transition: var(--transition);
-            text-align: center;
-            font-size: 0.85rem;
-        }
-        
-        .message-type-btn:hover {
-            background: rgba(255, 255, 255, 0.06);
-        }
-        
-        .message-type-btn.active {
-            background: rgba(58, 134, 255, 0.2);
-            border-color: var(--accent-primary);
-        }
-        
-        .message-content {
-            min-height: 120px;
-            padding: 12px;
-            background: rgba(255, 255, 255, 0.03);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 6px;
-            color: var(--text-primary);
-            font-family: inherit;
-            resize: vertical;
-        }
-        
-        .inbox-container {
-            max-height: 400px;
-            overflow-y: auto;
-        }
-        
-        .message-item {
-            background: rgba(255, 255, 255, 0.03);
-            border-radius: 8px;
-            padding: 12px;
-            margin-bottom: 10px;
-            border-left: 4px solid var(--accent-primary);
-            cursor: pointer;
-            transition: var(--transition);
-        }
-        
-        .message-item:hover {
-            background: rgba(255, 255, 255, 0.06);
-        }
-        
-        .message-item.unread {
-            border-left-color: var(--accent-warning);
-            background: rgba(255, 158, 0, 0.05);
-        }
-        
-        .message-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: flex-start;
-            margin-bottom: 8px;
-        }
-        
-        .message-sender {
-            font-weight: 600;
-            font-size: 0.9rem;
-        }
-        
-        .message-date {
-            font-size: 0.75rem;
-            color: var(--text-secondary);
-        }
-        
-        .message-preview {
-            font-size: 0.85rem;
-            color: var(--text-secondary);
-            overflow: hidden;
-            text-overflow: ellipsis;
-            display: -webkit-box;
-            -webkit-line-clamp: 2;
-            -webkit-box-orient: vertical;
-        }
-        
-        .message-detail {
-            display: none;
-            margin-top: 12px;
-            padding-top: 12px;
-            border-top: 1px solid rgba(255, 255, 255, 0.1);
-        }
-        
-        .message-detail.active {
-            display: block;
-        }
-        
-        .message-text {
-            font-size: 0.9rem;
-            line-height: 1.5;
-            margin-bottom: 12px;
-        }
-
-        /* War Declaration System */
-        .war-targets {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
-            gap: 8px;
-            margin: 12px 0;
-            max-height: 200px;
-            overflow-y: auto;
-        }
-        
-        .war-target {
-            padding: 10px;
-            background: rgba(255, 255, 255, 0.03);
-            border-radius: 6px;
-            cursor: pointer;
-            transition: var(--transition);
-            text-align: center;
-            border: 2px solid transparent;
-        }
-        
-        .war-target:hover {
-            background: rgba(255, 255, 255, 0.06);
-        }
-        
-        .war-target.selected {
-            border-color: var(--accent-danger);
-            background: rgba(255, 0, 110, 0.1);
-        }
-        
-        .war-reason {
-            margin: 12px 0;
-        }
-        
-        .war-reason textarea {
-            width: 100%;
-            min-height: 80px;
-            padding: 10px;
-            background: rgba(255, 255, 255, 0.03);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 6px;
-            color: var(--text-primary);
-            font-family: inherit;
-            resize: vertical;
-        }
-
-        /* Battle System Styles */
-        .battle-container {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 20px;
-            margin-top: 16px;
-        }
-        
-        @media (max-width: 768px) {
-            .battle-container {
-                grid-template-columns: 1fr;
-            }
-        }
-        
-        .battle-panel {
-            background: rgba(255, 255, 255, 0.03);
-            border-radius: var(--border-radius);
-            padding: 16px;
-            border: 1px solid rgba(255, 255, 255, 0.05);
-        }
-        
-        .battle-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 12px;
-        }
-        
-        .battle-stats {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 12px;
-            margin-bottom: 16px;
-        }
-        
-        .battle-stat {
-            text-align: center;
-            padding: 10px;
-            background: rgba(255, 255, 255, 0.03);
-            border-radius: 8px;
-        }
-        
-        .battle-stat-value {
-            font-size: 1.5rem;
-            font-weight: 700;
-            margin-bottom: 4px;
-        }
-        
-        .battle-stat-label {
-            font-size: 0.8rem;
-            color: var(--text-secondary);
-        }
-        
-        .battle-map {
-            height: 200px;
-            background: rgba(255, 255, 255, 0.03);
-            border-radius: 8px;
-            margin: 16px 0;
-            position: relative;
-            overflow: hidden;
-        }
-        
-        .battle-terrain {
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: linear-gradient(135deg, #2d5a27 0%, #1e3f1c 100%);
-        }
-        
-        .battle-frontline {
-            position: absolute;
-            top: 50%;
-            left: 0;
-            right: 0;
-            height: 3px;
-            background: var(--accent-danger);
-            transform: translateY(-50%);
-        }
-        
-        .battle-units {
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-        }
-        
-        .battle-unit {
-            position: absolute;
-            width: 12px;
-            height: 12px;
-            border-radius: 50%;
-            transform: translate(-50%, -50%);
-        }
-        
-        .battle-unit.player {
-            background: var(--accent-primary);
-            box-shadow: 0 0 10px rgba(58, 134, 255, 0.5);
-        }
-        
-        .battle-unit.enemy {
-            background: var(--accent-danger);
-            box-shadow: 0 0 10px rgba(255, 0, 110, 0.5);
-        }
-        
-        .battle-controls {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
-            gap: 8px;
-            margin-top: 16px;
-        }
-        
-        .battle-log {
-            max-height: 300px;
-            overflow-y: auto;
-            background: rgba(0, 0, 0, 0.3);
-            border-radius: 8px;
-            padding: 12px;
-            margin-top: 16px;
-        }
-        
-        .battle-log-entry {
-            font-size: 0.8rem;
-            padding: 6px 0;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-        }
-        
-        .battle-log-entry:last-child {
-            border-bottom: none;
-        }
-        
-        .log-positive {
-            color: var(--accent-success);
-        }
-        
-        .log-negative {
-            color: var(--accent-danger);
-        }
-        
-        .log-neutral {
-            color: var(--text-secondary);
-        }
-
-        /* War Overview Styles */
-        .war-overview {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 16px;
-            margin-top: 16px;
-        }
-        
-        .war-card {
-            background: rgba(255, 255, 255, 0.03);
-            border-radius: var(--border-radius);
-            padding: 16px;
-            border: 1px solid rgba(255, 255, 255, 0.05);
-        }
-        
-        .war-card.enemy {
-            border-color: rgba(255, 0, 110, 0.3);
-        }
-        
-        .war-card.ally {
-            border-color: rgba(56, 176, 0, 0.3);
-        }
-        
-        .war-card-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 12px;
-        }
-        
-        .war-card-title {
-            font-weight: 600;
-            font-size: 1rem;
-        }
-        
-        .war-card-status {
-            font-size: 0.75rem;
-            padding: 3px 6px;
-            border-radius: 4px;
-        }
-        
-        .status-winning {
-            background: rgba(56, 176, 0, 0.2);
-            color: var(--accent-success);
-        }
-        
-        .status-losing {
-            background: rgba(255, 0, 110, 0.2);
-            color: var(--accent-danger);
-        }
-        
-        .status-stalemate {
-            background: rgba(255, 158, 0, 0.2);
-            color: var(--accent-warning);
-        }
-        
-        .war-card-stats {
-            display: flex;
-            justify-content: space-between;
-            margin-bottom: 8px;
-            font-size: 0.8rem;
-        }
-
-        /* Modal */
-        .modal-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: rgba(0, 0, 0, 0.7);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            z-index: 2000;
-            opacity: 0;
-            pointer-events: none;
-            transition: opacity 0.3s ease;
-            padding: 16px;
-        }
-
-        .modal-overlay.active {
-            opacity: 1;
-            pointer-events: all;
-        }
-
-        .modal {
-            background: var(--bg-card);
-            border-radius: var(--border-radius);
-            padding: 24px;
-            box-shadow: var(--shadow);
-            max-width: 500px;
-            width: 100%;
-            transform: scale(0.9);
-            transition: transform 0.3s ease;
-        }
-
-        .modal-overlay.active .modal {
-            transform: scale(1);
-        }
-
-        .modal-header {
-            margin-bottom: 16px;
-        }
-
-        .modal-title {
-            font-size: 1.5rem;
-            margin-bottom: 8px;
-            color: var(--text-primary);
-        }
-
-        .modal-body {
-            margin-bottom: 20px;
-            color: var(--text-secondary);
-            font-size: 0.95rem;
-        }
-
-        .modal-actions {
-            display: flex;
-            justify-content: center;
-            gap: 12px;
-            flex-wrap: wrap;
-        }
-
-        /* Dashboard */
-        .dashboard {
-            background: var(--bg-card);
-            border-radius: var(--border-radius);
-            padding: 16px;
-            box-shadow: var(--shadow);
-            border: 1px solid rgba(255, 255, 255, 0.05);
-            order: 3;
-        }
-
-        @media (min-width: 1024px) {
-            .dashboard {
-                order: 3;
-                position: sticky;
-                top: 16px;
-                height: fit-content;
-            }
-        }
-
-        .dashboard-section {
-            margin-bottom: 16px;
-        }
-
-        .dashboard-section h3 {
-            margin-bottom: 12px;
-            font-size: 1.1rem;
-            color: var(--text-primary);
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-            padding-bottom: 8px;
+            gap: 0.75rem;
         }
 
         .nation-item {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 8px;
+            padding: 0.75rem;
             background: rgba(255, 255, 255, 0.03);
-            border-radius: 8px;
-            margin-bottom: 6px;
+            border-radius: var(--radius-sm);
             transition: var(--transition);
         }
 
         .nation-item:hover {
-            background: rgba(255, 255, 255, 0.06);
+            background: rgba(255, 255, 255, 0.05);
         }
 
         .nation-name {
-            font-weight: 600;
-            font-size: 0.9rem;
+            font-weight: 500;
         }
 
         .nation-status {
+            padding: 0.25rem 0.5rem;
+            border-radius: 6px;
             font-size: 0.75rem;
-            padding: 3px 6px;
-            border-radius: 4px;
+            font-weight: 600;
         }
 
         .status-ally {
-            background: rgba(56, 176, 0, 0.2);
-            color: var(--accent-success);
+            background: rgba(16, 185, 129, 0.2);
+            color: var(--success);
         }
 
         .status-enemy {
-            background: rgba(255, 0, 110, 0.2);
-            color: var(--accent-danger);
+            background: rgba(239, 68, 68, 0.2);
+            color: var(--danger);
         }
 
         .status-neutral {
@@ -908,1389 +480,654 @@
             color: var(--text-secondary);
         }
 
-        .empty-state {
-            text-align: center;
-            padding: 20px;
-            color: var(--text-muted);
-            font-style: italic;
+        /* Battle System */
+        .battle-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.5rem;
         }
 
-        /* War Panel */
-        .war-panel {
-            background: rgba(255, 0, 110, 0.1);
-            border: 1px solid rgba(255, 0, 110, 0.3);
-            border-radius: var(--border-radius);
-            padding: 12px;
-            margin-top: 12px;
+        .battle-map {
+            height: 200px;
+            background: linear-gradient(135deg, #1e3a8a, #3730a3);
+            border-radius: var(--radius);
+            position: relative;
+            overflow: hidden;
+            margin: 1rem 0;
         }
 
-        .war-panel h4 {
-            color: var(--accent-danger);
-            margin-bottom: 8px;
-            display: flex;
-            align-items: center;
-            gap: 6px;
-            font-size: 1rem;
-        }
-
-        /* Mobile Action Bar */
-        .mobile-action-bar {
-            position: fixed;
-            bottom: 0;
+        .battle-frontline {
+            position: absolute;
+            top: 50%;
             left: 0;
             right: 0;
-            background: var(--bg-card);
-            padding: 12px 16px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            box-shadow: 0 -5px 20px rgba(0, 0, 0, 0.3);
-            z-index: 100;
-            border-top: 1px solid rgba(255, 255, 255, 0.05);
+            height: 2px;
+            background: var(--danger);
+            transform: translateY(-50%);
         }
 
-        @media (min-width: 1024px) {
-            .mobile-action-bar {
-                display: none;
-            }
+        .battle-unit {
+            position: absolute;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+        }
+
+        .battle-unit.player {
+            background: var(--primary);
+            box-shadow: 0 0 10px var(--primary);
+        }
+
+        .battle-unit.enemy {
+            background: var(--danger);
+            box-shadow: 0 0 10px var(--danger);
+        }
+
+        .battle-stats {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+            margin: 1rem 0;
+        }
+
+        .battle-stat {
+            text-align: center;
+            padding: 1rem;
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: var(--radius);
+        }
+
+        .battle-stat-value {
+            font-size: 2rem;
+            font-weight: 800;
+            margin-bottom: 0.5rem;
+        }
+
+        .battle-stat-label {
+            color: var(--text-secondary);
+            font-size: 0.875rem;
+        }
+
+        .battle-controls {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 0.75rem;
+            margin-top: 1rem;
+        }
+
+        .battle-log {
+            max-height: 300px;
+            overflow-y: auto;
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: var(--radius);
+            padding: 1rem;
+        }
+
+        .log-entry {
+            padding: 0.5rem 0;
+            border-bottom: 1px solid var(--border);
+            font-size: 0.875rem;
+        }
+
+        .log-entry:last-child {
+            border-bottom: none;
+        }
+
+        /* Empty States */
+        .empty-state {
+            text-align: center;
+            padding: 3rem 2rem;
+            color: var(--text-muted);
+        }
+
+        .empty-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            opacity: 0.5;
         }
 
         /* Timeline */
-        .timeline-container {
-            background: var(--bg-card);
-            border-radius: var(--border-radius);
-            padding: 16px;
+        .timeline-card {
+            background: var(--dark-light);
+            border-radius: var(--radius);
+            padding: 1.5rem;
+            border: 1px solid var(--border);
             box-shadow: var(--shadow);
-            border: 1px solid rgba(255, 255, 255, 0.05);
-            margin-bottom: 16px;
+            margin-bottom: 1.5rem;
         }
 
         .timeline-header {
             display: flex;
-            flex-direction: column;
-            gap: 12px;
-            margin-bottom: 12px;
-        }
-
-        @media (min-width: 768px) {
-            .timeline-header {
-                flex-direction: row;
-                justify-content: space-between;
-                align-items: center;
-            }
-        }
-
-        .timeline-controls {
-            display: flex;
-            gap: 8px;
+            justify-content: space-between;
             align-items: center;
+            margin-bottom: 1rem;
         }
 
         .timeline-track {
-            height: 50px;
-            background: rgba(255, 255, 255, 0.03);
-            border-radius: 10px;
-            position: relative;
-            margin-top: 8px;
+            height: 8px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 4px;
             overflow: hidden;
+            margin: 1rem 0;
         }
 
         .timeline-progress {
             height: 100%;
-            background: linear-gradient(90deg, var(--accent-primary), var(--accent-secondary));
-            width: 0%;
-            border-radius: 10px;
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            border-radius: 4px;
             transition: width 0.5s ease;
-            position: relative;
         }
 
-        .tension-container {
+        .tension-bar {
             display: flex;
             align-items: center;
-            gap: 12px;
-            margin-top: 8px;
+            gap: 1rem;
+            margin-top: 1rem;
         }
-        
-        .tension-bar {
-            flex: 1;
-            height: 20px;
-            background: rgba(255, 255, 255, 0.1);
-            border-radius: 10px;
-            overflow: hidden;
-            position: relative;
-        }
-        
+
         .tension-fill {
-            height: 100%;
-            border-radius: 10px;
-            background: linear-gradient(90deg, var(--accent-warning), var(--accent-danger));
-            width: 0%;
+            flex: 1;
+            height: 8px;
+            background: linear-gradient(90deg, var(--warning), var(--danger));
+            border-radius: 4px;
             transition: width 0.5s ease;
         }
-        
-        .tension-value {
-            font-weight: 700;
-            min-width: 40px;
-            text-align: center;
-        }
-        
-        .tension-low { color: var(--accent-success); }
-        .tension-medium { color: var(--accent-warning); }
-        .tension-high { color: var(--accent-danger); }
 
-        /* Events */
-        .event-container {
-            position: fixed;
-            right: 16px;
-            bottom: 16px;
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
-            z-index: 1000;
-            max-width: 360px;
-            width: calc(100% - 32px);
-        }
-
-        @media (max-width: 640px) {
-            .event-container {
-                right: 16px;
-                left: 16px;
-                width: auto;
+        /* Mobile Responsive */
+        @media (max-width: 1200px) {
+            .app-container {
+                grid-template-columns: 280px 1fr;
+            }
+            
+            .dashboard {
+                grid-column: 1 / -1;
+                margin-top: 1rem;
             }
         }
 
-        .event-modal {
-            background: var(--bg-card);
-            border-radius: var(--border-radius);
-            padding: 16px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
-            border-left: 5px solid var(--accent-primary);
-            animation: slideIn 0.5s ease;
-            max-width: 100%;
+        @media (max-width: 768px) {
+            .app-container {
+                grid-template-columns: 1fr;
+                padding: 1rem;
+            }
+            
+            .header-content {
+                flex-direction: column;
+                gap: 1rem;
+            }
+            
+            .diplomacy-grid,
+            .battle-container {
+                grid-template-columns: 1fr;
+            }
+            
+            .action-grid {
+                grid-template-columns: 1fr;
+            }
         }
 
-        .event-modal.major {
-            border-left-color: var(--accent-danger);
-            background: linear-gradient(135deg, var(--bg-card) 0%, #2a1a38 100%);
+        /* Animations */
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.7; }
         }
 
-        @keyframes slideIn {
-            from { transform: translateX(100%); opacity: 0; }
-            to { transform: translateX(0); opacity: 1; }
+        .pulse {
+            animation: pulse 2s infinite;
         }
 
-        .event-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: flex-start;
-            margin-bottom: 12px;
+        /* Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
         }
 
-        .event-title {
-            font-size: 1.2rem;
-            font-weight: 700;
-            color: var(--text-primary);
+        ::-webkit-scrollbar-track {
+            background: var(--dark);
         }
 
-        .event-era {
-            background: var(--accent-primary);
-            color: white;
-            padding: 4px 8px;
+        ::-webkit-scrollbar-thumb {
+            background: var(--border);
             border-radius: 4px;
-            font-size: 0.75rem;
-            font-weight: 600;
         }
 
-        .event-description {
-            margin-bottom: 16px;
-            color: var(--text-secondary);
-            line-height: 1.5;
-            font-size: 0.9rem;
-        }
-
-        .event-actions {
-            display: flex;
-            gap: 8px;
-            flex-wrap: wrap;
-        }
-
-        /* Notification */
-        .notification {
-            position: fixed;
-            top: 16px;
-            right: 16px;
-            padding: 12px 16px;
-            background: var(--accent-success);
-            color: white;
-            border-radius: 8px;
-            box-shadow: var(--shadow);
-            z-index: 1500;
-            transform: translateX(150%);
-            transition: transform 0.5s ease;
-            max-width: 320px;
-        }
-
-        .notification.show {
-            transform: translateX(0);
-        }
-
-        .notification.error {
-            background: var(--accent-danger);
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--border-light);
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <header>
+    <!-- Modern Header -->
+    <header class="app-header">
+        <div class="header-content">
             <div class="logo">
-                <h1>NationCraft</h1>
-                <span class="sr-only">Historical Country Building Simulator</span>
+                <div class="logo-icon">N</div>
+                <div class="logo-text">NationCraft</div>
             </div>
             <div class="header-controls">
-                <select id="timeline-select" class="btn btn-secondary btn-small">
-                    <option value="WWII">World War II (1939-1945)</option>
-                    <option value="ColdWar">Cold War (1947-1991)</option>
-                    <option value="Modern">Modern Era (1991-Present)</option>
+                <select class="btn btn-secondary btn-small">
+                    <option>WWII Era</option>
+                    <option>Cold War</option>
+                    <option>Modern Era</option>
                 </select>
-                <button id="save-btn" class="btn btn-secondary btn-small">💾 Save</button>
-                <button id="load-btn" class="btn btn-secondary btn-small">📂 Load</button>
-                <button id="next-turn" class="btn btn-primary btn-small" disabled>Next Month ▶</button>
-            </div>
-        </header>
-
-        <!-- Timeline Container -->
-        <div class="timeline-container">
-            <div class="timeline-header">
-                <div>
-                    <h3>Timeline: <span id="current-era">World War II</span></h3>
-                    <p>Date: <span id="current-date">September 1939</span></p>
-                </div>
-                <div class="timeline-controls">
-                    <button id="timeline-speed" class="btn btn-secondary btn-small">Speed: 1x</button>
-                    <button id="timeline-auto" class="btn btn-secondary btn-small">Auto: Off</button>
-                </div>
-            </div>
-            <div class="timeline-track">
-                <div class="timeline-progress" id="timeline-progress"></div>
-            </div>
-            <div class="tension-container">
-                <span>World Tension:</span>
-                <div class="tension-bar">
-                    <div class="tension-fill" id="tension-fill"></div>
-                </div>
-                <span class="tension-value" id="tension-value">0%</span>
+                <button class="btn btn-secondary btn-small">💾 Save</button>
+                <button class="btn btn-secondary btn-small">📂 Load</button>
+                <button class="btn btn-primary btn-small">Next Month →</button>
             </div>
         </div>
+    </header>
 
-        <div class="game-layout">
-            <!-- Left Sidebar -->
-            <aside class="sidebar">
-                <div class="sidebar-section">
-                    <h3>Nation Overview</h3>
-                    <div class="stat">
-                        <div class="stat-name"><span>💰 Money</span></div>
-                        <div class="stat-value" id="money-value">$1,000</div>
-                    </div>
-                    <div class="progress-bar"><div class="progress-fill money-fill" id="money-bar"></div></div>
-
-                    <div class="stat">
-                        <div class="stat-name"><span>👥 Population</span></div>
-                        <div class="stat-value" id="population-value">1.2M</div>
-                    </div>
-                    <div class="progress-bar"><div class="progress-fill population-fill" id="population-bar"></div></div>
-
-                    <div class="stat">
-                        <div class="stat-name"><span>🔬 Technology</span></div>
-                        <div class="stat-value" id="tech-value">25</div>
-                    </div>
-                    <div class="progress-bar"><div class="progress-fill tech-fill" id="tech-bar"></div></div>
-
-                    <div class="stat">
-                        <div class="stat-name"><span>⚖️ Stability</span></div>
-                        <div class="stat-value" id="stability-value">75%</div>
-                    </div>
-                    <div class="progress-bar"><div class="progress-fill stability-fill" id="stability-bar"></div></div>
-
-                    <div class="stat">
-                        <div class="stat-name"><span>⚔️ Military</span></div>
-                        <div class="stat-value" id="military-value">100</div>
-                    </div>
-                    <div class="progress-bar"><div class="progress-fill military-fill" id="military-bar"></div></div>
-                </div>
-
-                <div class="sidebar-section">
-                    <h3>Resources</h3>
-                    <div class="stat">
-                        <div class="stat-name"><span>⛏️ Minerals</span></div>
-                        <div class="stat-value" id="minerals-value">500</div>
-                    </div>
-                    <div class="stat">
-                        <div class="stat-name"><span>🍞 Food</span></div>
-                        <div class="stat-value" id="food-value">1,000</div>
-                    </div>
-                    <div class="stat">
-                        <div class="stat-name"><span>🛢️ Oil</span></div>
-                        <div class="stat-value" id="oil-value">200</div>
-                    </div>
-                </div>
-
-                <div class="sidebar-section">
-                    <h3>Diplomacy</h3>
-                    <div class="stat">
-                        <div class="stat-name"><span>🌍 Influence</span></div>
-                        <div class="stat-value" id="influence-value">10</div>
-                    </div>
-                    <div class="stat">
-                        <div class="stat-name"><span>🤝 Alliances</span></div>
-                        <div class="stat-value" id="alliances-value">0</div>
-                    </div>
-                    <div class="stat">
-                        <div class="stat-name"><span>⚠️ Conflicts</span></div>
-                        <div class="stat-value" id="conflicts-value">0</div>
-                    </div>
-                </div>
-            </aside>
-
-            <!-- Main Content -->
-            <main class="main-content">
-                <!-- Main Game Phase -->
-                <section id="game-phase" class="game-phase active">
-                    <div class="phase-header">
-                        <h2>Nation Management - <span id="nation-name-display">Your Nation</span></h2>
-                        <p>Manage your country's development through strategic decisions and policies.</p>
-                    </div>
-                    
-                    <!-- Tab System -->
-                    <div class="tab-container">
-                        <div class="tab active" data-tab="actions">Actions</div>
-                        <div class="tab" data-tab="diplomacy">Diplomacy</div>
-                        <div class="tab" data-tab="war">War & Military</div>
-                    </div>
-                    
-                    <!-- Actions Tab -->
-                    <div class="tab-content active" id="actions-tab">
-                        <div class="action-panel">
-                            <div class="action-category">
-                                <h3>🏛️ Government</h3>
-                                <div class="action-item">
-                                    <div class="action-info">
-                                        <div class="action-name">Tax Reform</div>
-                                        <div class="action-description">Restructure tax system to increase revenue</div>
-                                    </div>
-                                    <button class="btn btn-secondary btn-small" data-action="tax-reform">Enact <span class="action-cost">$200</span></button>
-                                </div>
-                                <div class="action-item">
-                                    <div class="action-info">
-                                        <div class="action-name">Policy Reform</div>
-                                        <div class="action-description">Implement new domestic policies</div>
-                                    </div>
-                                    <button class="btn btn-secondary btn-small" data-action="policy-reform">Implement <span class="action-cost">$150</span></button>
-                                </div>
-                            </div>
-
-                            <div class="action-category">
-                                <h3>🏭 Economy</h3>
-                                <div class="action-item">
-                                    <div class="action-info">
-                                        <div class="action-name">Build Factory</div>
-                                        <div class="action-description">Construct new manufacturing facilities</div>
-                                    </div>
-                                    <button class="btn btn-secondary btn-small" data-action="factory">Build <span class="action-cost">$500</span></button>
-                                </div>
-                                <div class="action-item">
-                                    <div class="action-info">
-                                        <div class="action-name">Infrastructure</div>
-                                        <div class="action-description">Develop roads, bridges, and utilities</div>
-                                    </div>
-                                    <button class="btn btn-secondary btn-small" data-action="infrastructure">Develop <span class="action-cost">$400</span></button>
-                                </div>
-                            </div>
-
-                            <div class="action-category">
-                                <h3>⚔️ Military</h3>
-                                <div class="action-item">
-                                    <div class="action-info">
-                                        <div class="action-name">Build Barracks</div>
-                                        <div class="action-description">Construct military training facilities</div>
-                                    </div>
-                                    <button class="btn btn-secondary btn-small" data-action="barracks">Build <span class="action-cost">$700</span></button>
-                                </div>
-                                <div class="action-item">
-                                    <div class="action-info">
-                                        <div class="action-name">Recruit Soldiers</div>
-                                        <div class="action-description">Expand military forces</div>
-                                    </div>
-                                    <button class="btn btn-secondary btn-small" data-action="recruit">Recruit <span class="action-cost">$400</span></button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <!-- Diplomacy Tab -->
-                    <div class="tab-content" id="diplomacy-tab">
-                        <div class="phase-header">
-                            <h3>Diplomatic Relations</h3>
-                            <p>Manage your relationships with other nations through diplomacy and communication.</p>
-                        </div>
-                        
-                        <div class="diplomacy-container">
-                            <div class="diplomacy-panel">
-                                <h3>🤝 Allies</h3>
-                                <div class="diplomacy-list" id="allies-diplomacy-list">
-                                    <div class="empty-state">No allies yet</div>
-                                </div>
-                                <div style="margin-top: 12px;">
-                                    <button class="btn btn-primary btn-small" id="send-message-btn">Send Message</button>
-                                    <button class="btn btn-secondary btn-small" id="view-inbox-btn">View Inbox</button>
-                                </div>
-                            </div>
-                            
-                            <div class="diplomacy-panel">
-                                <h3>🌍 Other Nations</h3>
-                                <div class="diplomacy-list" id="nations-diplomacy-list">
-                                    <div class="empty-state">No diplomatic relations yet</div>
-                                </div>
-                                <div style="margin-top: 12px;">
-                                    <button class="btn btn-danger btn-small" id="declare-war-btn">Declare War</button>
-                                    <button class="btn btn-success btn-small" id="propose-alliance-btn">Propose Alliance</button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <!-- War & Military Tab -->
-                    <div class="tab-content" id="war-tab">
-                        <div class="phase-header">
-                            <h3>Military Command</h3>
-                            <p>Manage your armed forces and engage in military operations.</p>
-                        </div>
-                        
-                        <div class="battle-container" id="battle-container" style="display: none;">
-                            <div class="battle-panel">
-                                <div class="battle-header">
-                                    <h4>Battle: <span id="battle-location">Unknown</span></h4>
-                                    <div class="battle-status" id="battle-status">In Progress</div>
-                                </div>
-                                
-                                <div class="battle-stats">
-                                    <div class="battle-stat">
-                                        <div class="battle-stat-value" id="player-troops">0</div>
-                                        <div class="battle-stat-label">Your Troops</div>
-                                    </div>
-                                    <div class="battle-stat">
-                                        <div class="battle-stat-value" id="enemy-troops">0</div>
-                                        <div class="battle-stat-label">Enemy Troops</div>
-                                    </div>
-                                </div>
-                                
-                                <div class="battle-map">
-                                    <div class="battle-terrain"></div>
-                                    <div class="battle-frontline" id="battle-frontline"></div>
-                                    <div class="battle-units" id="battle-units"></div>
-                                </div>
-                                
-                                <div class="battle-controls">
-                                    <button class="btn btn-primary btn-small" id="battle-attack">Attack</button>
-                                    <button class="btn btn-secondary btn-small" id="battle-defend">Defend</button>
-                                    <button class="btn btn-warning btn-small" id="battle-flank">Flank</button>
-                                    <button class="btn btn-danger btn-small" id="battle-retreat">Retreat</button>
-                                </div>
-                            </div>
-                            
-                            <div class="battle-panel">
-                                <h4>Battle Log</h4>
-                                <div class="battle-log" id="battle-log"></div>
-                            </div>
-                        </div>
-                        
-                        <div id="no-battle-message" style="text-align: center; padding: 40px;">
-                            <h4>No Active Battles</h4>
-                            <p>You are not currently engaged in any military conflicts.</p>
-                            <button class="btn btn-primary" id="plan-offensive-btn">Plan New Offensive</button>
-                        </div>
-                    </div>
-                </section>
-            </main>
-
-            <!-- Right Dashboard -->
-            <aside class="dashboard">
-                <div class="dashboard-section">
-                    <h3>🤝 Allies</h3>
-                    <div id="allies-list">
-                        <div class="empty-state">No allies yet</div>
-                    </div>
-                </div>
-
-                <div class="dashboard-section">
-                    <h3>⚠️ Enemies</h3>
-                    <div id="enemies-list">
-                        <div class="empty-state">No enemies yet</div>
-                    </div>
-                </div>
-
-                <div class="dashboard-section">
-                    <h3>🌍 Other Nations</h3>
-                    <div id="other-nations-list">
-                        <div class="empty-state">No diplomatic relations yet</div>
-                    </div>
-                </div>
-
-                <!-- War Panel -->
-                <div class="war-panel" id="war-panel" style="display: none;">
-                    <h4>⚔️ Active War</h4>
-                    <div id="war-status">
-                        <p>War with <strong id="war-enemy">Unknown</strong></p>
-                        <div class="progress-bar">
-                            <div class="progress-fill military-fill" id="war-progress" style="width: 0%"></div>
-                        </div>
-                        <p style="margin-top: 8px; font-size: 0.85rem;">War Support: <span id="war-support">0%</span></p>
-                    </div>
-                    <div style="margin-top: 12px;">
-                        <button class="btn btn-danger btn-small" style="width: 100%;" id="war-offensive">Launch Offensive</button>
-                        <button class="btn btn-secondary btn-small" style="width: 100%; margin-top: 6px;" id="war-peace">Peace Negotiations</button>
-                    </div>
-                </div>
-            </aside>
+    <!-- Timeline -->
+    <div class="timeline-card">
+        <div class="timeline-header">
+            <div>
+                <h3>World War II Era</h3>
+                <p style="color: var(--text-secondary); margin-top: 0.25rem;">September 1939</p>
+            </div>
+            <div style="display: flex; gap: 0.5rem;">
+                <button class="btn btn-secondary btn-small">Speed: 1x</button>
+                <button class="btn btn-secondary btn-small">Auto: Off</button>
+            </div>
+        </div>
+        <div class="timeline-track">
+            <div class="timeline-progress" style="width: 15%"></div>
+        </div>
+        <div class="tension-bar">
+            <span>World Tension:</span>
+            <div class="tension-fill" style="width: 35%"></div>
+            <span style="font-weight: 600;">35%</span>
         </div>
     </div>
 
-    <!-- Mobile Action Bar -->
-    <div class="mobile-action-bar">
-        <button id="mobile-save" class="btn btn-secondary btn-small">💾 Save</button>
-        <button id="mobile-next" class="btn btn-primary btn-small" disabled>Next Month ▶</button>
-        <button id="mobile-menu" class="btn btn-secondary btn-small">☰ Menu</button>
-    </div>
+    <!-- Main App Container -->
+    <div class="app-container">
+        <!-- Left Sidebar -->
+        <aside class="sidebar">
+            <!-- Nation Stats -->
+            <div class="sidebar-card">
+                <div class="card-header">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                        <path d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"/>
+                    </svg>
+                    Nation Overview
+                </div>
+                <div class="stat">
+                    <div class="stat-label">💰 Money</div>
+                    <div class="stat-value">$12,450</div>
+                </div>
+                <div class="progress-bar"><div class="progress-fill money-fill" style="width: 75%"></div></div>
 
-    <!-- Event Container -->
-    <div class="event-container" id="event-container"></div>
+                <div class="stat">
+                    <div class="stat-label">👥 Population</div>
+                    <div class="stat-value">4.2M</div>
+                </div>
+                <div class="progress-bar"><div class="progress-fill population-fill" style="width: 60%"></div></div>
 
-    <!-- Notification -->
-    <div class="notification" id="notification"></div>
+                <div class="stat">
+                    <div class="stat-label">🔬 Technology</div>
+                    <div class="stat-value">68</div>
+                </div>
+                <div class="progress-bar"><div class="progress-fill tech-fill" style="width: 68%"></div></div>
 
-    <!-- Modal -->
-    <div class="modal-overlay" id="modal-overlay">
-        <div class="modal">
-            <div class="modal-header">
-                <h3 class="modal-title" id="modal-title">Modal Title</h3>
-            </div>
-            <div class="modal-body" id="modal-body">
-                Modal content goes here.
-            </div>
-            <div class="modal-actions">
-                <button class="btn btn-secondary btn-small" id="modal-close">Close</button>
-                <button class="btn btn-primary btn-small" id="modal-action">Action</button>
-            </div>
-        </div>
-    </div>
+                <div class="stat">
+                    <div class="stat-label">⚖️ Stability</div>
+                    <div class="stat-value">82%</div>
+                </div>
+                <div class="progress-bar"><div class="progress-fill stability-fill" style="width: 82%"></div></div>
 
-    <!-- Message Modal -->
-    <div class="modal-overlay" id="message-modal">
-        <div class="modal message-modal">
-            <div class="modal-header">
-                <h3 class="modal-title">Send Diplomatic Message</h3>
+                <div class="stat">
+                    <div class="stat-label">⚔️ Military</div>
+                    <div class="stat-value">450</div>
+                </div>
+                <div class="progress-bar"><div class="progress-fill military-fill" style="width: 45%"></div></div>
             </div>
-            <div class="modal-body">
-                <div class="message-form">
-                    <div class="message-recipient">
-                        <span>To:</span>
-                        <strong id="message-recipient-name">Select a recipient</strong>
-                    </div>
-                    
-                    <div>
-                        <label>Message Type:</label>
-                        <div class="message-type">
-                            <div class="message-type-btn active" data-type="diplomatic">Diplomatic</div>
-                            <div class="message-type-btn" data-type="trade">Trade Proposal</div>
-                            <div class="message-type-btn" data-type="military">Military Coordination</div>
+
+            <!-- Resources -->
+            <div class="sidebar-card">
+                <div class="card-header">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                        <path d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"/>
+                    </svg>
+                    Resources
+                </div>
+                <div class="stat">
+                    <div class="stat-label">⛏️ Minerals</div>
+                    <div class="stat-value">1,240</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-label">🍞 Food</div>
+                    <div class="stat-value">3,850</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-label">🛢️ Oil</div>
+                    <div class="stat-value">680</div>
+                </div>
+            </div>
+
+            <!-- Diplomacy -->
+            <div class="sidebar-card">
+                <div class="card-header">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                        <path d="M12 2C13.1 2 14 2.9 14 4C14 5.1 13.1 6 12 6C10.9 6 10 5.1 10 4C10 2.9 10.9 2 12 2ZM21 9V7L15 5.5V7H9V5.5L3 7V9L9 10.5V12L3 13.5V15.5L9 14V16L3 17.5V19.5L9 18V22H15V18L21 19.5V17.5L15 16V14L21 15.5V13.5L15 12V10.5L21 9Z"/>
+                    </svg>
+                    Diplomacy
+                </div>
+                <div class="stat">
+                    <div class="stat-label">🌍 Influence</div>
+                    <div class="stat-value">24</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-label">🤝 Alliances</div>
+                    <div class="stat-value">3</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-label">⚠️ Conflicts</div>
+                    <div class="stat-value">1</div>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <div class="content-card">
+                <div class="content-header">
+                    <h1 class="content-title">Nation Management</h1>
+                    <p class="content-subtitle">Build your empire through strategic decisions and diplomacy</p>
+                </div>
+
+                <!-- Tab System -->
+                <div class="tab-container">
+                    <button class="tab active" data-tab="actions">Actions</button>
+                    <button class="tab" data-tab="diplomacy">Diplomacy</button>
+                    <button class="tab" data-tab="military">Military</button>
+                    <button class="tab" data-tab="research">Research</button>
+                </div>
+
+                <!-- Actions Tab -->
+                <div class="tab-content active" id="actions-tab">
+                    <div class="action-grid">
+                        <div class="action-card">
+                            <div class="action-icon">🏛️</div>
+                            <div class="action-title">Tax Reform</div>
+                            <div class="action-description">Restructure tax system to increase government revenue and economic growth</div>
+                            <div class="action-cost">$200</div>
+                        </div>
+
+                        <div class="action-card">
+                            <div class="action-icon">🏭</div>
+                            <div class="action-title">Build Factory</div>
+                            <div class="action-description">Construct manufacturing facilities to boost production and create jobs</div>
+                            <div class="action-cost">$500</div>
+                        </div>
+
+                        <div class="action-card">
+                            <div class="action-icon">🛣️</div>
+                            <div class="action-title">Infrastructure</div>
+                            <div class="action-description">Develop roads, bridges and utilities to improve national connectivity</div>
+                            <div class="action-cost">$400</div>
+                        </div>
+
+                        <div class="action-card">
+                            <div class="action-icon">🔬</div>
+                            <div class="action-title">Research Lab</div>
+                            <div class="action-description">Establish advanced research facilities for technological breakthroughs</div>
+                            <div class="action-cost">$600</div>
+                        </div>
+
+                        <div class="action-card">
+                            <div class="action-icon">⚔️</div>
+                            <div class="action-title">Military Base</div>
+                            <div class="action-description">Build military training facilities to strengthen national defense</div>
+                            <div class="action-cost">$700</div>
+                        </div>
+
+                        <div class="action-card">
+                            <div class="action-icon">🏥</div>
+                            <div class="action-title">Healthcare</div>
+                            <div class="action-description">Implement national healthcare system to improve public welfare</div>
+                            <div class="action-cost">$600</div>
                         </div>
                     </div>
-                    
-                    <div>
-                        <label>Message Content:</label>
-                        <textarea class="message-content" id="message-content" placeholder="Type your message here..."></textarea>
+                </div>
+
+                <!-- Diplomacy Tab -->
+                <div class="tab-content" id="diplomacy-tab">
+                    <div class="diplomacy-grid">
+                        <div class="diplomacy-section">
+                            <div class="diplomacy-header">🤝 Allies</div>
+                            <div class="nation-list">
+                                <div class="nation-item">
+                                    <div class="nation-name">United Kingdom</div>
+                                    <div class="nation-status status-ally">Ally</div>
+                                </div>
+                                <div class="nation-item">
+                                    <div class="nation-name">France</div>
+                                    <div class="nation-status status-ally">Ally</div>
+                                </div>
+                                <div class="nation-item">
+                                    <div class="nation-name">United States</div>
+                                    <div class="nation-status status-ally">Ally</div>
+                                </div>
+                            </div>
+                            <button class="btn btn-primary" style="width: 100%; margin-top: 1rem;">Send Message</button>
+                        </div>
+
+                        <div class="diplomacy-section">
+                            <div class="diplomacy-header">🌍 Other Nations</div>
+                            <div class="nation-list">
+                                <div class="nation-item">
+                                    <div class="nation-name">Soviet Union</div>
+                                    <div class="nation-status status-neutral">Neutral</div>
+                                </div>
+                                <div class="nation-item">
+                                    <div class="nation-name">Japan</div>
+                                    <div class="nation-status status-neutral">Neutral</div>
+                                </div>
+                                <div class="nation-item">
+                                    <div class="nation-name">Italy</div>
+                                    <div class="nation-status status-neutral">Neutral</div>
+                                </div>
+                            </div>
+                            <div style="display: flex; gap: 0.5rem; margin-top: 1rem;">
+                                <button class="btn btn-success" style="flex: 1;">Propose Alliance</button>
+                                <button class="btn btn-danger" style="flex: 1;">Declare War</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Military Tab -->
+                <div class="tab-content" id="military-tab">
+                    <div class="battle-container">
+                        <div>
+                            <div class="battle-stats">
+                                <div class="battle-stat">
+                                    <div class="battle-stat-value">12,400</div>
+                                    <div class="battle-stat-label">Your Troops</div>
+                                </div>
+                                <div class="battle-stat">
+                                    <div class="battle-stat-value">15,800</div>
+                                    <div class="battle-stat-label">Enemy Troops</div>
+                                </div>
+                            </div>
+
+                            <div class="battle-map">
+                                <div class="battle-frontline" style="left: 40%"></div>
+                                <div class="battle-unit player" style="top: 30%; left: 20%"></div>
+                                <div class="battle-unit player" style="top: 70%; left: 25%"></div>
+                                <div class="battle-unit enemy" style="top: 50%; left: 60%"></div>
+                                <div class="battle-unit enemy" style="top: 30%; left: 70%"></div>
+                            </div>
+
+                            <div class="battle-controls">
+                                <button class="btn btn-primary">Attack</button>
+                                <button class="btn btn-secondary">Defend</button>
+                                <button class="btn btn-warning">Flank</button>
+                                <button class="btn btn-danger">Retreat</button>
+                            </div>
+                        </div>
+
+                        <div>
+                            <h4 style="margin-bottom: 1rem;">Battle Log</h4>
+                            <div class="battle-log">
+                                <div class="log-entry">Your forces launched an attack on enemy positions</div>
+                                <div class="log-entry">Enemy counter-attack inflicted moderate casualties</div>
+                                <div class="log-entry">Reinforcements have arrived from the north</div>
+                                <div class="log-entry">Artillery barrage successful - enemy lines weakened</div>
+                                <div class="log-entry">Aerial reconnaissance completed</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Research Tab -->
+                <div class="tab-content" id="research-tab">
+                    <div class="empty-state">
+                        <div class="empty-icon">🔬</div>
+                        <h3>Research & Development</h3>
+                        <p>No active research projects. Start a new technological initiative to advance your nation.</p>
+                        <button class="btn btn-primary" style="margin-top: 1rem;">Start Research</button>
                     </div>
                 </div>
             </div>
-            <div class="modal-actions">
-                <button class="btn btn-secondary btn-small" id="message-cancel">Cancel</button>
-                <button class="btn btn-primary btn-small" id="message-send">Send Message</button>
-            </div>
-        </div>
-    </div>
+        </main>
 
-    <!-- Inbox Modal -->
-    <div class="modal-overlay" id="inbox-modal">
-        <div class="modal message-modal">
-            <div class="modal-header">
-                <h3 class="modal-title">Diplomatic Inbox</h3>
-            </div>
-            <div class="modal-body">
-                <div class="inbox-container" id="inbox-container">
-                    <div class="empty-state">No messages yet</div>
+        <!-- Right Dashboard -->
+        <aside class="dashboard">
+            <div class="sidebar-card">
+                <div class="card-header">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                        <path d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"/>
+                    </svg>
+                    Active Wars
+                </div>
+                <div class="empty-state" style="padding: 1rem;">
+                    <div style="font-size: 2rem; margin-bottom: 0.5rem;">🕊️</div>
+                    <p style="color: var(--text-secondary); font-size: 0.875rem;">No active conflicts</p>
                 </div>
             </div>
-            <div class="modal-actions">
-                <button class="btn btn-secondary btn-small" id="inbox-close">Close</button>
-            </div>
-        </div>
-    </div>
 
-    <!-- War Declaration Modal -->
-    <div class="modal-overlay" id="war-declaration-modal">
-        <div class="modal war-declaration-modal">
-            <div class="modal-header">
-                <h3 class="modal-title">Declare War</h3>
-            </div>
-            <div class="modal-body">
-                <p>Select a nation to declare war on:</p>
-                <div class="war-targets" id="war-targets">
-                    <div class="empty-state">No available targets</div>
+            <div class="sidebar-card">
+                <div class="card-header">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                        <path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/>
+                        <polyline points="9 22 9 12 15 12 15 22"/>
+                    </svg>
+                    Recent Events
                 </div>
-                
-                <div class="war-reason">
-                    <label>Casus Belli (Reason for War):</label>
-                    <textarea id="war-reason" placeholder="State your reasons for declaring war..."></textarea>
-                </div>
-                
-                <div class="war-warning">
-                    <p style="color: var(--accent-danger); font-size: 0.9rem;">
-                        ⚠️ Declaring war will significantly increase world tension and may trigger responses from other nations.
-                    </p>
+                <div style="display: flex; flex-direction: column; gap: 0.75rem;">
+                    <div style="padding: 0.75rem; background: rgba(59, 130, 246, 0.1); border-radius: var(--radius-sm); border-left: 3px solid var(--primary);">
+                        <div style="font-weight: 600; font-size: 0.875rem;">Economic Growth</div>
+                        <div style="color: var(--text-secondary); font-size: 0.8rem; margin-top: 0.25rem;">+$1,200 revenue</div>
+                    </div>
+                    <div style="padding: 0.75rem; background: rgba(16, 185, 129, 0.1); border-radius: var(--radius-sm); border-left: 3px solid var(--success);">
+                        <div style="font-weight: 600; font-size: 0.875rem;">Research Complete</div>
+                        <div style="color: var(--text-secondary); font-size: 0.8rem; margin-top: 0.25rem;">New technology available</div>
+                    </div>
+                    <div style="padding: 0.75rem; background: rgba(245, 158, 11, 0.1); border-radius: var(--radius-sm); border-left: 3px solid var(--warning);">
+                        <div style="font-weight: 600; font-size: 0.875rem;">Diplomatic Message</div>
+                        <div style="color: var(--text-secondary); font-size: 0.8rem; margin-top: 0.25rem;">From United Kingdom</div>
+                    </div>
                 </div>
             </div>
-            <div class="modal-actions">
-                <button class="btn btn-secondary btn-small" id="war-declaration-cancel">Cancel</button>
-                <button class="btn btn-danger btn-small" id="war-declaration-confirm">Declare War</button>
-            </div>
-        </div>
+        </aside>
     </div>
 
     <script>
-        // Game State
-        const gameState = {
-            country: "Your Nation",
-            money: 1000,
-            population: 1200000,
-            technology: 25,
-            stability: 75,
-            military: 100,
-            minerals: 500,
-            food: 1000,
-            oil: 200,
-            influence: 10,
-            alliances: 0,
-            conflicts: 0,
-            month: 8,
-            year: 1939,
-            timelineEra: 'WWII',
-            worldTension: 0,
-            allies: [],
-            enemies: [],
-            neutral: ["United Kingdom", "France", "Germany", "Soviet Union", "United States", "Japan"],
-            atWar: false,
-            currentWar: null,
-            warSupport: 0,
-            diplomaticMessages: [],
-            activeBattles: [],
-            selectedMessageRecipient: null,
-            selectedWarTarget: null
-        };
-
-        // Initialize the game
-        function initGame() {
-            setupEventListeners();
-            updateUI();
-            showNotification('Welcome to NationCraft! Manage your nation and engage in diplomacy.', 'success');
-        }
-
-        // Set up event listeners
-        function setupEventListeners() {
-            // Tab system
-            document.querySelectorAll('.tab').forEach(tab => {
-                tab.addEventListener('click', () => {
-                    const tabId = tab.dataset.tab;
-                    switchTab(tabId);
-                });
+        // Tab System
+        document.querySelectorAll('.tab').forEach(tab => {
+            tab.addEventListener('click', () => {
+                // Remove active class from all tabs
+                document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+                document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+                
+                // Add active class to clicked tab
+                tab.classList.add('active');
+                const tabId = tab.dataset.tab;
+                document.getElementById(`${tabId}-tab`).classList.add('active');
             });
+        });
 
-            // Action buttons
-            document.querySelectorAll('[data-action]').forEach(button => {
-                button.addEventListener('click', () => {
-                    const action = button.dataset.action;
-                    performAction(action, button);
-                });
+        // Action Cards
+        document.querySelectorAll('.action-card').forEach(card => {
+            card.addEventListener('click', () => {
+                // Add visual feedback
+                card.style.transform = 'scale(0.98)';
+                setTimeout(() => {
+                    card.style.transform = '';
+                }, 150);
+                
+                // Show notification
+                const title = card.querySelector('.action-title').textContent;
+                const cost = card.querySelector('.action-cost').textContent;
+                showNotification(`Started: ${title} (${cost})`, 'success');
             });
+        });
 
-            // Diplomacy buttons
-            document.getElementById('send-message-btn').addEventListener('click', openMessageModal);
-            document.getElementById('view-inbox-btn').addEventListener('click', openInboxModal);
-            document.getElementById('declare-war-btn').addEventListener('click', openWarDeclarationModal);
-            document.getElementById('propose-alliance-btn').addEventListener('click', proposeAlliance);
-
-            // Message system
-            document.getElementById('message-cancel').addEventListener('click', () => {
-                document.getElementById('message-modal').classList.remove('active');
-            });
-            document.getElementById('message-send').addEventListener('click', sendMessage);
-            document.getElementById('inbox-close').addEventListener('click', () => {
-                document.getElementById('inbox-modal').classList.remove('active');
-            });
-
-            // War declaration
-            document.getElementById('war-declaration-cancel').addEventListener('click', () => {
-                document.getElementById('war-declaration-modal').classList.remove('active');
-            });
-            document.getElementById('war-declaration-confirm').addEventListener('click', declareWar);
-
-            // Battle system
-            document.getElementById('battle-attack').addEventListener('click', () => performBattleAction('attack'));
-            document.getElementById('battle-defend').addEventListener('click', () => performBattleAction('defend'));
-            document.getElementById('battle-flank').addEventListener('click', () => performBattleAction('flank'));
-            document.getElementById('battle-retreat').addEventListener('click', () => performBattleAction('retreat'));
-            document.getElementById('plan-offensive-btn').addEventListener('click', planOffensive);
-
-            // Modal close
-            document.getElementById('modal-close').addEventListener('click', () => {
-                document.getElementById('modal-overlay').classList.remove('active');
-            });
-
-            // Next turn
-            document.getElementById('next-turn').addEventListener('click', nextTurn);
-            document.getElementById('mobile-next').addEventListener('click', nextTurn);
-        }
-
-        // Switch between tabs
-        function switchTab(tabId) {
-            // Update tabs
-            document.querySelectorAll('.tab').forEach(tab => {
-                tab.classList.toggle('active', tab.dataset.tab === tabId);
-            });
-            
-            // Update tab contents
-            document.querySelectorAll('.tab-content').forEach(content => {
-                content.classList.toggle('active', content.id === `${tabId}-tab`);
-            });
-            
-            // Special handling for diplomacy tab
-            if (tabId === 'diplomacy') {
-                updateDiplomacyLists();
-            }
-            
-            // Special handling for war tab
-            if (tabId === 'war') {
-                updateWarTab();
-            }
-        }
-
-        // Update diplomacy lists
-        function updateDiplomacyLists() {
-            // Allies list
-            const alliesList = document.getElementById('allies-diplomacy-list');
-            alliesList.innerHTML = '';
-            
-            if (gameState.allies.length === 0) {
-                alliesList.innerHTML = '<div class="empty-state">No allies yet</div>';
-            } else {
-                gameState.allies.forEach(ally => {
-                    const allyElement = document.createElement('div');
-                    allyElement.className = 'diplomacy-item';
-                    allyElement.innerHTML = `
-                        <div class="diplomacy-info">
-                            <div class="diplomacy-name">${ally}</div>
-                            <div class="diplomacy-relation">Ally</div>
-                        </div>
-                        <div class="diplomacy-actions">
-                            <button class="btn btn-secondary btn-small" data-ally="${ally}">Message</button>
-                        </div>
-                    `;
-                    alliesList.appendChild(allyElement);
-                });
-            }
-            
-            // Other nations list
-            const nationsList = document.getElementById('nations-diplomacy-list');
-            nationsList.innerHTML = '';
-            
-            if (gameState.neutral.length === 0) {
-                nationsList.innerHTML = '<div class="empty-state">No other nations available</div>';
-            } else {
-                gameState.neutral.forEach(nation => {
-                    const nationElement = document.createElement('div');
-                    nationElement.className = 'diplomacy-item';
-                    nationElement.innerHTML = `
-                        <div class="diplomacy-info">
-                            <div class="diplomacy-name">${nation}</div>
-                            <div class="diplomacy-relation">Neutral</div>
-                        </div>
-                        <div class="diplomacy-actions">
-                            <button class="btn btn-secondary btn-small" data-nation="${nation}">Message</button>
-                        </div>
-                    `;
-                    nationsList.appendChild(nationElement);
-                });
-            }
-            
-            // Add event listeners to message buttons
-            document.querySelectorAll('[data-ally]').forEach(button => {
-                button.addEventListener('click', () => {
-                    const ally = button.dataset.ally;
-                    openMessageModal(ally);
-                });
-            });
-            
-            document.querySelectorAll('[data-nation]').forEach(button => {
-                button.addEventListener('click', () => {
-                    const nation = button.dataset.nation;
-                    openMessageModal(nation);
-                });
-            });
-        }
-
-        // Open message modal
-        function openMessageModal(recipient = null) {
-            const modal = document.getElementById('message-modal');
-            const recipientName = document.getElementById('message-recipient-name');
-            
-            if (recipient) {
-                recipientName.textContent = recipient;
-                gameState.selectedMessageRecipient = recipient;
-            }
-            
-            modal.classList.add('active');
-            
-            // Message type selection
-            document.querySelectorAll('.message-type-btn').forEach(btn => {
-                btn.addEventListener('click', () => {
-                    document.querySelectorAll('.message-type-btn').forEach(b => b.classList.remove('active'));
-                    btn.classList.add('active');
-                });
-            });
-        }
-
-        // Send message
-        function sendMessage() {
-            const recipient = gameState.selectedMessageRecipient;
-            const content = document.getElementById('message-content').value;
-            const type = document.querySelector('.message-type-btn.active').dataset.type;
-            
-            if (!recipient) {
-                showNotification('Please select a recipient first.', 'error');
-                return;
-            }
-            
-            if (!content.trim()) {
-                showNotification('Please enter a message.', 'error');
-                return;
-            }
-            
-            // Add message to diplomatic messages
-            gameState.diplomaticMessages.push({
-                id: Date.now(),
-                from: gameState.country,
-                to: recipient,
-                type: type,
-                content: content,
-                date: new Date().toLocaleDateString(),
-                read: false
-            });
-            
-            document.getElementById('message-modal').classList.remove('active');
-            document.getElementById('message-content').value = '';
-            showNotification(`Message sent to ${recipient}`, 'success');
-        }
-
-        // Open inbox modal
-        function openInboxModal() {
-            const modal = document.getElementById('inbox-modal');
-            const inboxContainer = document.getElementById('inbox-container');
-            
-            inboxContainer.innerHTML = '';
-            
-            if (gameState.diplomaticMessages.length === 0) {
-                inboxContainer.innerHTML = '<div class="empty-state">No messages yet</div>';
-            } else {
-                gameState.diplomaticMessages.forEach(message => {
-                    const messageElement = document.createElement('div');
-                    messageElement.className = `message-item ${message.read ? '' : 'unread'}`;
-                    messageElement.innerHTML = `
-                        <div class="message-header">
-                            <div class="message-sender">From: ${message.from}</div>
-                            <div class="message-date">${message.date}</div>
-                        </div>
-                        <div class="message-preview">${message.content.substring(0, 100)}...</div>
-                        <div class="message-detail">
-                            <div class="message-text">${message.content}</div>
-                            <div class="message-actions">
-                                <button class="btn btn-primary btn-small reply-btn" data-sender="${message.from}">Reply</button>
-                                <button class="btn btn-secondary btn-small delete-btn">Delete</button>
-                            </div>
-                        </div>
-                    `;
-                    
-                    // Toggle message detail
-                    messageElement.addEventListener('click', (e) => {
-                        if (!e.target.classList.contains('reply-btn') && !e.target.classList.contains('delete-btn')) {
-                            const detail = messageElement.querySelector('.message-detail');
-                            detail.classList.toggle('active');
-                            message.read = true;
-                            messageElement.classList.remove('unread');
-                        }
-                    });
-                    
-                    // Reply button
-                    const replyBtn = messageElement.querySelector('.reply-btn');
-                    replyBtn.addEventListener('click', (e) => {
-                        e.stopPropagation();
-                        openMessageModal(message.from);
-                    });
-                    
-                    // Delete button
-                    const deleteBtn = messageElement.querySelector('.delete-btn');
-                    deleteBtn.addEventListener('click', (e) => {
-                        e.stopPropagation();
-                        gameState.diplomaticMessages = gameState.diplomaticMessages.filter(m => m.id !== message.id);
-                        openInboxModal(); // Refresh inbox
-                    });
-                    
-                    inboxContainer.appendChild(messageElement);
-                });
-            }
-            
-            modal.classList.add('active');
-        }
-
-        // Open war declaration modal
-        function openWarDeclarationModal() {
-            const modal = document.getElementById('war-declaration-modal');
-            const warTargets = document.getElementById('war-targets');
-            
-            warTargets.innerHTML = '';
-            
-            // Show neutral nations and enemies as potential targets
-            const targets = [...gameState.neutral, ...gameState.enemies];
-            
-            if (targets.length === 0) {
-                warTargets.innerHTML = '<div class="empty-state">No available targets</div>';
-            } else {
-                targets.forEach(target => {
-                    const targetElement = document.createElement('div');
-                    targetElement.className = 'war-target';
-                    targetElement.textContent = target;
-                    targetElement.addEventListener('click', () => {
-                        document.querySelectorAll('.war-target').forEach(t => t.classList.remove('selected'));
-                        targetElement.classList.add('selected');
-                        gameState.selectedWarTarget = target;
-                    });
-                    warTargets.appendChild(targetElement);
-                });
-            }
-            
-            modal.classList.add('active');
-        }
-
-        // Declare war
-        function declareWar() {
-            const target = gameState.selectedWarTarget;
-            const reason = document.getElementById('war-reason').value;
-            
-            if (!target) {
-                showNotification('Please select a target nation.', 'error');
-                return;
-            }
-            
-            // Remove from neutral/add to enemies
-            gameState.neutral = gameState.neutral.filter(n => n !== target);
-            if (!gameState.enemies.includes(target)) {
-                gameState.enemies.push(target);
-            }
-            
-            // Start war
-            gameState.atWar = true;
-            gameState.currentWar = {
-                enemy: target,
-                startDate: `${monthNames[gameState.month]} ${gameState.year}`,
-                progress: 0,
-                battles: []
-            };
-            
-            // Increase world tension
-            gameState.worldTension += 20;
-            
-            document.getElementById('war-declaration-modal').classList.remove('active');
-            showNotification(`War declared on ${target}!`, 'error');
-            updateUI();
-        }
-
-        // Propose alliance
-        function proposeAlliance() {
-            // Simple implementation - 50% chance of success
-            if (Math.random() > 0.5) {
-                const randomNation = gameState.neutral[Math.floor(Math.random() * gameState.neutral.length)];
-                gameState.neutral = gameState.neutral.filter(n => n !== randomNation);
-                gameState.allies.push(randomNation);
-                gameState.alliances++;
-                showNotification(`${randomNation} has accepted your alliance proposal!`, 'success');
-            } else {
-                showNotification('Your alliance proposal was rejected.', 'error');
-            }
-            updateUI();
-        }
-
-        // Update war tab
-        function updateWarTab() {
-            const battleContainer = document.getElementById('battle-container');
-            const noBattleMessage = document.getElementById('no-battle-message');
-            
-            if (gameState.activeBattles.length > 0) {
-                battleContainer.style.display = 'grid';
-                noBattleMessage.style.display = 'none';
-                // Update battle display
-                updateBattleDisplay();
-            } else {
-                battleContainer.style.display = 'none';
-                noBattleMessage.style.display = 'block';
-            }
-        }
-
-        // Plan offensive
-        function planOffensive() {
-            if (!gameState.atWar) {
-                showNotification('You are not at war with any nation.', 'error');
-                return;
-            }
-            
-            // Create a new battle
-            const battle = {
-                id: Date.now(),
-                enemy: gameState.currentWar.enemy,
-                location: "Frontline",
-                playerTroops: Math.floor(gameState.military * 0.3),
-                enemyTroops: Math.floor(gameState.military * 0.4),
-                frontline: 50, // 50% controlled by player
-                log: ["Battle started!"]
-            };
-            
-            gameState.activeBattles.push(battle);
-            updateWarTab();
-            showNotification('New offensive launched!', 'success');
-        }
-
-        // Update battle display
-        function updateBattleDisplay() {
-            if (gameState.activeBattles.length === 0) return;
-            
-            const battle = gameState.activeBattles[0]; // Show first active battle
-            
-            document.getElementById('battle-location').textContent = battle.location;
-            document.getElementById('player-troops').textContent = battle.playerTroops;
-            document.getElementById('enemy-troops').textContent = battle.enemyTroops;
-            
-            // Update frontline
-            document.getElementById('battle-frontline').style.left = `${battle.frontline}%`;
-            
-            // Update battle log
-            const battleLog = document.getElementById('battle-log');
-            battleLog.innerHTML = '';
-            battle.log.forEach(entry => {
-                const logEntry = document.createElement('div');
-                logEntry.className = 'battle-log-entry';
-                logEntry.textContent = entry;
-                battleLog.appendChild(logEntry);
-            });
-        }
-
-        // Perform battle action
-        function performBattleAction(action) {
-            if (gameState.activeBattles.length === 0) return;
-            
-            const battle = gameState.activeBattles[0];
-            let result = "";
-            
-            switch (action) {
-                case 'attack':
-                    // Player attacks
-                    const attackDamage = Math.floor(battle.playerTroops * 0.1);
-                    battle.enemyTroops -= attackDamage;
-                    battle.frontline += 5;
-                    result = `Your forces attack, inflicting ${attackDamage} casualties!`;
-                    break;
-                    
-                case 'defend':
-                    // Player defends
-                    battle.playerTroops += Math.floor(battle.playerTroops * 0.05);
-                    result = "Your forces dig in and reinforce their positions!";
-                    break;
-                    
-                case 'flank':
-                    // Player flanks
-                    if (Math.random() > 0.3) {
-                        const flankDamage = Math.floor(battle.enemyTroops * 0.15);
-                        battle.enemyTroops -= flankDamage;
-                        battle.frontline += 10;
-                        result = `Flanking maneuver successful! Inflicted ${flankDamage} casualties!`;
-                    } else {
-                        const flankDamage = Math.floor(battle.playerTroops * 0.1);
-                        battle.playerTroops -= flankDamage;
-                        battle.frontline -= 5;
-                        result = `Flanking maneuver failed! Lost ${flankDamage} troops.`;
-                    }
-                    break;
-                    
-                case 'retreat':
-                    // Player retreats
-                    battle.playerTroops = Math.floor(battle.playerTroops * 0.8);
-                    gameState.activeBattles = gameState.activeBattles.filter(b => b.id !== battle.id);
-                    result = "Your forces retreat from the battlefield!";
-                    break;
-            }
-            
-            // Enemy counter-attack
-            if (action !== 'retreat' && battle.enemyTroops > 0) {
-                const enemyDamage = Math.floor(battle.enemyTroops * 0.08);
-                battle.playerTroops -= enemyDamage;
-                battle.frontline -= 3;
-                result += ` Enemy counter-attack inflicts ${enemyDamage} casualties.`;
-            }
-            
-            // Add to log
-            battle.log.push(result);
-            
-            // Check battle outcome
-            if (battle.playerTroops <= 0) {
-                battle.log.push("Your forces have been defeated!");
-                gameState.activeBattles = gameState.activeBattles.filter(b => b.id !== battle.id);
-                gameState.currentWar.progress -= 10;
-                showNotification("Battle lost! Your forces have been defeated.", 'error');
-            } else if (battle.enemyTroops <= 0) {
-                battle.log.push("Enemy forces have been defeated!");
-                gameState.activeBattles = gameState.activeBattles.filter(b => b.id !== battle.id);
-                gameState.currentWar.progress += 15;
-                showNotification("Battle won! Enemy forces defeated.", 'success');
-            } else if (battle.frontline >= 90) {
-                battle.log.push("Your forces have achieved a breakthrough!");
-                gameState.activeBattles = gameState.activeBattles.filter(b => b.id !== battle.id);
-                gameState.currentWar.progress += 20;
-                showNotification("Breakthrough achieved! Significant progress in the war.", 'success');
-            } else if (battle.frontline <= 10) {
-                battle.log.push("Your forces have been pushed back!");
-                gameState.activeBattles = gameState.activeBattles.filter(b => b.id !== battle.id);
-                gameState.currentWar.progress -= 15;
-                showNotification("Your forces have been pushed back!", 'error');
-            }
-            
-            updateWarTab();
-            updateUI();
-        }
-
-        // Perform action
-        function performAction(action, button) {
-            const actionCosts = {
-                'tax-reform': 200,
-                'policy-reform': 150,
-                'factory': 500,
-                'infrastructure': 400,
-                'barracks': 700,
-                'recruit': 400
-            };
-            
-            const cost = actionCosts[action] || 0;
-            
-            if (gameState.money < cost) {
-                showNotification('Not enough money to perform this action.', 'error');
-                return;
-            }
-            
-            gameState.money -= cost;
-            
-            // Apply action effects
-            switch (action) {
-                case 'tax-reform':
-                    gameState.money += 300;
-                    gameState.stability -= 5;
-                    break;
-                case 'policy-reform':
-                    gameState.stability += 10;
-                    break;
-                case 'factory':
-                    gameState.money += 100; // Increased production
-                    break;
-                case 'infrastructure':
-                    gameState.stability += 5;
-                    break;
-                case 'barracks':
-                    gameState.military += 50;
-                    break;
-                case 'recruit':
-                    gameState.military += 80;
-                    gameState.population -= 50000;
-                    break;
-            }
-            
-            showNotification(`Action completed: ${action}`, 'success');
-            updateUI();
-        }
-
-        // Advance to next turn
-        function nextTurn() {
-            gameState.month++;
-            
-            if (gameState.month > 11) {
-                gameState.month = 0;
-                gameState.year++;
-            }
-            
-            // Passive income and growth
-            gameState.money += 100;
-            gameState.population += 50000;
-            gameState.technology += 2;
-            gameState.minerals += 50;
-            gameState.food += 100;
-            gameState.oil += 20;
-            
-            // Random events
-            if (Math.random() < 0.3) {
-                const events = [
-                    "Economic growth boosts your treasury.",
-                    "Technological breakthrough improves research.",
-                    "Population growth increases workforce.",
-                    "Resource discovery provides additional materials."
-                ];
-                showNotification(events[Math.floor(Math.random() * events.length)], 'success');
-            }
-            
-            updateUI();
-            showNotification(`${monthNames[gameState.month]} ${gameState.year} completed.`, 'success');
-        }
-
-        // Update UI
-        function updateUI() {
-            // Update stats
-            document.getElementById('money-value').textContent = `$${gameState.money.toLocaleString()}`;
-            document.getElementById('population-value').textContent = `${(gameState.population / 1000000).toFixed(1)}M`;
-            document.getElementById('tech-value').textContent = gameState.technology;
-            document.getElementById('stability-value').textContent = `${Math.max(0, Math.min(100, gameState.stability))}%`;
-            document.getElementById('military-value').textContent = gameState.military;
-            document.getElementById('minerals-value').textContent = gameState.minerals;
-            document.getElementById('food-value').textContent = gameState.food.toLocaleString();
-            document.getElementById('oil-value').textContent = gameState.oil;
-            document.getElementById('influence-value').textContent = gameState.influence;
-            document.getElementById('alliances-value').textContent = gameState.alliances;
-            document.getElementById('conflicts-value').textContent = gameState.conflicts;
-            
-            // Update progress bars
-            document.getElementById('money-bar').style.width = `${Math.min(100, (gameState.money / 5000) * 100)}%`;
-            document.getElementById('population-bar').style.width = `${Math.min(100, (gameState.population / 5000000) * 100)}%`;
-            document.getElementById('tech-bar').style.width = `${Math.min(100, (gameState.technology / 100) * 100)}%`;
-            document.getElementById('stability-bar').style.width = `${Math.max(0, Math.min(100, gameState.stability))}%`;
-            document.getElementById('military-bar').style.width = `${Math.min(100, (gameState.military / 1000) * 100)}%`;
-            
-            // Update timeline
-            document.getElementById('current-era').textContent = gameState.timelineEra;
-            document.getElementById('current-date').textContent = `${monthNames[gameState.month]} ${gameState.year}`;
-            
-            // Update tension
-            document.getElementById('tension-fill').style.width = `${Math.min(100, gameState.worldTension)}%`;
-            document.getElementById('tension-value').textContent = `${Math.min(100, gameState.worldTension)}%`;
-            
-            // Update tension value color
-            const tensionValue = document.getElementById('tension-value');
-            tensionValue.className = 'tension-value';
-            if (gameState.worldTension < 30) {
-                tensionValue.classList.add('tension-low');
-            } else if (gameState.worldTension < 70) {
-                tensionValue.classList.add('tension-medium');
-            } else {
-                tensionValue.classList.add('tension-high');
-            }
-            
-            // Update dashboard lists
-            updateDashboardLists();
-            
-            // Update war panel
-            const warPanel = document.getElementById('war-panel');
-            if (gameState.atWar && gameState.currentWar) {
-                warPanel.style.display = 'block';
-                document.getElementById('war-enemy').textContent = gameState.currentWar.enemy;
-                document.getElementById('war-progress').style.width = `${gameState.currentWar.progress}%`;
-                document.getElementById('war-support').textContent = `${gameState.warSupport}%`;
-            } else {
-                warPanel.style.display = 'none';
-            }
-        }
-
-        // Update dashboard lists
-        function updateDashboardLists() {
-            // Allies list
-            const alliesList = document.getElementById('allies-list');
-            alliesList.innerHTML = '';
-            if (gameState.allies.length === 0) {
-                alliesList.innerHTML = '<div class="empty-state">No allies yet</div>';
-            } else {
-                gameState.allies.forEach(ally => {
-                    const allyElement = document.createElement('div');
-                    allyElement.className = 'nation-item';
-                    allyElement.innerHTML = `
-                        <span class="nation-name">${ally}</span>
-                        <span class="nation-status status-ally">Ally</span>
-                    `;
-                    alliesList.appendChild(allyElement);
-                });
-            }
-            
-            // Enemies list
-            const enemiesList = document.getElementById('enemies-list');
-            enemiesList.innerHTML = '';
-            if (gameState.enemies.length === 0) {
-                enemiesList.innerHTML = '<div class="empty-state">No enemies yet</div>';
-            } else {
-                gameState.enemies.forEach(enemy => {
-                    const enemyElement = document.createElement('div');
-                    enemyElement.className = 'nation-item';
-                    enemyElement.innerHTML = `
-                        <span class="nation-name">${enemy}</span>
-                        <span class="nation-status status-enemy">${gameState.atWar && gameState.currentWar?.enemy === enemy ? 'At War' : 'Hostile'}</span>
-                    `;
-                    enemiesList.appendChild(enemyElement);
-                });
-            }
-            
-            // Other nations list
-            const otherNationsList = document.getElementById('other-nations-list');
-            otherNationsList.innerHTML = '';
-            if (gameState.neutral.length === 0) {
-                otherNationsList.innerHTML = '<div class="empty-state">No diplomatic relations yet</div>';
-            } else {
-                gameState.neutral.forEach(nation => {
-                    const nationElement = document.createElement('div');
-                    nationElement.className = 'nation-item';
-                    nationElement.innerHTML = `
-                        <span class="nation-name">${nation}</span>
-                        <span class="nation-status status-neutral">Neutral</span>
-                    `;
-                    otherNationsList.appendChild(nationElement);
-                });
-            }
-        }
-
-        // Show notification
+        // Notification System
         function showNotification(message, type = 'success') {
-            const notification = document.getElementById('notification');
+            // Create notification element
+            const notification = document.createElement('div');
+            notification.style.cssText = `
+                position: fixed;
+                top: 100px;
+                right: 2rem;
+                background: ${type === 'success' ? 'var(--success)' : 'var(--danger)'};
+                color: white;
+                padding: 1rem 1.5rem;
+                border-radius: var(--radius);
+                box-shadow: var(--shadow-lg);
+                z-index: 1000;
+                transform: translateX(400px);
+                transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+                font-weight: 600;
+            `;
             notification.textContent = message;
-            notification.className = 'notification';
             
-            if (type === 'error') {
-                notification.classList.add('error');
-            }
+            document.body.appendChild(notification);
             
-            notification.classList.add('show');
-            
+            // Animate in
             setTimeout(() => {
-                notification.classList.remove('show');
+                notification.style.transform = 'translateX(0)';
+            }, 100);
+            
+            // Remove after 3 seconds
+            setTimeout(() => {
+                notification.style.transform = 'translateX(400px)';
+                setTimeout(() => {
+                    document.body.removeChild(notification);
+                }, 300);
             }, 3000);
         }
 
-        // Initialize the game when the page loads
-        window.addEventListener('DOMContentLoaded', initGame);
+        // Battle System Animation
+        function animateBattle() {
+            const frontline = document.querySelector('.battle-frontline');
+            let position = 40;
+            let direction = 1;
+            
+            setInterval(() => {
+                position += direction * 2;
+                if (position > 70 || position < 30) {
+                    direction *= -1;
+                }
+                frontline.style.left = `${position}%`;
+            }, 2000);
+        }
+
+        // Initialize animations
+        animateBattle();
+
+        // Add hover effects to buttons
+        document.querySelectorAll('.btn').forEach(btn => {
+            btn.addEventListener('mouseenter', function() {
+                this.style.transform = 'translateY(-2px)';
+            });
+            
+            btn.addEventListener('mouseleave', function() {
+                this.style.transform = 'translateY(0)';
+            });
+        });
     </script>
 </body>
 </html>
